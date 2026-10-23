@@ -26,107 +26,18 @@
         .toggle-link { text-align: center; margin-top: 1rem; font-size: 0.85rem; }
         .toggle-link a { color: #2c7da0; text-decoration: none; font-weight: 600; }
         
-        .balance-card { background: linear-gradient(135deg, #1e3a5f, #0f2c48); color: white; border-radius: 1.5rem; padding: 1.5rem 1rem; margin: 0 auto; text-align: center; width: 100%; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .balance-amount { font-size: 2.2rem; font-weight: bold; margin: 0.5rem 0; color: #10b981; }
+        .balance-card { background: linear-gradient(135deg, #1e3a5f, #0f2c48); color: white; border-radius: 1.5rem; padding: 1.2rem; margin: 1rem; text-align: center; }
+        .balance-amount { font-size: 2rem; font-weight: bold; margin: 0.5rem 0; color: #10b981; }
         .recharge-wallet { color: #ef4444; }
-        .action-btn-recharge { background: #ef4444; color: white; padding: 0.6rem 1.2rem; border-radius: 2rem; border: none; font-weight:bold; font-size: 0.9rem; cursor: pointer; }
-        .action-btn-withdraw { background: #f59e0b; color: white; padding: 0.6rem 1.2rem; border-radius: 2rem; border: none; font-weight:bold; font-size: 0.9rem; cursor: pointer; }
-
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 1.5rem; padding: 1rem; }
+        .action-btn-recharge { background: #ef4444; color: white; padding: 0.5rem; border-radius: 1rem; border: none; margin: 0.2rem; font-weight:bold;}
+        .action-btn-withdraw { background: #f59e0b; color: white; padding: 0.5rem; border-radius: 1rem; border: none; margin: 0.2rem; font-weight:bold;}
         
-        /* ✅ የፕሮዳክት ካርድ ዲዛይን - በአበቦች የተከበበ */
-        .product-card { 
-            background: linear-gradient(180deg, #ffffff, #fdfbf7); 
-            border-radius: 1.25rem; 
-            padding: 1.5rem 1rem; 
-            text-align: center;
-            position: relative;
-            border: none !important;
-            margin: 1rem 0.5rem;
-            z-index: 1;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-        }
-        
-        .double-flower-border::before {
-            content: "";
-            position: absolute;
-            top: -12px; left: -12px; right: -12px; bottom: -12px;
-            border-radius: 1.5rem;
-            background-image: 
-                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">🌺</text></svg>'),
-                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">💛</text></svg>'),
-                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">🌼</text></svg>'),
-                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">💚</text></svg>');
-            background-position: top left, top right, bottom left, bottom right;
-            background-repeat: repeat-x, repeat-x, repeat-x, repeat-x; 
-            background-size: 24px 24px;
-            z-index: -1;
-        }
-        
-        .double-flower-border::after {
-            content: "";
-            position: absolute;
-            top: 0; left: -12px; right: -12px; bottom: 0;
-            border-radius: 1.5rem;
-            background-image: 
-                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">🌺</text></svg>'),
-                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">💛</text></svg>'),
-                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">🌼</text></svg>'),
-                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">💚</text></svg>');
-            background-position: top left, top right, bottom left, bottom right;
-            background-repeat: repeat-y, repeat-y, repeat-y, repeat-y; 
-            background-size: 24px 24px;
-            z-index: -1;
-        }
-
-        /* ✅ የላይኛው ባላንስ ካርድ ማዕቀፍ - በአበቦች ብቻ የተከበበ */
-        .flower-border-box {
-            position: relative;
-            padding: 1.5rem 1.2rem;
-            margin: 1.5rem 1rem;
-            border: none !important; 
-            border-radius: 1rem;
-            background-color: #fff;
-            z-index: 1;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-
-        .flower-border-box::before {
-            content: "";
-            position: absolute;
-            top: -15px; left: -15px; right: -15px; bottom: -15px;
-            border-radius: 1.5rem;
-            background-image: 
-                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24"><text x="0" y="20" font-size="20">🌺</text></svg>'),
-                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24"><text x="0" y="20" font-size="20">💛</text></svg>'),
-                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24"><text x="0" y="20" font-size="20">🌼</text></svg>'),
-                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24"><text x="0" y="20" font-size="20">💚</text></svg>');
-            background-position: top left, top right, bottom left, bottom right;
-            background-repeat: repeat-x, repeat-x, repeat-x, repeat-x; 
-            background-size: 26px 26px;
-            z-index: -1;
-        }
-
-        .flower-border-box::after {
-            content: "";
-            position: absolute;
-            top: 0; left: -15px; right: -15px; bottom: 0;
-            border-radius: 1.5rem;
-            background-image: 
-                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24"><text x="0" y="20" font-size="20">🌺</text></svg>'),
-                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24"><text x="0" y="20" font-size="20">💛</text></svg>'),
-                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24"><text x="0" y="20" font-size="20">🌼</text></svg>'),
-                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24"><text x="0" y="20" font-size="20">💚</text></svg>');
-            background-position: top left, top right, bottom left, bottom right;
-            background-repeat: repeat-y, repeat-y, repeat-y, repeat-y; 
-            background-size: 26px 26px;
-            z-index: -1;
-        }
-
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 1rem; padding: 1rem; }
+        .product-card { background: white; border-radius: 1.25rem; padding: 1rem; box-shadow: 0 8px 20px rgba(0,0,0,0.05); border: 1px solid #eef2f6; text-align: center; }
         .product-card h4 { font-size: 1.2rem; font-weight: 700; color: #1e3a5f; margin-bottom: 0.5rem; }
-        .product-price { font-size: 1.4rem; font-weight: 800; color: #d97706; margin: 0.5rem 0; background: #fef3c7; display: inline-block; padding: 0.3rem 1rem; border-radius: 2rem; border: 2px solid #f59e0b;}
-        .product-detail { font-size: 0.8rem; color: #4b5563; display: flex; justify-content: space-between; margin-top: 0.4rem; font-weight: 500;}
-        .invest-now { margin-top: 1rem; width: 100%; background: linear-gradient(135deg, #1e3a5f, #2c7da0); color: white; border: none; padding: 0.6rem; border-radius: 2rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 10px rgba(30,58,95,0.3);}
+        .product-price { font-size: 1.3rem; font-weight: 800; color: #d97706; margin: 0.25rem 0; }
+        .product-detail { font-size: 0.75rem; color: #4b5563; display: flex; justify-content: space-between; margin-top: 0.3rem; }
+        .invest-now { margin-top: 0.75rem; width: 100%; background: #1e3a5f; color: white; border: none; padding: 0.5rem; border-radius: 2rem; font-weight: 600; cursor: pointer; }
         
         .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; max-width: 550px; margin: 0 auto; background: white; display: flex; justify-content: space-around; padding: 0.6rem 0.5rem; border-top: 1px solid #eef2f6; z-index: 20; }
         .nav-item { text-align: center; flex: 1; cursor: pointer; font-size: 0.7rem; color: #8a9bb0; }
@@ -148,6 +59,50 @@
         .text-center { text-align: center; }
         .mt-2 { margin-top: 0.5rem; }
         .mt-3 { margin-top: 1rem; }
+
+        /* ===== ✅ አዲስ የተሻሻሉ ዲዛይኖች ===== */
+        .flower-border-box {
+            position: relative;
+            padding: 1.5rem 1.2rem;
+            margin: 1.5rem 0;
+            border: none !important; 
+            border-radius: 1rem;
+            background-color: #fff;
+            z-index: 1;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .flower-border-box::before {
+            content: "";
+            position: absolute;
+            top: -12px; left: -12px; right: -12px; bottom: -12px;
+            border-radius: 1.2rem;
+            background-image: 
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">🌺</text></svg>'),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">💛</text></svg>'),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">🌼</text></svg>'),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">💚</text></svg>');
+            background-position: top left, top right, bottom left, bottom right;
+            background-repeat: repeat-x, repeat-x, repeat-x, repeat-x; 
+            background-size: 24px 24px;
+            z-index: -1;
+        }
+
+        .flower-border-box::after {
+            content: "";
+            position: absolute;
+            top: 0; left: -12px; right: -12px; bottom: 0;
+            border-radius: 1.2rem;
+            background-image: 
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">🌺</text></svg>'),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">💛</text></svg>'),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">🌼</text></svg>'),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">💚</text></svg>');
+            background-position: top left, top right, bottom left, bottom right;
+            background-repeat: repeat-y, repeat-y, repeat-y, repeat-y; 
+            background-size: 24px 24px;
+            z-index: -1;
+        }
 
         .wealth-bg { background-color: #e0f2fe !important; }
         .task-bg-black { background-color: #f3f4f6 !important; }
@@ -177,7 +132,8 @@
 
 <!-- Authentication Container -->
 <div id="authContainer" class="auth-container">
-    <div id="loginForm">
+    <!-- ✅ የመግቢያ ገጽ መጀመሪያ እንዲመጣ (display: block) -->
+    <div id="loginForm" style="display:block;">
         <h2 style="text-align:center;">Cotton Exporter</h2>
         <p class="text-center" style="margin-bottom:1.5rem;">Sign in to your account</p>
         <div class="form-group"><label>📞 Phone Number</label><input type="tel" id="loginPhone" placeholder="+251 912345678"></div>
@@ -187,6 +143,7 @@
         <div id="loginMessage" class="warning text-center mt-2"></div>
     </div>
 
+    <!-- ✅ የምዝገባ ገጽ ሁለተኛ እንዲመጣ (display: none) -->
     <div id="registerForm" style="display:none;">
         <h2 style="text-align:center;">Cotton Exporter</h2>
         <p class="text-center">Create an account to start investing</p>
@@ -369,29 +326,25 @@
     function renderHomePage() {
         let user = users.find(u => u.phone === currentUser);
         if (!user) return;
-        
-        // የ "Investment Products" ሳጥን ተወግዷል፣ የባላንስ ካርዱ በቀጥታ በአበቦች ተከብቧል
         let html = `
-            <div class="flower-border-box" style="margin: 1.5rem 1rem; padding: 1.5rem 1rem;">
-                <div class="balance-card" style="margin: 0; width: 100%;">
-                    <div>Cotton Exporter - The first checkpoint of quality control</div>
-                    <div class="balance-amount">${user.balance.toFixed(2)} ETB</div>
-                    <div>Wallet Balance</div>
-                    <div style="margin-top:1rem; display:flex; justify-content:center; gap:15px;">
-                        <button class="action-btn-recharge" id="openRecharge">➕ Recharge</button>
-                        <button class="action-btn-withdraw" id="openWithdraw">➖ Withdraw</button>
-                    </div>
-                    <div style="margin-top:0.8rem; font-size:0.9rem;">💰 Recharge Wallet: <span class="recharge-wallet">${user.rechargeBalance.toFixed(2)} ETB</span></div>
+            <div class="balance-card">
+                <div>Cotton Exporter - The first checkpoint of quality control</div>
+                <div class="balance-amount">${user.balance.toFixed(2)} ETB</div>
+                <div>Wallet Balance</div>
+                <div class="action-buttons" style="margin-top:0.5rem; display:flex; justify-content:center; gap:10px;">
+                    <button class="action-btn-recharge" id="openRecharge">➕ Recharge</button>
+                    <button class="action-btn-withdraw" id="openWithdraw">➖ Withdraw</button>
                 </div>
+                <div style="margin-top:0.5rem; font-size:0.8rem;">💰 Recharge Wallet: <span class="recharge-wallet">${user.rechargeBalance.toFixed(2)} ETB</span></div>
             </div>
-            
+            <h3 style="margin:1rem 0 0 1rem;">📈 Investment Products</h3>
             <div class="products-grid" id="productsGrid"></div>
         `;
         document.getElementById("homePage").innerHTML = html;
         let grid = document.getElementById("productsGrid");
         for (let [key, prod] of Object.entries(PRODUCTS)) {
             let card = document.createElement("div");
-            card.className = "product-card double-flower-border";
+            card.className = "product-card";
             card.innerHTML = `
                 <h4>${prod.icon} ${prod.name}</h4>
                 <div class="product-price">${prod.price.toLocaleString()} ETB</div>
@@ -490,7 +443,7 @@
                     <div class="flex-between"><span>📢 Share on social media (referral)</span><span class="tag">${shareStatus}</span></div>
                     <div class="mt-2">Invite 2 friends to join using your link:</div>
                     <div class="flex-between mt-2">
-                        <input type="text" id="referralLinkInput" readonly value="${window.location.href.split('?')[0]}?ref=${user.inviteCode}" style="font-size:0.75rem;">
+                        <input type="text" id="referralLinkInput" readonly value="${window.location.href.split('#')[0].split('?')[0]}?ref=${user.inviteCode}" style="font-size:0.75rem;">
                         <button id="copyReferralLink" class="copy-btn">Copy</button>
                     </div>
                     <div class="warning mt-2">Reward (50 ETB) will be added to Reward Wallet after 2 successful registrations.</div>
@@ -587,7 +540,8 @@
         `;
         
         document.getElementById("copyInviteLink").onclick = () => {
-            let link = `${window.location.href.split('?')[0]}?ref=${user.inviteCode}`;
+            // ✅ ሊንኩ ?ref= የሚል እንዲሆን ተስተካክሏል
+            let link = `${window.location.href.split('#')[0].split('?')[0]}?ref=${user.inviteCode}`;
             navigator.clipboard.writeText(link);
             alert("Invite link copied!");
         };
@@ -651,10 +605,13 @@
         };
     });
 
-    // Registration with referral link
+    // ✅ የሊንክ መረጃ አነባበብ ተስተካክሏል (# እና ? ሁለቱንም ያነባል)
     function getUrlParameter(name) {
-        let urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(name);
+        let url = window.location.href;
+        // ሊንኩ ላይ #?ref= ወይም ?ref= ቢሆን ሁለቱንም ለይቶ ማውጣት
+        let regex = new RegExp('[?&]' + name + '=([^&#]*)');
+        let results = regex.exec(url);
+        return results === null ? null : decodeURIComponent(results[1].replace(/\+/g, ' '));
     }
 
     document.getElementById("showRegister").onclick = () => {
