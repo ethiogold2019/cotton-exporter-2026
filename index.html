@@ -132,8 +132,8 @@
 
 <!-- Authentication Container -->
 <div id="authContainer" class="auth-container">
-    <!-- ✅ የመግቢያ ገጽ መጀመሪያ እንዲመጣ (display: block) -->
-    <div id="loginForm" style="display:block;">
+    <!-- ✅ የመግቢያ ገጽ መጀመሪያ እንዲመጣ (display: none) -->
+    <div id="loginForm" style="display:none;">
         <h2 style="text-align:center;">Cotton Exporter</h2>
         <p class="text-center" style="margin-bottom:1.5rem;">Sign in to your account</p>
         <div class="form-group"><label>📞 Phone Number</label><input type="tel" id="loginPhone" placeholder="+251 912345678"></div>
@@ -143,8 +143,8 @@
         <div id="loginMessage" class="warning text-center mt-2"></div>
     </div>
 
-    <!-- ✅ የምዝገባ ገጽ ሁለተኛ እንዲመጣ (display: none) -->
-    <div id="registerForm" style="display:none;">
+    <!-- ✅ የምዝገባ ገጽ ቀዳሚ እንዲሆን (display: block) -->
+    <div id="registerForm" style="display:block;">
         <h2 style="text-align:center;">Cotton Exporter</h2>
         <p class="text-center">Create an account to start investing</p>
         <div class="form-group"><label>📞 Phone Number</label><input type="tel" id="regPhone" placeholder="+251 912345678"></div>
@@ -540,7 +540,6 @@
         `;
         
         document.getElementById("copyInviteLink").onclick = () => {
-            // ✅ ሊንኩ ?ref= የሚል እንዲሆን ተስተካክሏል
             let link = `${window.location.href.split('#')[0].split('?')[0]}?ref=${user.inviteCode}`;
             navigator.clipboard.writeText(link);
             alert("Invite link copied!");
@@ -605,7 +604,7 @@
         };
     });
 
-    // ✅ የሊንክ መረጃ አነባበብ ተስተካክሏል (# እና ? ሁለቱንም ያነባል)
+    // ✅ የሊንክ መረጃ አነባበብ (የተስተካከለ)
     function getUrlParameter(name) {
         let url = window.location.href;
         // ሊንኩ ላይ #?ref= ወይም ?ref= ቢሆን ሁለቱንም ለይቶ ማውጣት
@@ -623,6 +622,14 @@
     document.getElementById("showLogin").onclick = () => {
         document.getElementById("registerForm").style.display = "none";
         document.getElementById("loginForm").style.display = "block";
+    };
+
+    // ✅ ገጹ ሲከፈት ኢንቫይት ኮድ ካለ በራሱ እንዲሞላ
+    window.onload = function() {
+        let ref = getUrlParameter("ref");
+        if (ref) {
+            document.getElementById("inviteCodeReg").value = ref;
+        }
     };
 
     document.getElementById("doRegister").onclick = () => {
