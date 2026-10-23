@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>የአድሚን ፓናል - አጠቃላይ ቁጥጥር</title>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            background: #f0f2f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        h1 { text-align: center; color: #1a3e60; margin-bottom: 20px; }
+        .stats {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .stat-card {
+            background: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .admin-photo-box {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .admin-photo-preview {
+            max-width: 300px;
+            margin: 15px auto;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px dashed #aaa;
+            background: #eee;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .admin-photo-preview img { width: 100%; height: auto; display: block; }
+        .admin-photo-upload {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        .admin-photo-upload input, .admin-photo-upload button {
+            padding: 10px 20px;
+            border-radius: 60px;
+            border: none;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .admin-photo-upload button {
+            background: #27ae60;
+            color: white;
+        }
+        .remove-bg-btn { background: #e67e22 !important; }
+        .user-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 25px;
+        }
+        .user-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .card-header {
+            background: #1a3e60;
+            color: white;
+            padding: 15px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .card-actions button {
+            margin-left: 8px;
+            padding: 6px 12px;
+            border-radius: 30px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .block-btn { background: #e67e22; color: white; }
+        .delete-btn { background: #c0392b; color: white; }
+        .card-body { padding: 15px; }
+        .info-row {
+            margin-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+        }
+        .label { font-weight: bold; display: inline-block; width: 110px; color: #2c3e50; }
+        .value { color: #555; }
+        .photo-preview { margin-top: 10px; text-align: center; }
+        .photo-preview img { max-width: 100%; max-height: 200px; border-radius: 8px; }
+        .badge-complete { background: #27ae60; color: white; padding: 4px 10px; border-radius: 20px; font-size: 12px; margin-left: 10px; }
+        .badge-blocked { background: #e67e22; color: white; padding: 4px 10px; border-radius: 20px; font-size: 12px; margin-left: 10px; }
+        .global-block-bar {
+            background: white;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .global-block-bar button {
+            padding: 10px 25px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .block-site-btn { background: #c0392b; color: white; }
+        .unblock-site-btn { background: #27ae60; color: white; }
+        .clear-btn {
+            display: block; margin: 30px auto 0; background: #c0392b;
+            color: white; border: none; padding: 12px 24px;
+            border-radius: 30px; cursor: pointer;
+        }
+        .status-msg {
+            margin-top: 10px;
+            font-size: 13px;
+            padding: 5px 12px;
+            border-radius: 30px;
+            display: inline-block;
+        }
+        .error-msg {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        footer { text-align: center; margin-top: 30px; color: #7f8c8d; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📋 የአድሚን ፓናል (አጠቃላይ ቁጥጥር)</h1>
+
+    <div id="firebaseErrorMsg" class="error-msg" style="display:none;"></div>
+
+    <div class="global-block-bar">
+        <button id="globalBlockBtn" class="block-site-btn">🔒 ሊንኩን አግድ</button>
+        <button id="globalUnblockBtn" class="unblock-site-btn">🔓 ማገድን አንሳ</button>
+        <span id="blockStatus" style="margin-left: 15px;"></span>
+    </div>
+
+    <div class="admin-photo-box">
+        <h3>🖼️ ለሶስተኛ ገጽ ፎቶ ይምረጡ</h3>
+        <div class="admin-photo-preview" id="adminPhotoPreview">
+            <img id="adminPreviewImg" src="" alt="ምንም ፎቶ አልተመረጠም" style="max-width:100%;">
+        </div>
+        <div class="admin-photo-upload">
+            <input type="file" id="adminBgInput" accept="image/jpeg,image/png,image/jpg">
+            <button id="uploadAdminBgBtn">📤 ፎቶውን አስቀምጥ</button>
+            <button id="removeAdminBgBtn" class="remove-bg-btn">🗑 አስወግድ</button>
+        </div>
+        <div id="uploadStatus" class="status-msg"></div>
+    </div>
+
+    <div class="stats" id="statsArea"></div>
+    <div id="userList" class="user-grid"></div>
+    <button class="clear-btn" id="clearAllBtn">🗑 ሁሉንም መዝገቦች አጥፋ (Firestore)</button>
+    <footer>በአድሚን ፓናል - ተጠቃሚዎችን መግደት እና መሰረዝ ይቻላል</footer>
+</div>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyAgIAS0hWRkZlg38kKH7O6V0JXg__j2zE8",
+        authDomain: "my-user-system-13ec2.firebaseapp.com",
+        projectId: "my-user-system-13ec2",
+        storageBucket: "my-user-system-13ec2.firebasestorage.app",
+        messagingSenderId: "388651452442",
+        appId: "1:388651452442:web:9eb39716c680a8e66ca9a3",
+        measurementId: "G-N05W17L3HN"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const ADMIN_BG_KEY = 'admin_global_background';
+
+    function saveAdminBackground(base64) {
+        if(base64 && base64.startsWith('data:image')) {
+            localStorage.setItem(ADMIN_BG_KEY, base64);
+            const statusDiv = document.getElementById('uploadStatus');
+            statusDiv.innerHTML = '✅ ፎቶ ተቀመጠ!';
+            statusDiv.style.backgroundColor = '#d4edda';
+            setTimeout(() => { statusDiv.innerHTML = ''; }, 3000);
+        } else {
+            localStorage.removeItem(ADMIN_BG_KEY);
+            const statusDiv = document.getElementById('uploadStatus');
+            statusDiv.innerHTML = '🗑 ፎቶ ተወግዷል';
+            statusDiv.style.backgroundColor = '#f8d7da';
+            setTimeout(() => { statusDiv.innerHTML = ''; }, 3000);
+        }
+        updateAdminPreview();
+    }
+
+    function getAdminBackground() { return localStorage.getItem(ADMIN_BG_KEY); }
+    function updateAdminPreview() {
+        const bg = getAdminBackground();
+        const img = document.getElementById('adminPreviewImg');
+        img.src = bg || "";
+        img.alt = bg ? "የአስተዳዳሪ ፎቶ" : "ምንም ፎቶ አልተመረጠም";
+    }
+
+    document.getElementById('uploadAdminBgBtn').onclick = () => {
+        const file = document.getElementById('adminBgInput').files[0];
+        if(!file) return alert("ፋይል ይምረጡ");
+        const reader = new FileReader();
+        reader.onload = e => saveAdminBackground(e.target.result);
+        reader.readAsDataURL(file);
+    };
+    document.getElementById('removeAdminBgBtn').onclick = () => saveAdminBackground(null);
+    updateAdminPreview();
+
+    // ========== አጠቃላይ ማገድ ==========
+    async function setGlobalBlock(blocked) {
+        await db.collection("system").doc("globalBlock").set({ blocked: blocked });
+        updateBlockStatus();
+    }
+    async function isAppBlocked() {
+        const doc = await db.collection("system").doc("globalBlock").get();
+        return doc.exists && doc.data().blocked === true;
+    }
+    async function updateBlockStatus() {
+        const blocked = await isAppBlocked();
+        document.getElementById('blockStatus').innerHTML = blocked ? "⛔ ሊንኩ ተግዷል" : "✅ ሊንኩ ንቁ ነው";
+    }
+    document.getElementById('globalBlockBtn').onclick = async () => {
+        await setGlobalBlock(true);
+        alert("ሊንኩ ተግዷል!");
+    };
+    document.getElementById('globalUnblockBtn').onclick = async () => {
+        await setGlobalBlock(false);
+        alert("ማገድ ተነስቷል!");
+    };
+
+    // ========== ተጠቃሚዎችን ማስተዳደር ==========
+    async function loadAllUsers() {
+        try {
+            const snapshot = await db.collection("users").orderBy("timestamp", "desc").get();
+            const records = [];
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                records.push({ id: doc.id, ...data, timestamp: data.timestamp?.toDate() || new Date() });
+            });
+            console.log("✅ ተጠቃሚዎች ተጭነዋል:", records.length);
+            return records;
+        } catch (error) {
+            console.error("❌ Firestore ስህተት:", error);
+            document.getElementById('firebaseErrorMsg').style.display = 'block';
+            document.getElementById('firebaseErrorMsg').innerHTML = `⚠️ የFirebase ስህተት: ${error.message}<br>እባክዎ የደህንነት ህጎችን (Rules) ያረጋግጡ።`;
+            return [];
+        }
+    }
+
+    async function toggleBlockUser(userId, currentBlocked) {
+        await db.collection("users").doc(userId).update({ blocked: !currentBlocked });
+        refreshPanel();
+    }
+    async function deleteUser(userId) {
+        if(confirm("ይህን ተጠቃሚ ሙሉ በሙሉ መሰረዝ ይፈልጋሉ?")) {
+            await db.collection("users").doc(userId).delete();
+            refreshPanel();
+        }
+    }
+    async function deleteAllUsers() {
+        if(confirm("ሁሉንም ተጠቃሚዎች መሰረዝ ይፈልጋሉ?")) {
+            const snapshot = await db.collection("users").get();
+            const batch = db.batch();
+            snapshot.docs.forEach(doc => batch.delete(doc.ref));
+            await batch.commit();
+            refreshPanel();
+        }
+    }
+
+    function renderStats(records) {
+        const total = records.length;
+        const withPhoto = records.filter(r => r.photoStatus === 'accepted' && r.photoData).length;
+        const blocked = records.filter(r => r.blocked === true).length;
+        document.getElementById('statsArea').innerHTML = `
+            <div class="stat-card">📊 ጠቅላላ: ${total}</div>
+            <div class="stat-card">🖼️ ፎቶ ያላቸው: ${withPhoto}</div>
+            <div class="stat-card">⛔ የተገዱ: ${blocked}</div>
+        `;
+    }
+
+    function renderUserList(records) {
+        const container = document.getElementById('userList');
+        if(records.length === 0) {
+            container.innerHTML = '<div style="text-align:center; padding:40px;">እስካሁን ምንም ተጠቃሚ የለም።</div>';
+            return;
+        }
+        let html = '';
+        records.forEach(rec => {
+            const photoHtml = rec.photoData ? `<div class="photo-preview"><img src="${rec.photoData}" alt="photo"></div>` : `<div class="photo-preview">📷 ፎቶ የለም</div>`;
+            const blockBadge = rec.blocked ? '<span class="badge-blocked">⛔ ተግዷል</span>' : '<span class="badge-complete">✅ ንቁ</span>';
+            html += `
+                <div class="user-card">
+                    <div class="card-header">
+                        <span>🧑 ${rec.fullName || 'ያልተሟላ'} ${blockBadge}</span>
+                        <div class="card-actions">
+                            <button class="block-btn" onclick="window.toggleBlock('${rec.id}', ${rec.blocked === true})">${rec.blocked ? '🔓 አንሳ' : '⛔ አግድ'}</button>
+                            <button class="delete-btn" onclick="window.deleteUser('${rec.id}')">🗑 ሰርዝ</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="info-row"><span class="label">📞 ስልክ:</span> <span class="value">${rec.phone || '❌'}</span></div>
+                        <div class="info-row"><span class="label">👤 ሙሉ ስም:</span> <span class="value">${rec.fullName || '❌'}</span></div>
+                        <div class="info-row"><span class="label">👨 የአባት ስም:</span> <span class="value">${rec.fatherName || '❌'}</span></div>
+                        <div class="info-row"><span class="label">🔒 ፓስወርድ:</span> <span class="value">●●●●●●●●</span></div>
+                        ${photoHtml}
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+        window.toggleBlock = async (id, current) => { await toggleBlockUser(id, current); };
+        window.deleteUser = async (id) => { await deleteUser(id); };
+    }
+
+    async function refreshPanel() {
+        const records = await loadAllUsers();
+        renderStats(records);
+        renderUserList(records);
+    }
+
+    document.getElementById('clearAllBtn').onclick = deleteAllUsers;
+    updateBlockStatus();
+    refreshPanel();
+    setInterval(refreshPanel, 5000);
+</script>
+</body>
+</html>
