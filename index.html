@@ -7,11 +7,9 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
         body { background: #f5f7fb; padding: 0; margin: 0; min-height: 100vh; display: flex; flex-direction: column; }
-        
         .auth-container, .app-container { max-width: 550px; margin: 0 auto; width: 100%; background: white; min-height: 100vh; box-shadow: 0 0 20px rgba(0,0,0,0.05); position: relative; }
         .auth-container { display: flex; flex-direction: column; justify-content: center; padding: 2rem 1.5rem; }
         .app-container { display: none; padding-bottom: 70px; }
-        
         .form-group { margin-bottom: 1.2rem; }
         label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; color: #1e3a5f; }
         input, select { width: 100%; padding: 0.8rem 1rem; border: 1px solid #cfdfed; border-radius: 2rem; font-size: 0.95rem; background: white; outline: none; margin-bottom: 0.5rem; }
@@ -19,62 +17,43 @@
         .btn-outline { background: transparent; border: 1px solid #1e3a5f; color: #1e3a5f; }
         .toggle-link { text-align: center; margin-top: 1rem; font-size: 0.85rem; }
         .toggle-link a { color: #2c7da0; text-decoration: none; font-weight: 600; }
-        
         .header { padding: 1.2rem 1rem; background: #1e293b; color: white; position: sticky; top: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center; }
         .header-text h1 { font-size: 1.5rem; font-weight: 700; color: white; }
         .header-text p { font-size: 0.75rem; color: #94a3b8; }
         .telegram-logo { width: 40px; height: 40px; background-color: #229ED9; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; text-decoration: none; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-        
         .balance-card { background: #1e3a5f; color: white; border-radius: 1.5rem; padding: 1.5rem 1.2rem; margin: 1rem; text-align: center; position: relative; overflow: hidden; }
         .balance-amount { font-size: 2.5rem; font-weight: bold; margin: 0.5rem 0; color: #10b981; }
         .recharge-wallet { color: #ef4444; }
         .action-btn-recharge { background: #ef4444; color: white; padding: 0.5rem 1rem; border-radius: 1rem; border: none; margin: 0.2rem; font-weight:bold; cursor:pointer;}
         .action-btn-withdraw { background: #f59e0b; color: white; padding: 0.5rem 1rem; border-radius: 1rem; border: none; margin: 0.2rem; font-weight:bold; cursor:pointer;}
-        
         .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 1rem; padding: 1rem; }
-        
-        .product-card-container {
-            position: relative;
-            padding: 10px; margin-bottom: 1rem; border-radius: 1.2rem;
-            background-color: #fbbf24;
-            background-image: 
-                repeating-linear-gradient(90deg, transparent, transparent 18px, rgba(16, 185, 129, 0.8) 18px, rgba(16, 185, 129, 0.8) 20px),
-                repeating-linear-gradient(0deg, transparent, transparent 18px, rgba(16, 185, 129, 0.8) 18px, rgba(16, 185, 129, 0.8) 20px);
-            background-size: 20px 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-        }
+        .product-card-container { position: relative; padding: 10px; margin-bottom: 1rem; border-radius: 1.2rem; background-color: #fbbf24; background-image: repeating-linear-gradient(90deg, transparent, transparent 18px, rgba(16, 185, 129, 0.8) 18px, rgba(16, 185, 129, 0.8) 20px), repeating-linear-gradient(0deg, transparent, transparent 18px, rgba(16, 185, 129, 0.8) 18px, rgba(16, 185, 129, 0.8) 20px); background-size: 20px 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
         .product-card-inner { background: #fef08a; border-radius: 1rem; padding: 1.2rem 1rem; text-align: center; border: 2px solid #10b981; }
         .product-card-inner h4 { font-size: 1.2rem; font-weight: 700; color: #1e3a5f; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 5px;}
         .product-price-pill { background: white; color: #10b981; padding: 0.4rem 1.5rem; border-radius: 2rem; font-size: 1.3rem; font-weight: 800; margin: 0.8rem auto; display: inline-block; border: 2px solid #e2e8f0; }
         .product-detail { font-size: 0.8rem; color: #4b5563; display: flex; justify-content: space-between; margin-top: 0.3rem; border-bottom: 1px dashed #d1d5db; padding-bottom: 0.2rem;}
         .invest-now { margin-top: 1rem; width: 100%; background: #1e3a5f; color: white; border: none; padding: 0.6rem; border-radius: 2rem; font-weight: 600; cursor: pointer; }
-        
         .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; max-width: 550px; margin: 0 auto; background: white; display: flex; justify-content: space-around; padding: 0.6rem 0.5rem; border-top: 1px solid #eef2f6; z-index: 20; }
         .nav-item { text-align: center; flex: 1; cursor: pointer; font-size: 0.7rem; color: #8a9bb0; }
         .nav-item.active { color: #1e3a5f; font-weight: bold; }
         .nav-icon { font-size: 1.4rem; display: block; }
-        
         .page { display: none; padding: 0.5rem 1rem 1rem; }
         .page.active { display: block; }
-        
         .order-card, .transaction-item { background: #f9fbfd; border-radius: 1rem; padding: 0.8rem; margin-bottom: 0.8rem; border: 1px solid #eef2f6; }
         .wealth-stats { background: #eef2f9; border-radius: 1rem; padding: 1rem; margin: 1rem 0; }
         .flex-between { display: flex; justify-content: space-between; align-items: center; }
         .tag { background: #cfdfed; padding: 0.2rem 0.6rem; border-radius: 2rem; font-size: 0.7rem; }
         .copy-btn { background: #2c7da0; color: white; border: none; padding: 0.2rem 0.6rem; border-radius: 2rem; font-size: 0.7rem; cursor: pointer; margin-left: 0.5rem; }
         .video-timer { background: #fef3c7; padding: 0.5rem; border-radius: 2rem; text-align: center; margin-top: 0.5rem; }
-        
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
         .modal-content { background: white; width: 90%; max-width: 400px; border-radius: 1.5rem; padding: 1.5rem; max-height: 90vh; overflow-y: auto; }
         .warning { color: #d97706; font-size: 0.75rem; }
         .text-center { text-align: center; }
         .mt-2 { margin-top: 0.5rem; }
         .mt-3 { margin-top: 1rem; }
-
         .flower-border-box { position: relative; padding: 1.5rem 1.2rem; margin: 1.5rem 0; border: none !important; border-radius: 1rem; background-color: #fff; z-index: 1; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .flower-border-box::before { content: ""; position: absolute; top: -12px; left: -12px; right: -12px; bottom: -12px; border-radius: 1.2rem; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">🌺</text></svg>'), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">💛</text></svg>'), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">🌼</text></svg>'), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">💚</text></svg>'); background-position: top left, top right, bottom left, bottom right; background-repeat: repeat-x, repeat-x, repeat-x, repeat-x; background-size: 24px 24px; z-index: -1; }
         .flower-border-box::after { content: ""; position: absolute; top: 0; left: -12px; right: -12px; bottom: 0; border-radius: 1.2rem; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">🌺</text></svg>'), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">💛</text></svg>'), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">🌼</text></svg>'), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">💚</text></svg>'); background-position: top left, top right, bottom left, bottom right; background-repeat: repeat-y, repeat-y, repeat-y, repeat-y; background-size: 24px 24px; z-index: -1; }
-
         .wealth-bg { background-color: #e0f2fe !important; }
         .task-bg-black { background-color: #f3f4f6 !important; }
         .task-bg-red { background-color: #fef2f2 !important; }
@@ -82,21 +61,16 @@
         .mine-bg-blue { background-color: #e0f2fe !important; }
         .mine-bg-green { background-color: #dcfce7 !important; }
         .dotted-blue-btn { background: transparent; border: 2px dotted #3b82f6 !important; color: #10b981; border-radius: 2rem; padding: 0.5rem 1rem; font-weight: 600; cursor: pointer; width: 100%; text-align: center; margin-top: 0.5rem; }
-
-        /* Maintenance Screen Style */
         #maintenanceScreen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: #f5f7fb; z-index: 9999; justify-content: center; align-items: center; text-align: center; padding: 2rem; flex-direction: column;}
-        
-        /* የፎቶ መቀበያ ስታይል */
-        .upload-box-container { width: 100%; margin: 1rem 0 1.5rem 0; }
-        .upload-box { border: 2px dashed #94a3b8; border-radius: 1rem; padding: 1.5rem 1rem; text-align: center; cursor: pointer; background: #f8fafc; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 120px; transition: all 0.3s ease; position: relative; }
-        .upload-box:hover { border-color: #3b82f6; background: #eff6ff; }
-        .upload-box img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; display: none; margin-bottom: 0.5rem; border: 2px solid #3b82f6; }
-        .upload-box span { font-size: 0.9rem; color: #64748b; font-weight: 500; }
+        #loadingOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.85); z-index: 9998; justify-content: center; align-items: center; flex-direction: column; }
+        .spinner { width: 50px; height: 50px; border: 5px solid #e2e8f0; border-top: 5px solid #1e3a5f; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-<!-- MAINTENANCE SCREEN -->
+<div id="loadingOverlay"><div class="spinner"></div><p style="margin-top:1rem;color:#1e3a5f;font-weight:bold;">Loading...</p></div>
+
 <div id="maintenanceScreen">
     <div style="font-size: 4rem; margin-bottom: 1rem;">🛠️</div>
     <h2 style="color: #ef4444; margin-bottom: 1rem;">Under Maintenance</h2>
@@ -104,29 +78,16 @@
     <p id="maintenanceTime" style="font-size: 0.9rem; color: #94a3b8; font-weight: bold;"></p>
 </div>
 
-<!-- AUTH CONTAINER -->
 <div id="authContainer" class="auth-container">
     <div id="loginForm" style="display:none;">
         <h2 style="text-align:center; color:#1e3a5f;">Cotton Exporter</h2>
         <p class="text-center" style="margin-bottom:1.5rem;">Sign in to your account</p>
-        
-        <div class="upload-box-container">
-            <div class="upload-box" onclick="document.getElementById('loginPhotoInput').click()">
-                <img id="loginPhotoPreview" src="" alt="Profile">
-                <span id="loginPhotoText">📷 ፎቶ ይምረጡ (Optional)</span>
-            </div>
-        </div>
-        <input type="file" id="loginPhotoInput" accept="image/*" capture="environment" style="display:none;" onchange="previewLoginPhoto(event)">
-
         <div class="form-group"><label>📞 Phone Number</label><input type="tel" id="loginPhone" placeholder="+251 912345678"></div>
         <div class="form-group"><label>🔒 Password</label><input type="password" id="loginPassword" placeholder="Enter password"></div>
-        
         <button id="doLogin" class="btn" style="margin-top: 0.5rem;">Ok</button>
-        
         <button id="biometricLoginBtn" class="btn-outline mt-2" style="display:flex; justify-content:center; align-items:center; gap:10px;" onclick="biometricLogin()">
             <span style="font-size:1.5rem;">👤</span> Login with Face ID / Fingerprint
         </button>
-
         <div class="toggle-link">Don't have an account? <a href="#" id="showRegister">Sign up</a></div>
         <div id="loginMessage" class="warning text-center mt-2"></div>
     </div>
@@ -134,15 +95,6 @@
     <div id="registerForm" style="display:block;">
         <h2 style="text-align:center; color:#1e3a5f;">Cotton Exporter</h2>
         <p class="text-center">Create an account to start investing</p>
-        
-        <div class="upload-box-container">
-            <div class="upload-box" onclick="document.getElementById('regPhotoInput').click()">
-                <img id="regPhotoPreview" src="" alt="Profile">
-                <span id="regPhotoText">📷 ፎቶ ይምረጡ (Optional)</span>
-            </div>
-        </div>
-        <input type="file" id="regPhotoInput" accept="image/*" capture="environment" style="display:none;" onchange="previewRegPhoto(event)">
-        
         <div class="form-group"><label>📞 Phone Number</label><input type="tel" id="regPhone" placeholder="+251 912345678"></div>
         <div class="form-group"><label>👤 Full Name</label><input type="text" id="fullName" placeholder="Full name"></div>
         <div class="form-group"><label>🔒 Login Password</label><input type="password" id="regPassword" placeholder="Password"></div>
@@ -155,7 +107,6 @@
     </div>
 </div>
 
-<!-- APP CONTAINER -->
 <div id="appContainer" class="app-container">
     <div class="header">
         <div class="header-text">
@@ -166,12 +117,10 @@
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" fill="#ffffff"/></svg>
         </a>
     </div>
-
     <div id="homePage" class="page active"></div>
     <div id="wealthPage" class="page"></div>
     <div id="taskPage" class="page"></div>
     <div id="minePage" class="page"></div>
-
     <div class="bottom-nav">
         <div class="nav-item" data-page="home"><span class="nav-icon">🏠</span><br>Home</div>
         <div class="nav-item" data-page="wealth"><span class="nav-icon">💰</span><br>Wealth</div>
@@ -180,701 +129,822 @@
     </div>
 </div>
 
-<!-- MODALS -->
 <div id="rechargeModal" class="modal"><div class="modal-content" id="rechargeContent"></div></div>
 <div id="withdrawModal" class="modal"><div class="modal-content" id="withdrawContent"></div></div>
 <div id="investModal" class="modal"><div class="modal-content" id="investContent"></div></div>
 <div id="cashGiftModal" class="modal"><div class="modal-content" id="cashGiftContent"></div></div>
 <div id="exchangeModal" class="modal"><div class="modal-content" id="exchangeContent"></div></div>
 
-<script>
-    // ================= GLOBAL DATA =================
-    let currentUser = null;
-    let users = [];
-    let investments = [];
-    let transactions = [];
-    let giftCodes = [];
-    let validFTTransactions = [];
-    let PRODUCTS = {};
-    let tempLoginPhotoBase64 = ""; 
-    let tempRegPhotoBase64 = "";   
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getDatabase, ref, get, set, update, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-    const defaultProducts = {
-        young: { name: "Young", price: 1000, totalReturn: 1800, daily: 40, days: 45, icon: "🌱" },
-        bestOne: { name: "Best One", price: 2500, totalReturn: 4840, daily: 110, days: 44, icon: "⭐" },
-        onlyEthiopians: { name: "Only For Ethiopians", price: 5000, totalReturn: 9900, daily: 220, days: 45, icon: "🇪🇹" },
-        mandheling: { name: "Mandheling", price: 8000, totalReturn: 15300, daily: 340, days: 45, icon: "☕" },
-        antigua: { name: "Antigua", price: 20000, totalReturn: 45000, daily: 1000, days: 45, icon: "🏝️" },
-        tarrazu: { name: "Tarrazú", price: 40000, totalReturn: 100000, daily: 2500, days: 40, icon: "⛰️" }
-    };
+  const firebaseConfig = {
+    apiKey: "AIzaSyDhbWmNY-Jf-O4y_wF26EEa6YKshz0H_cU",
+    authDomain: "cotton-exporter.firebaseapp.com",
+    projectId: "cotton-exporter",
+    storageBucket: "cotton-exporter.firebasestorage.app",
+    messagingSenderId: "1003506189501",
+    appId: "1:1003506189501:web:37a47612e791af7ce8e3d4",
+    databaseURL: "https://cotton-exporter-default-rtdb.firebaseio.com"
+  };
 
-    // ================= LOAD & SAVE =================
-    function loadData() {
-        let u = localStorage.getItem("cotton_users");
-        if (u) users = JSON.parse(u);
-        let inv = localStorage.getItem("cotton_investments");
-        if (inv) investments = JSON.parse(inv);
-        let tr = localStorage.getItem("cotton_transactions");
-        if (tr) transactions = JSON.parse(tr);
-        let gc = localStorage.getItem("cotton_giftcodes");
-        if (gc) giftCodes = JSON.parse(gc);
-        let ft = localStorage.getItem("cotton_ft_transactions");
-        if (ft) validFTTransactions = JSON.parse(ft);
-        else validFTTransactions = [{ code: "FT26110L6GG0", amount: 500, usedBy: null }, { code: "FT98765ABCD", amount: 1000, usedBy: null }];
-        
-        let p = localStorage.getItem("cotton_products");
-        PRODUCTS = p ? JSON.parse(p) : JSON.parse(JSON.stringify(defaultProducts));
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
 
-        for (let g of giftCodes) { if (g.active === undefined) g.active = true; }
-        if (giftCodes.length === 0) giftCodes.push({ code: "YXMTQX", value: 50, usedBy: null, active: true });
-        
-        if (users.length === 0) {
-            let demoUser = {
-                phone: "0947655291", fullName: "Demo User", password: "123456", payPassword: "123456",
-                inviteCode: generateInviteCode(), referredBy: null, balance: 5000, rechargeBalance: 5000,
-                wealthWallet: 0, rewardWallet: 0, totalEarnings: 0, vipLevel: 0, lastDailyBonus: null,
-                lastVideoTaskDate: null, shareReferralCount: 0, shareRewardClaimed: false, isBanned: false,
-                profilePic: "", createdAt: new Date().toISOString()
-            };
-            users.push(demoUser);
-        }
-        for (let u of users) {
-            if (u.rechargeBalance === undefined) u.rechargeBalance = 0;
-            if (u.isBanned === undefined) u.isBanned = false;
-            if (u.profilePic === undefined) u.profilePic = "";
-        }
-        saveAllData();
-    }
+  let currentUser = null;
+  let users = {};
+  let investments = {};
+  let transactions = {};
+  let giftCodes = {};
+  let validFTTransactions = {};
+  let PRODUCTS = {};
 
-    function saveAllData() {
-        localStorage.setItem("cotton_users", JSON.stringify(users));
-        localStorage.setItem("cotton_investments", JSON.stringify(investments));
-        localStorage.setItem("cotton_transactions", JSON.stringify(transactions));
-        localStorage.setItem("cotton_giftcodes", JSON.stringify(giftCodes));
-        localStorage.setItem("cotton_ft_transactions", JSON.stringify(validFTTransactions));
-        localStorage.setItem("cotton_products", JSON.stringify(PRODUCTS));
-    }
+  const defaultProducts = {
+      young: { name: "Young", price: 1000, totalReturn: 1800, daily: 40, days: 45, icon: "🌱" },
+      bestOne: { name: "Best One", price: 2500, totalReturn: 4840, daily: 110, days: 44, icon: "⭐" },
+      onlyEthiopians: { name: "Only For Ethiopians", price: 5000, totalReturn: 9900, daily: 220, days: 45, icon: "🇪🇹" },
+      mandheling: { name: "Mandheling", price: 8000, totalReturn: 15300, daily: 340, days: 45, icon: "☕" },
+      antigua: { name: "Antigua", price: 20000, totalReturn: 45000, daily: 1000, days: 45, icon: "🏝️" },
+      tarrazu: { name: "Tarrazú", price: 40000, totalReturn: 100000, daily: 2500, days: 40, icon: "⛰️" }
+  };
 
-    function generateInviteCode() { return Math.random().toString(36).substring(2, 8).toUpperCase(); }
-    function addTransaction(userPhone, type, amount, desc) {
-        transactions.unshift({ id: Date.now(), userPhone, type, amount, description: desc, timestamp: new Date().toISOString() });
-        saveAllData();
-    }
+  function showLoading(show) {
+      document.getElementById("loadingOverlay").style.display = show ? "flex" : "none";
+  }
 
-    // ================= MAIN APP LOGIC =================
-    function processDailyIncomes() {
-        let now = new Date();
-        for (let inv of investments) {
-            let user = users.find(u => u.phone === inv.userPhone);
-            if (!user) continue;
-            let last = new Date(inv.lastIncomeDate);
-            let daysDiff = Math.floor((now - last) / 86400000);
-            if (daysDiff > 0 && inv.daysLeft > 0) {
-                let income = inv.dailyRate * daysDiff;
-                if (income > 0) {
-                    user.wealthWallet += income;
-                    user.totalEarnings += income;
-                    inv.lastIncomeDate = now.toISOString();
-                    inv.daysLeft -= daysDiff;
-                    addTransaction(user.phone, "income", income, `Daily income from ${inv.productName}`);
-                }
-            }
-        }
-        for (let u of users) {
-            let hasPurchase = investments.some(i => i.userPhone === u.phone);
-            let referralCount = users.filter(usr => usr.referredBy === u.phone).length;
-            if (referralCount >= 20 && hasPurchase) u.vipLevel = 3;
-            else if (referralCount >= 5 && hasPurchase) u.vipLevel = 2;
-            else if (hasPurchase) u.vipLevel = 1;
-            else u.vipLevel = 0;
-        }
-        saveAllData();
-    }
+  function generateInviteCode() { return Math.random().toString(36).substring(2, 8).toUpperCase(); }
 
-    function refreshAllUI() {
-        if (!currentUser) return;
-        processDailyIncomes();
-        renderHomePage();
-        renderWealthPage();
-        renderTaskPage();
-        renderMinePage();
-    }
+  async function loadData() {
+      try {
+          const usersSnap = await get(ref(db, "cotton_users"));
+          users = usersSnap.exists() ? usersSnap.val() : {};
 
-    function renderHomePage() {
-        let user = users.find(u => u.phone === currentUser);
-        if (!user) return;
-        let html = `
-            <div class="flower-border-box" style="background-color: #fefce8; margin-top: 1rem;">
-                <div style="text-align: center;">
-                    <div style="font-size: 1.1rem; color: #1e3a5f; margin-bottom: 0.5rem;">Cotton Exporter - The first checkpoint of quality control</div>
-                    <div style="font-size: 3rem; font-weight: bold; color: #10b981;">${user.balance.toFixed(2)} ETB</div>
-                    <div style="color: #475569; margin-bottom: 1rem;">Wallet Balance</div>
-                    <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 1rem;">
-                        <button class="action-btn-recharge" id="openRecharge" style="border-radius: 2rem; padding: 0.6rem 1.5rem;">➕ Recharge</button>
-                        <button class="action-btn-withdraw" id="openWithdraw" style="border-radius: 2rem; padding: 0.6rem 1.5rem;">➖ Withdraw</button>
-                    </div>
-                    <div style="font-size: 0.9rem; color: #475569;">💰 Recharge Wallet: <span style="color: #ef4444; font-weight: bold;">${user.rechargeBalance.toFixed(2)} ETB</span></div>
-                </div>
-            </div>
-            <h3 style="margin:1.5rem 0 0.5rem 1rem; text-align: center; color: #1e3a5f;">እያስቀመጡ ባሉት (Investment Products)</h3>
-            <div class="products-grid" id="productsGrid" style="padding-top: 0;"></div>
-        `;
-        document.getElementById("homePage").innerHTML = html;
-        
-        let grid = document.getElementById("productsGrid");
-        for (let [key, prod] of Object.entries(PRODUCTS)) {
-            let card = document.createElement("div");
-            card.className = "product-card-container";
-            card.innerHTML = `
-                <div class="product-card-inner">
-                    <h4>${prod.icon} ${prod.name}</h4>
-                    <div class="product-price-pill">${prod.price.toLocaleString()} ETB</div>
-                    <div class="product-detail"><span>Total:</span><span>${prod.totalReturn.toLocaleString()} ETB</span></div>
-                    <div class="product-detail"><span>Daily:</span><span>${prod.daily} ETB</span></div>
-                    <div class="product-detail" style="border:none;"><span>${prod.days} Days</span></div>
-                    <button class="invest-now" data-product="${key}">Invest Now</button>
-                </div>
-            `;
-            grid.appendChild(card);
-        }
-        document.querySelectorAll(".invest-now").forEach(btn => {
-            btn.onclick = () => openInvestModal(btn.dataset.product);
-        });
-        document.getElementById("openRecharge").onclick = () => document.getElementById("rechargeModal").style.display = "flex";
-        document.getElementById("openWithdraw").onclick = () => {
-            document.getElementById("withdrawableBalance").innerText = user.balance.toFixed(2);
-            document.getElementById("withdrawModal").style.display = "flex";
-        };
-    }
+          const invSnap = await get(ref(db, "cotton_investments"));
+          investments = invSnap.exists() ? invSnap.val() : {};
 
-    function renderWealthPage() {
-        let user = users.find(u => u.phone === currentUser);
-        let userInvestments = investments.filter(i => i.userPhone === currentUser);
-        let lastBonus = user.lastDailyBonus ? new Date(user.lastDailyBonus) : null;
-        let now = new Date();
-        let canReceive = !lastBonus || (now - lastBonus) >= 86400000;
-        let bonusStatus = canReceive ? "✅ Ready to claim" : `⏳ Next: ${new Date(lastBonus.getTime() + 86400000).toLocaleString()}`;
-        
-        let html = `
-            <div class="flower-border-box wealth-bg" style="margin-top: 1rem;">
-                <div class="flex-between" style="margin-bottom: 0.5rem;"><span style="font-weight: 600;">Wealth Wallet</span><span>${user.wealthWallet.toFixed(2)} ETB</span></div>
-                <div class="flex-between" style="margin-bottom: 0.5rem;"><span style="font-weight: 600;">Reward Wallet</span><span>${(user.rewardWallet || 0).toFixed(2)} ETB</span></div>
-                <div class="flex-between" style="margin-bottom: 1rem; border-bottom: 1px solid #bae6fd; padding-bottom: 0.5rem;"><span style="font-weight: 600;">Total Earnings</span><span>${user.totalEarnings.toFixed(2)} ETB</span></div>
-                <div class="flex-between mt-2">
-                    <span>🎁 Daily Receive</span>
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <span style="font-size: 0.8rem; color: #10b981;">${canReceive ? '✅ Ready' : '⏳ Wait'}</span>
-                        <button id="dailyReceiveBtn" class="btn-outline" style="padding: 0.3rem 1rem; border-radius: 1rem;" ${!canReceive ? 'disabled' : ''}>Claim</button>
-                    </div>
-                </div>
-                <div class="warning text-center mt-1" style="font-size: 0.7rem;">${bonusStatus}</div>
-                <button id="exchangeToBalance" class="btn-outline mt-3" style="border-radius: 0.5rem; padding: 0.5rem;">Exchange Wealth → Balance</button>
-            </div>
-            <div class="flex-between" style="margin:1rem 0;"><strong>Active Orders</strong><span>${userInvestments.length}</span></div>
-            <div id="ordersList"></div>
-        `;
-        document.getElementById("wealthPage").innerHTML = html;
-        let ordersDiv = document.getElementById("ordersList");
-        if (userInvestments.length === 0) ordersDiv.innerHTML = "<p>No active investments.</p>";
-        else {
-            ordersDiv.innerHTML = userInvestments.map(inv => `
-                <div class="order-card">
-                    <div class="flex-between"><strong>${inv.productName}</strong><span class="tag">Active</span></div>
-                    <div>Investment: ${inv.amount} ETB</div><div>Daily: ${inv.dailyRate} ETB</div>
-                    <div>Remaining: ${inv.daysLeft} days</div><div>Started: ${new Date(inv.startDate).toLocaleDateString()}</div>
-                </div>
-            `).join('');
-        }
-        document.getElementById("exchangeToBalance").onclick = () => {
-            document.getElementById("wealthWalletAmount").innerText = user.wealthWallet.toFixed(2);
-            document.getElementById("exchangeModal").style.display = "flex";
-        };
-        let dailyBtn = document.getElementById("dailyReceiveBtn");
-        if (dailyBtn) {
-            dailyBtn.onclick = () => {
-                if (!canReceive) { alert("Please wait 24 hours since last claim."); return; }
-                let bonus = Math.floor(Math.random() * 41) + 10;
-                user.wealthWallet += bonus;
-                user.totalEarnings += bonus;
-                user.lastDailyBonus = now.toISOString();
-                addTransaction(currentUser, "daily_bonus", bonus, `Daily receive bonus: ${bonus} ETB`);
-                saveAllData();
-                refreshAllUI();
-                alert(`You received ${bonus} ETB bonus! Added to Wealth Wallet.`);
-            };
-        }
-    }
+          const txSnap = await get(ref(db, "cotton_transactions"));
+          transactions = txSnap.exists() ? txSnap.val() : {};
 
-    function renderTaskPage() {
-        let user = users.find(u => u.phone === currentUser);
-        let lastVideo = user.lastVideoTaskDate ? new Date(user.lastVideoTaskDate) : null;
-        let now = new Date();
-        let canWatch = !lastVideo || (now - lastVideo) >= 86400000;
-        let videoStatus = canWatch ? "✅ Ready" : `⏳ Available in ${Math.ceil((lastVideo.getTime() + 86400000 - now) / 3600000)} hours`;
-        let shareRequired = 2;
-        let shareProgress = user.shareReferralCount || 0;
-        let shareCompleted = (user.shareRewardClaimed === true);
-        let shareStatus = shareCompleted ? "✅ Reward claimed" : `${shareProgress}/${shareRequired} registrations`;
+          const gcSnap = await get(ref(db, "cotton_giftcodes"));
+          giftCodes = gcSnap.exists() ? gcSnap.val() : {};
 
-        let html = `
-            <div style="padding: 0 1rem;">
-                <h3 style="margin-top: 1rem;">📋 Daily Tasks</h3>
-                <div class="flower-border-box task-bg-black" style="margin-top: 1.5rem;">
-                    <div class="flex-between">
-                        <span>🎬 Watch video advertisement (60 sec)</span>
-                        <span class="tag" style="background: #e5e7eb;">${videoStatus}</span>
-                    </div>
-                    <button id="watchVideoBtn" class="btn-outline mt-2" style="border-radius: 0.5rem; padding: 0.4rem 1rem;" ${!canWatch ? 'disabled' : ''}>Watch Video</button>
-                    <div id="videoTimer" class="video-timer" style="display:none;"></div>
-                </div>
-                <div class="flower-border-box task-bg-red" style="margin-top: 1.5rem;">
-                    <div class="flex-between">
-                        <span>📢 Share on social media (referral)</span>
-                        <span class="tag" style="background: #fecaca;">${shareStatus}</span>
-                    </div>
-                    <div class="mt-2">Invite 2 friends to join using your link:</div>
-                    <div class="flex-between mt-2">
-                        <input type="text" id="referralLinkInput" readonly value="${window.location.href.split('#')[0].split('?')[0]}?ref=${user.inviteCode}" style="font-size:0.75rem; background: white;">
-                        <button id="copyReferralLink" class="copy-btn" style="background: #3b82f6;">Copy</button>
-                    </div>
-                    <div class="warning mt-2" style="color: #b45309;">Reward (50 ETB) will be added to Reward Wallet after 2 successful registrations.</div>
-                </div>
-                <div class="flower-border-box task-bg-yellow" style="margin-top: 1.5rem; margin-bottom: 2rem;">
-                    <h3 class="mt-2">📜 Task Transaction History</h3>
-                    <div id="taskTransactionsList"></div>
-                </div>
-            </div>
-        `;
-        document.getElementById("taskPage").innerHTML = html;
-        let taskTx = transactions.filter(tx => tx.userPhone === currentUser && (tx.type === "video_task" || tx.type === "share_task"));
-        let txDiv = document.getElementById("taskTransactionsList");
-        if (taskTx.length === 0) txDiv.innerHTML = "<p>No task transactions yet.</p>";
-        else {
-            txDiv.innerHTML = taskTx.map(tx => `
-                <div class="transaction-item flex-between">
-                    <div><strong>${tx.type === "video_task" ? "🎬 Video Task" : "📢 Share Task"}</strong><br><small>${new Date(tx.timestamp).toLocaleString()}</small></div>
-                    <div style="color:#2b9348">+${tx.amount.toFixed(2)} ETB</div>
-                </div>
-            `).join('');
-        }
-        let watchBtn = document.getElementById("watchVideoBtn");
-        if (watchBtn) {
-            watchBtn.onclick = () => {
-                if (!canWatch) { alert("You can only watch once per day."); return; }
-                let timerDiv = document.getElementById("videoTimer");
-                let seconds = 60;
-                timerDiv.style.display = "block";
-                timerDiv.innerHTML = `⏳ Watch video: ${seconds} seconds remaining...`;
-                let interval = setInterval(() => {
-                    seconds--;
-                    timerDiv.innerHTML = `⏳ Watch video: ${seconds} seconds remaining...`;
-                    if (seconds <= 0) {
-                        clearInterval(interval);
-                        timerDiv.style.display = "none";
-                        let reward = 20;
-                        user.rewardWallet = (user.rewardWallet || 0) + reward;
-                        user.lastVideoTaskDate = new Date().toISOString();
-                        addTransaction(currentUser, "video_task", reward, `Video task reward: ${reward} ETB`);
-                        saveAllData();
-                        refreshAllUI();
-                        alert(`You earned ${reward} ETB! Added to Reward Wallet.`);
-                    }
-                }, 1000);
-            };
-        }
-        document.getElementById("copyReferralLink").onclick = () => {
-            let linkInput = document.getElementById("referralLinkInput");
-            linkInput.select();
-            navigator.clipboard.writeText(linkInput.value);
-            alert("Referral link copied!");
-        };
-    }
+          const ftSnap = await get(ref(db, "cotton_ft_transactions"));
+          if (ftSnap.exists()) {
+              validFTTransactions = ftSnap.val();
+          } else {
+              validFTTransactions = {
+                  "FT26110L6GG0": { code: "FT26110L6GG0", amount: 500, usedBy: null },
+                  "FT98765ABCD": { code: "FT98765ABCD", amount: 1000, usedBy: null }
+              };
+              await set(ref(db, "cotton_ft_transactions"), validFTTransactions);
+          }
 
-    function renderMinePage() {
-        let user = users.find(u => u.phone === currentUser);
-        let referralCount = users.filter(u => u.referredBy === currentUser).length;
-        
-        let profilePicHtml = user.profilePic ? `<img src="${user.profilePic}" style="width:60px; height:60px; border-radius:50%; object-fit:cover; margin-bottom:0.5rem;">` : `<div style="width:60px; height:60px; border-radius:50%; background:#cbd5e1; margin-bottom:0.5rem; display:flex; justify-content:center; align-items:center; font-size:1.5rem; color:white;">👤</div>`;
+          const prodSnap = await get(ref(db, "cotton_products"));
+          if (prodSnap.exists()) {
+              PRODUCTS = prodSnap.val();
+          } else {
+              PRODUCTS = JSON.parse(JSON.stringify(defaultProducts));
+              await set(ref(db, "cotton_products"), PRODUCTS);
+          }
 
-        document.getElementById("minePage").innerHTML = `
-            <div style="padding: 0 1rem;">
-                <div class="flower-border-box mine-bg-blue" style="margin-top: 1rem; text-align:center;">
-                    ${profilePicHtml}
-                    <div style="font-size: 1.1rem; font-weight: 600; margin-bottom: 0.3rem;">${user.fullName}</div>
-                    <div style="margin-bottom: 0.3rem;">VIP ${user.vipLevel}</div>
-                    <div>📱 ${user.phone}</div>
-                </div>
-                <div class="flower-border-box mine-bg-green" style="margin-top: 1.5rem;">
-                    <div class="flex-between" style="margin-bottom: 0.5rem;"><span>Total Revenue</span><span>${user.totalEarnings.toFixed(2)} ETB</span></div>
-                    <div class="flex-between"><span>Reward Wallet</span><span>${(user.rewardWallet || 0).toFixed(2)} ETB</span></div>
-                </div>
-                <div class="order-card" style="padding: 1rem; margin-bottom: 1rem; background: white; border-radius: 1rem;">
-                    <div style="margin-bottom: 0.5rem;">🔗 Invite Code: <strong>${user.inviteCode}</strong></div>
-                    <button id="copyInviteLink" class="dotted-blue-btn">Copy Link</button>
-                </div>
-                <div class="order-card" style="padding: 1rem; margin-bottom: 1rem; background: white; border-radius: 1rem;">
-                    <div style="margin-bottom: 0.5rem;">👥 My Team (${referralCount})</div>
-                    <button id="viewTeam" class="dotted-blue-btn">Team Details</button>
-                </div>
-                <div class="order-card" style="padding: 1rem; margin-bottom: 1rem; background: white; border-radius: 1rem;">
-                    <div style="margin-bottom: 0.5rem;">🎁 Cash Gift</div>
-                    <button id="openCashGift" class="dotted-blue-btn">Redeem Code</button>
-                </div>
-                <div class="order-card" style="padding: 1rem; margin-bottom: 1rem; background: white; border-radius: 1rem;">
-                    <div style="margin-bottom: 0.5rem;">⚙️ Settings</div>
-                    <button id="logoutBtn" class="btn-outline" style="background:#b91c1c; color:white; border-radius: 0.5rem; padding: 0.5rem;">Sign Out</button>
-                </div>
-                <div class="wealth-stats mt-3" style="background: #e2e8f0; border-radius: 1rem; padding: 1rem; margin-bottom: 2rem;">
-                    <strong>VIP Rules</strong><br>- VIP0: No purchase<br>- VIP1: Purchased product (5% team commission)<br>- VIP2: 5+ referrals (9%)<br>- VIP3: 20+ referrals (12%)
-                </div>
-            </div>
-        `;
-        document.getElementById("copyInviteLink").onclick = () => {
-            let link = `${window.location.href.split('#')[0].split('?')[0]}?ref=${user.inviteCode}`;
-            navigator.clipboard.writeText(link);
-            alert("Invite link copied!");
-        };
-        document.getElementById("viewTeam").onclick = () => {
-            let team = users.filter(u => u.referredBy === currentUser);
-            if (team.length === 0) alert("No team members yet.");
-            else alert(team.map(m => `${m.fullName} - ${m.phone}`).join("\n"));
-        };
-        document.getElementById("openCashGift").onclick = () => document.getElementById("cashGiftModal").style.display = "flex";
-        document.getElementById("logoutBtn").onclick = () => {
-            currentUser = null;
-            document.getElementById("appContainer").style.display = "none";
-            document.getElementById("authContainer").style.display = "flex";
-            document.getElementById("loginForm").style.display = "block";
-            document.getElementById("registerForm").style.display = "none";
-        };
-    }
+          // Initialize gift codes if empty
+          if (Object.keys(giftCodes).length === 0) {
+              giftCodes = { "YXMTQX": { code: "YXMTQX", value: 50, usedBy: null, active: true } };
+              await set(ref(db, "cotton_giftcodes"), giftCodes);
+          } else {
+              // ensure active flag
+              for (let k in giftCodes) {
+                  if (giftCodes[k].active === undefined) giftCodes[k].active = true;
+              }
+          }
 
-    function openInvestModal(productKey) {
-        let prod = PRODUCTS[productKey];
-        let user = users.find(u => u.phone === currentUser);
-        document.getElementById("investProductName").innerText = `${prod.icon} ${prod.name}`;
-        document.getElementById("investDetails").innerHTML = `Price: ${prod.price} ETB<br>Daily: ${prod.daily} ETB<br>Total Return: ${prod.totalReturn} ETB<br>Period: ${prod.days} Days<br>Available Balance: ${user.balance.toFixed(2)} ETB`;
-        document.getElementById("investPayPassword").value = "";
-        document.getElementById("investError").innerText = "";
-        let modal = document.getElementById("investModal");
-        modal.style.display = "flex";
-        let confirmBtn = document.getElementById("confirmInvest");
-        confirmBtn.onclick = () => {
-            let payPass = document.getElementById("investPayPassword").value;
-            if (payPass !== user.payPassword) { document.getElementById("investError").innerText = "❌ Incorrect pay password"; return; }
-            if (user.balance < prod.price) { document.getElementById("investError").innerText = "❌ Insufficient balance."; return; }
-            user.balance -= prod.price;
-            if (user.rechargeBalance >= prod.price) user.rechargeBalance -= prod.price;
-            else user.rechargeBalance = 0;
-            
-            investments.push({
-                id: Date.now(), userPhone: currentUser, productKey, productName: prod.name, amount: prod.price,
-                startDate: new Date().toISOString(), lastIncomeDate: new Date().toISOString(), dailyRate: prod.daily,
-                daysLeft: prod.days, totalReturn: prod.totalReturn
-            });
-            addTransaction(currentUser, "invest", -prod.price, `Purchased ${prod.name}`);
-            saveAllData();
-            modal.style.display = "none";
-            refreshAllUI();
-            alert(`Successfully invested in ${prod.name}!`);
-        };
-        document.getElementById("closeInvestModal").onclick = () => modal.style.display = "none";
-    }
+          // Demo user if empty
+          if (Object.keys(users).length === 0) {
+              const demoPhone = "0947655291";
+              const demoUser = {
+                  phone: demoPhone, fullName: "Demo User", password: "123456", payPassword: "123456",
+                  inviteCode: generateInviteCode(), referredBy: null, balance: 5000, rechargeBalance: 5000,
+                  wealthWallet: 0, rewardWallet: 0, totalEarnings: 0, vipLevel: 0, lastDailyBonus: null,
+                  lastVideoTaskDate: null, shareReferralCount: 0, shareRewardClaimed: false, isBanned: false,
+                  profilePic: "", createdAt: new Date().toISOString()
+              };
+              await set(ref(db, "cotton_users/" + demoPhone), demoUser);
+              users[demoPhone] = demoUser;
+          }
 
-    // ================= NAVIGATION & AUTH =================
-    document.querySelectorAll(".nav-item").forEach(item => {
-        item.onclick = () => {
-            let page = item.dataset.page;
-            document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-            document.getElementById(page + "Page").classList.add("active");
-            document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
-            item.classList.add("active");
-            if (page === "home") renderHomePage();
-            else if (page === "wealth") renderWealthPage();
-            else if (page === "task") renderTaskPage();
-            else if (page === "mine") renderMinePage();
-        };
-    });
+          // ensure user defaults
+          for (let phone in users) {
+              if (users[phone].rechargeBalance === undefined) users[phone].rechargeBalance = 0;
+              if (users[phone].isBanned === undefined) users[phone].isBanned = false;
+              if (users[phone].profilePic === undefined) users[phone].profilePic = "";
+          }
+      } catch (e) {
+          console.error("Load error:", e);
+          alert("Error loading data: " + e.message);
+      }
+  }
 
-    function getUrlParameter(name) {
-        let url = window.location.href;
-        let regex = new RegExp('[?&]' + name + '=([^&#]*)');
-        let results = regex.exec(url);
-        return results === null ? null : decodeURIComponent(results[1].replace(/\+/g, ' '));
-    }
+  async function saveUser(phone) {
+      await set(ref(db, "cotton_users/" + phone), users[phone]);
+  }
 
-    // ================= SERVICE BLOCK CHECK =================
-    window.onload = function() {
-        let ref = getUrlParameter("ref");
-        if (ref) document.getElementById("inviteCodeReg").value = ref;
-        
-        let blockStart = localStorage.getItem("cotton_block_start");
-        let blockEnd = localStorage.getItem("cotton_block_end");
-        
-        if (blockStart && blockEnd) {
-            let now = new Date();
-            let start = new Date(blockStart);
-            let end = new Date(blockEnd);
+  async function saveAllData() {
+      // For transactional updates we mostly update individual nodes. This is kept for compatibility.
+  }
 
-            if (now >= start && now <= end) {
-                document.getElementById("maintenanceScreen").style.display = "flex";
-                document.getElementById("maintenanceTime").innerText = `Expected return: ${end.toLocaleString()}`;
-                return; 
-            }
-        }
-    };
+  async function addTransaction(userPhone, type, amount, desc) {
+      const id = Date.now() + "_" + Math.random().toString(36).substring(2, 6);
+      const tx = { id, userPhone, type, amount, description: desc, timestamp: new Date().toISOString() };
+      transactions[id] = tx;
+      await set(ref(db, "cotton_transactions/" + id), tx);
+  }
 
-    // ================= PHOTO UPLOAD PREVIEWS =================
-    function previewLoginPhoto(event) {
-        let file = event.target.files[0];
-        if (file) {
-            let reader = new FileReader();
-            reader.onload = function(e) {
-                tempLoginPhotoBase64 = e.target.result; 
-                document.getElementById("loginPhotoPreview").src = e.target.result;
-                document.getElementById("loginPhotoPreview").style.display = "block";
-                document.getElementById("loginPhotoText").style.display = "none"; 
-            };
-            reader.readAsDataURL(file);
-        }
-    }
+  // ================= MAIN APP LOGIC =================
+  async function processDailyIncomes() {
+      let now = new Date();
+      let changed = false;
+      for (let invId in investments) {
+          let inv = investments[invId];
+          let user = users[inv.userPhone];
+          if (!user) continue;
+          let last = new Date(inv.lastIncomeDate);
+          let daysDiff = Math.floor((now - last) / 86400000);
+          if (daysDiff > 0 && inv.daysLeft > 0) {
+              let income = inv.dailyRate * daysDiff;
+              if (income > 0) {
+                  user.wealthWallet = (user.wealthWallet || 0) + income;
+                  user.totalEarnings = (user.totalEarnings || 0) + income;
+                  inv.lastIncomeDate = now.toISOString();
+                  inv.daysLeft -= daysDiff;
+                  await addTransaction(user.phone, "income", income, `Daily income from ${inv.productName}`);
+                  await set(ref(db, "cotton_investments/" + invId), inv);
+                  await saveUser(user.phone);
+                  changed = true;
+              }
+          }
+      }
+      // VIP logic
+      for (let phone in users) {
+          let u = users[phone];
+          let hasPurchase = Object.values(investments).some(i => i.userPhone === phone);
+          let referralCount = Object.values(users).filter(usr => usr.referredBy === phone).length;
+          let newVip = 0;
+          if (referralCount >= 20 && hasPurchase) newVip = 3;
+          else if (referralCount >= 5 && hasPurchase) newVip = 2;
+          else if (hasPurchase) newVip = 1;
+          if (u.vipLevel !== newVip) {
+              u.vipLevel = newVip;
+              await saveUser(phone);
+              changed = true;
+          }
+      }
+      return changed;
+  }
 
-    function previewRegPhoto(event) {
-        let file = event.target.files[0];
-        if (file) {
-            let reader = new FileReader();
-            reader.onload = function(e) {
-                tempRegPhotoBase64 = e.target.result; 
-                document.getElementById("regPhotoPreview").src = e.target.result;
-                document.getElementById("regPhotoPreview").style.display = "block";
-                document.getElementById("regPhotoText").style.display = "none"; 
-            };
-            reader.readAsDataURL(file);
-        }
-    }
+  async function refreshAllUI() {
+      if (!currentUser) return;
+      showLoading(true);
+      // reload users & investments
+      const usersSnap = await get(ref(db, "cotton_users"));
+      users = usersSnap.exists() ? usersSnap.val() : {};
+      const invSnap = await get(ref(db, "cotton_investments"));
+      investments = invSnap.exists() ? invSnap.val() : {};
+      await processDailyIncomes();
+      // reload after process
+      const usersSnap2 = await get(ref(db, "cotton_users"));
+      users = usersSnap2.exists() ? usersSnap2.val() : {};
+      renderHomePage();
+      renderWealthPage();
+      renderTaskPage();
+      renderMinePage();
+      showLoading(false);
+  }
 
-    // ================= LOGIN / REGISTER LOGIC =================
-    document.getElementById("showRegister").onclick = (e) => {
-        e.preventDefault();
-        document.getElementById("loginForm").style.display = "none";
-        document.getElementById("registerForm").style.display = "block";
-    };
-    document.getElementById("showLogin").onclick = (e) => {
-        e.preventDefault();
-        document.getElementById("registerForm").style.display = "none";
-        document.getElementById("loginForm").style.display = "block";
-    };
+  function renderHomePage() {
+      let user = users[currentUser];
+      if (!user) return;
+      let html = `
+          <div class="flower-border-box" style="background-color: #fefce8; margin-top: 1rem;">
+              <div style="text-align: center;">
+                  <div style="font-size: 1.1rem; color: #1e3a5f; margin-bottom: 0.5rem;">Cotton Exporter - The first checkpoint of quality control</div>
+                  <div style="font-size: 3rem; font-weight: bold; color: #10b981;">${(user.balance || 0).toFixed(2)} ETB</div>
+                  <div style="color: #475569; margin-bottom: 1rem;">Wallet Balance</div>
+                  <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 1rem;">
+                      <button class="action-btn-recharge" id="openRecharge" style="border-radius: 2rem; padding: 0.6rem 1.5rem;">➕ Recharge</button>
+                      <button class="action-btn-withdraw" id="openWithdraw" style="border-radius: 2rem; padding: 0.6rem 1.5rem;">➖ Withdraw</button>
+                  </div>
+                  <div style="font-size: 0.9rem; color: #475569;">💰 Recharge Wallet: <span style="color: #ef4444; font-weight: bold;">${(user.rechargeBalance || 0).toFixed(2)} ETB</span></div>
+              </div>
+          </div>
+          <h3 style="margin:1.5rem 0 0.5rem 1rem; text-align: center; color: #1e3a5f;">እያስቀመጡ ባሉት (Investment Products)</h3>
+          <div class="products-grid" id="productsGrid" style="padding-top: 0;"></div>
+      `;
+      document.getElementById("homePage").innerHTML = html;
 
-    document.getElementById("doRegister").onclick = () => {
-        let phone = document.getElementById("regPhone").value.trim();
-        let fullName = document.getElementById("fullName").value.trim();
-        let pass = document.getElementById("regPassword").value;
-        let confirm = document.getElementById("confirmPassword").value;
-        let payPass = document.getElementById("payPassword").value;
-        let invite = document.getElementById("inviteCodeReg").value.trim().toUpperCase();
-        
-        if (!phone || !fullName || !pass || !confirm || !payPass) { document.getElementById("regMessage").innerText = "Please fill all fields"; return; }
-        
-        if (!tempRegPhotoBase64) { 
-            document.getElementById("regMessage").innerText = "❌ እባክዎ መጀመሪያ ፎቶ ይምረጡ! (Please select a photo first)"; 
-            return; 
-        }
+      let grid = document.getElementById("productsGrid");
+      for (let [key, prod] of Object.entries(PRODUCTS)) {
+          let card = document.createElement("div");
+          card.className = "product-card-container";
+          card.innerHTML = `
+              <div class="product-card-inner">
+                  <h4>${prod.icon} ${prod.name}</h4>
+                  <div class="product-price-pill">${prod.price.toLocaleString()} ETB</div>
+                  <div class="product-detail"><span>Total:</span><span>${prod.totalReturn.toLocaleString()} ETB</span></div>
+                  <div class="product-detail"><span>Daily:</span><span>${prod.daily} ETB</span></div>
+                  <div class="product-detail" style="border:none;"><span>${prod.days} Days</span></div>
+                  <button class="invest-now" data-product="${key}">Invest Now</button>
+              </div>
+          `;
+          grid.appendChild(card);
+      }
+      document.querySelectorAll(".invest-now").forEach(btn => {
+          btn.onclick = () => openInvestModal(btn.dataset.product);
+      });
+      document.getElementById("openRecharge").onclick = () => document.getElementById("rechargeModal").style.display = "flex";
+      document.getElementById("openWithdraw").onclick = () => {
+          document.getElementById("withdrawableBalance").innerText = (user.balance || 0).toFixed(2);
+          document.getElementById("withdrawModal").style.display = "flex";
+      };
+  }
 
-        if (pass !== confirm) { document.getElementById("regMessage").innerText = "Passwords mismatch"; return; }
-        if (payPass.length !== 6 || isNaN(payPass)) { document.getElementById("regMessage").innerText = "Pay password must be 6 digits"; return; }
-        
-        // Reload users to avoid duplicate registration
-        users = JSON.parse(localStorage.getItem("cotton_users")) || [];
-        
-        if (users.find(u => u.phone === phone)) { document.getElementById("regMessage").innerText = "Phone already registered"; return; }
-        
-        let referredBy = null;
-        if (invite) {
-            let refUser = users.find(u => u.inviteCode === invite);
-            if (refUser) referredBy = refUser.phone;
-            else { document.getElementById("regMessage").innerText = "Invalid invite code"; return; }
-        }
-        
-        let newUser = {
-            phone, fullName, password: pass, payPassword: payPass,
-            inviteCode: generateInviteCode(), referredBy,
-            balance: 0, rechargeBalance: 0, wealthWallet: 0, rewardWallet: 0, totalEarnings: 0,
-            vipLevel: 0, lastDailyBonus: null, lastVideoTaskDate: null,
-            shareReferralCount: 0, shareRewardClaimed: false, isBanned: false,
-            profilePic: tempRegPhotoBase64, 
-            createdAt: new Date().toISOString()
-        };
-        users.push(newUser);
-        saveAllData();
-        
-        alert("Registration successful! Please login.");
-        document.getElementById("registerForm").style.display = "none";
-        document.getElementById("loginForm").style.display = "block";
-        document.getElementById("regMessage").innerText = "";
-    };
+  function renderWealthPage() {
+      let user = users[currentUser];
+      let userInvestments = Object.values(investments).filter(i => i.userPhone === currentUser);
+      let lastBonus = user.lastDailyBonus ? new Date(user.lastDailyBonus) : null;
+      let now = new Date();
+      let canReceive = !lastBonus || (now - lastBonus) >= 86400000;
+      let bonusStatus = canReceive ? "✅ Ready to claim" : `⏳ Next: ${new Date(lastBonus.getTime() + 86400000).toLocaleString()}`;
 
-    document.getElementById("doLogin").onclick = () => {
-        let phone = document.getElementById("loginPhone").value.trim();
-        let pass = document.getElementById("loginPassword").value;
-        
-        if (!tempLoginPhotoBase64) { 
-            document.getElementById("loginMessage").innerText = "❌ እባክዎ መጀመሪያ ፎቶ ይምረጡ! (Please select a photo first)"; 
-            return; 
-        }
+      let html = `
+          <div class="flower-border-box wealth-bg" style="margin-top: 1rem;">
+              <div class="flex-between" style="margin-bottom: 0.5rem;"><span style="font-weight: 600;">Wealth Wallet</span><span>${(user.wealthWallet || 0).toFixed(2)} ETB</span></div>
+              <div class="flex-between" style="margin-bottom: 0.5rem;"><span style="font-weight: 600;">Reward Wallet</span><span>${(user.rewardWallet || 0).toFixed(2)} ETB</span></div>
+              <div class="flex-between" style="margin-bottom: 1rem; border-bottom: 1px solid #bae6fd; padding-bottom: 0.5rem;"><span style="font-weight: 600;">Total Earnings</span><span>${(user.totalEarnings || 0).toFixed(2)} ETB</span></div>
+              <div class="flex-between mt-2">
+                  <span>🎁 Daily Receive</span>
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                      <span style="font-size: 0.8rem; color: #10b981;">${canReceive ? '✅ Ready' : '⏳ Wait'}</span>
+                      <button id="dailyReceiveBtn" class="btn-outline" style="padding: 0.3rem 1rem; border-radius: 1rem;" ${!canReceive ? 'disabled' : ''}>Claim</button>
+                  </div>
+              </div>
+              <div class="warning text-center mt-1" style="font-size: 0.7rem;">${bonusStatus}</div>
+              <button id="exchangeToBalance" class="btn-outline mt-3" style="border-radius: 0.5rem; padding: 0.5rem;">Exchange Wealth → Balance</button>
+          </div>
+          <div class="flex-between" style="margin:1rem 0;"><strong>Active Orders</strong><span>${userInvestments.length}</span></div>
+          <div id="ordersList"></div>
+      `;
+      document.getElementById("wealthPage").innerHTML = html;
+      let ordersDiv = document.getElementById("ordersList");
+      if (userInvestments.length === 0) ordersDiv.innerHTML = "<p>No active investments.</p>";
+      else {
+          ordersDiv.innerHTML = userInvestments.map(inv => `
+              <div class="order-card">
+                  <div class="flex-between"><strong>${inv.productName}</strong><span class="tag">Active</span></div>
+                  <div>Investment: ${inv.amount} ETB</div><div>Daily: ${inv.dailyRate} ETB</div>
+                  <div>Remaining: ${inv.daysLeft} days</div><div>Started: ${new Date(inv.startDate).toLocaleDateString()}</div>
+              </div>
+          `).join('');
+      }
+      document.getElementById("exchangeToBalance").onclick = () => {
+          document.getElementById("wealthWalletAmount").innerText = user.wealthWallet.toFixed(2);
+          document.getElementById("exchangeModal").style.display = "flex";
+      };
+      let dailyBtn = document.getElementById("dailyReceiveBtn");
+      if (dailyBtn) {
+          dailyBtn.onclick = async () => {
+              if (!canReceive) { alert("Please wait 24 hours since last claim."); return; }
+              let bonus = Math.floor(Math.random() * 41) + 10;
+              user.wealthWallet = (user.wealthWallet || 0) + bonus;
+              user.totalEarnings = (user.totalEarnings || 0) + bonus;
+              user.lastDailyBonus = now.toISOString();
+              await addTransaction(currentUser, "daily_bonus", bonus, `Daily receive bonus: ${bonus} ETB`);
+              await saveUser(currentUser);
+              refreshAllUI();
+              alert(`You received ${bonus} ETB bonus! Added to Wealth Wallet.`);
+          };
+      }
+  }
 
-        // Reload users to get latest registration
-        users = JSON.parse(localStorage.getItem("cotton_users")) || [];
-        
-        let checkUser = users.find(u => u.phone === phone);
+  function renderTaskPage() {
+      let user = users[currentUser];
+      let lastVideo = user.lastVideoTaskDate ? new Date(user.lastVideoTaskDate) : null;
+      let now = new Date();
+      let canWatch = !lastVideo || (now - lastVideo) >= 86400000;
+      let videoStatus = canWatch ? "✅ Ready" : `⏳ Available in ${Math.ceil((lastVideo.getTime() + 86400000 - now) / 3600000)} hours`;
+      let shareRequired = 2;
+      let shareProgress = user.shareReferralCount || 0;
+      let shareCompleted = (user.shareRewardClaimed === true);
+      let shareStatus = shareCompleted ? "✅ Reward claimed" : `${shareProgress}/${shareRequired} registrations`;
 
-        if (checkUser && checkUser.isBanned) {
-            document.getElementById("loginMessage").innerText = "❌ አካውንትዎ በአድሚን ተከልክሏል! (Account Banned)";
-            return;
-        }
+      let html = `
+          <div style="padding: 0 1rem;">
+              <h3 style="margin-top: 1rem;">📋 Daily Tasks</h3>
+              <div class="flower-border-box task-bg-black" style="margin-top: 1.5rem;">
+                  <div class="flex-between">
+                      <span>🎬 Watch video advertisement (60 sec)</span>
+                      <span class="tag" style="background: #e5e7eb;">${videoStatus}</span>
+                  </div>
+                  <button id="watchVideoBtn" class="btn-outline mt-2" style="border-radius: 0.5rem; padding: 0.4rem 1rem;" ${!canWatch ? 'disabled' : ''}>Watch Video</button>
+                  <div id="videoTimer" class="video-timer" style="display:none;"></div>
+              </div>
+              <div class="flower-border-box task-bg-red" style="margin-top: 1.5rem;">
+                  <div class="flex-between">
+                      <span>📢 Share on social media (referral)</span>
+                      <span class="tag" style="background: #fecaca;">${shareStatus}</span>
+                  </div>
+                  <div class="mt-2">Invite 2 friends to join using your link:</div>
+                  <div class="flex-between mt-2">
+                      <input type="text" id="referralLinkInput" readonly value="${window.location.href.split('#')[0].split('?')[0]}?ref=${user.inviteCode}" style="font-size:0.75rem; background: white;">
+                      <button id="copyReferralLink" class="copy-btn" style="background: #3b82f6;">Copy</button>
+                  </div>
+                  <div class="warning mt-2" style="color: #b45309;">Reward (50 ETB) will be added to Reward Wallet after 2 successful registrations.</div>
+              </div>
+              <div class="flower-border-box task-bg-yellow" style="margin-top: 1.5rem; margin-bottom: 2rem;">
+                  <h3 class="mt-2">📜 Task Transaction History</h3>
+                  <div id="taskTransactionsList"></div>
+              </div>
+          </div>
+      `;
+      document.getElementById("taskPage").innerHTML = html;
+      let taskTx = Object.values(transactions).filter(tx => tx.userPhone === currentUser && (tx.type === "video_task" || tx.type === "share_task"));
+      let txDiv = document.getElementById("taskTransactionsList");
+      if (taskTx.length === 0) txDiv.innerHTML = "<p>No task transactions yet.</p>";
+      else {
+          txDiv.innerHTML = taskTx.map(tx => `
+              <div class="transaction-item flex-between">
+                  <div><strong>${tx.type === "video_task" ? "🎬 Video Task" : "📢 Share Task"}</strong><br><small>${new Date(tx.timestamp).toLocaleString()}</small></div>
+                  <div style="color:#2b9348">+${tx.amount.toFixed(2)} ETB</div>
+              </div>
+          `).join('');
+      }
+      let watchBtn = document.getElementById("watchVideoBtn");
+      if (watchBtn) {
+          watchBtn.onclick = () => {
+              if (!canWatch) { alert("You can only watch once per day."); return; }
+              let timerDiv = document.getElementById("videoTimer");
+              let seconds = 60;
+              timerDiv.style.display = "block";
+              timerDiv.innerHTML = `⏳ Watch video: ${seconds} seconds remaining...`;
+              let interval = setInterval(async () => {
+                  seconds--;
+                  timerDiv.innerHTML = `⏳ Watch video: ${seconds} seconds remaining...`;
+                  if (seconds <= 0) {
+                      clearInterval(interval);
+                      timerDiv.style.display = "none";
+                      let reward = 20;
+                      user.rewardWallet = (user.rewardWallet || 0) + reward;
+                      user.lastVideoTaskDate = new Date().toISOString();
+                      await addTransaction(currentUser, "video_task", reward, `Video task reward: ${reward} ETB`);
+                      await saveUser(currentUser);
+                      refreshAllUI();
+                      alert(`You earned ${reward} ETB! Added to Reward Wallet.`);
+                  }
+              }, 1000);
+          };
+      }
+      document.getElementById("copyReferralLink").onclick = () => {
+          let linkInput = document.getElementById("referralLinkInput");
+          linkInput.select();
+          navigator.clipboard.writeText(linkInput.value);
+          alert("Referral link copied!");
+      };
+  }
 
-        let user = users.find(u => u.phone === phone && u.password === pass);
-        if (!user) {
-            document.getElementById("loginMessage").innerText = "Invalid phone or password. Try demo: 0947655291 / 123456";
-            return;
-        }
-        
-        currentUser = phone;
-        document.getElementById("authContainer").style.display = "none";
-        document.getElementById("appContainer").style.display = "block";
-        refreshAllUI();
-        document.querySelector(".nav-item[data-page='home']").click();
-    };
+  function renderMinePage() {
+      let user = users[currentUser];
+      let referralCount = Object.values(users).filter(u => u.referredBy === currentUser).length;
 
-    function biometricLogin() {
-        if (!window.PublicKeyCredential) {
-            alert("ይህ ብራውዘር የፊት አሻራ መግቢያን አይደግፍም።");
-            return;
-        }
+      document.getElementById("minePage").innerHTML = `
+          <div style="padding: 0 1rem;">
+              <div class="flower-border-box mine-bg-blue" style="margin-top: 1rem; text-align:center;">
+                  <div style="width:60px; height:60px; border-radius:50%; background:#cbd5e1; margin:0 auto 0.5rem auto; display:flex; justify-content:center; align-items:center; font-size:1.5rem; color:white;">👤</div>
+                  <div style="font-size: 1.1rem; font-weight: 600; margin-bottom: 0.3rem;">${user.fullName}</div>
+                  <div style="margin-bottom: 0.3rem;">VIP ${user.vipLevel}</div>
+                  <div>📱 ${user.phone}</div>
+              </div>
+              <div class="flower-border-box mine-bg-green" style="margin-top: 1.5rem;">
+                  <div class="flex-between" style="margin-bottom: 0.5rem;"><span>Total Revenue</span><span>${(user.totalEarnings || 0).toFixed(2)} ETB</span></div>
+                  <div class="flex-between"><span>Reward Wallet</span><span>${(user.rewardWallet || 0).toFixed(2)} ETB</span></div>
+              </div>
+              <div class="order-card" style="padding: 1rem; margin-bottom: 1rem; background: white; border-radius: 1rem;">
+                  <div style="margin-bottom: 0.5rem;">🔗 Invite Code: <strong>${user.inviteCode}</strong></div>
+                  <button id="copyInviteLink" class="dotted-blue-btn">Copy Link</button>
+              </div>
+              <div class="order-card" style="padding: 1rem; margin-bottom: 1rem; background: white; border-radius: 1rem;">
+                  <div style="margin-bottom: 0.5rem;">👥 My Team (${referralCount})</div>
+                  <button id="viewTeam" class="dotted-blue-btn">Team Details</button>
+              </div>
+              <div class="order-card" style="padding: 1rem; margin-bottom: 1rem; background: white; border-radius: 1rem;">
+                  <div style="margin-bottom: 0.5rem;">🎁 Cash Gift</div>
+                  <button id="openCashGift" class="dotted-blue-btn">Redeem Code</button>
+              </div>
+              <div class="order-card" style="padding: 1rem; margin-bottom: 1rem; background: white; border-radius: 1rem;">
+                  <div style="margin-bottom: 0.5rem;">⚙️ Settings</div>
+                  <button id="logoutBtn" class="btn-outline" style="background:#b91c1c; color:white; border-radius: 0.5rem; padding: 0.5rem;">Sign Out</button>
+              </div>
+              <div class="wealth-stats mt-3" style="background: #e2e8f0; border-radius: 1rem; padding: 1rem; margin-bottom: 2rem;">
+                  <strong>VIP Rules</strong><br>- VIP0: No purchase<br>- VIP1: Purchased product (5% team commission)<br>- VIP2: 5+ referrals (9%)<br>- VIP3: 20+ referrals (12%)
+              </div>
+          </div>
+      `;
+      document.getElementById("copyInviteLink").onclick = () => {
+          let link = `${window.location.href.split('#')[0].split('?')[0]}?ref=${user.inviteCode}`;
+          navigator.clipboard.writeText(link);
+          alert("Invite link copied!");
+      };
+      document.getElementById("viewTeam").onclick = () => {
+          let team = Object.values(users).filter(u => u.referredBy === currentUser);
+          if (team.length === 0) alert("No team members yet.");
+          else alert(team.map(m => `${m.fullName} - ${m.phone}`).join("\n"));
+      };
+      document.getElementById("openCashGift").onclick = () => document.getElementById("cashGiftModal").style.display = "flex";
+      document.getElementById("logoutBtn").onclick = () => {
+          currentUser = null;
+          document.getElementById("appContainer").style.display = "none";
+          document.getElementById("authContainer").style.display = "flex";
+          document.getElementById("loginForm").style.display = "block";
+          document.getElementById("registerForm").style.display = "none";
+      };
+  }
 
-        if (confirm("የፊት አሻራዎን (Face ID / Fingerprint) ለመጠቀም ይፈቅዳሉ?")) {
-            users = JSON.parse(localStorage.getItem("cotton_users")) || [];
-            let demoUser = users.find(u => u.phone === "0947655291"); 
-            if(demoUser) {
-                currentUser = demoUser.phone;
-                document.getElementById("authContainer").style.display = "none";
-                document.getElementById("appContainer").style.display = "block";
-                refreshAllUI();
-                document.querySelector(".nav-item[data-page='home']").click();
-                alert("በተሳካ ሁኔታ ገብተዋል!");
-            } else {
-                alert("እባክዎ መጀመሪያ በስልክ ቁጥርዎ ይግቡ።");
-            }
-        }
-    }
+  function openInvestModal(productKey) {
+      let prod = PRODUCTS[productKey];
+      let user = users[currentUser];
+      document.getElementById("investProductName").innerText = `${prod.icon} ${prod.name}`;
+      document.getElementById("investDetails").innerHTML = `Price: ${prod.price} ETB<br>Daily: ${prod.daily} ETB<br>Total Return: ${prod.totalReturn} ETB<br>Period: ${prod.days} Days<br>Available Balance: ${(user.balance || 0).toFixed(2)} ETB`;
+      document.getElementById("investPayPassword").value = "";
+      document.getElementById("investError").innerText = "";
+      let modal = document.getElementById("investModal");
+      modal.style.display = "flex";
+      let confirmBtn = document.getElementById("confirmInvest");
+      confirmBtn.onclick = async () => {
+          let payPass = document.getElementById("investPayPassword").value;
+          if (payPass !== user.payPassword) { document.getElementById("investError").innerText = "❌ Incorrect pay password"; return; }
+          if ((user.balance || 0) < prod.price) { document.getElementById("investError").innerText = "❌ Insufficient balance."; return; }
+          
+          user.balance -= prod.price;
+          if ((user.rechargeBalance || 0) >= prod.price) user.rechargeBalance -= prod.price;
+          else user.rechargeBalance = 0;
+          
+          const invId = Date.now();
+          const newInv = {
+              id: invId, userPhone: currentUser, productKey, productName: prod.name, amount: prod.price,
+              startDate: new Date().toISOString(), lastIncomeDate: new Date().toISOString(), dailyRate: prod.daily,
+              daysLeft: prod.days, totalReturn: prod.totalReturn
+          };
+          
+          await set(ref(db, "cotton_investments/" + invId), newInv);
+          await addTransaction(currentUser, "invest", -prod.price, `Purchased ${prod.name}`);
+          await saveUser(currentUser);
+          
+          modal.style.display = "none";
+          refreshAllUI();
+          alert(`Successfully invested in ${prod.name}!`);
+      };
+      document.getElementById("closeInvestModal").onclick = () => modal.style.display = "none";
+  }
 
-    // ================= MODALS SETUP =================
-    document.getElementById("rechargeContent").innerHTML = `<div class="modal-header">💳 Recharge Wallet</div><p>Bank: Commercial Bank of Ethiopia</p>
-        <div class="form-group"><label>Account Name</label><div style="display:flex;"><input type="text" id="bankAccountName" value="Cotton Exporter PLC" readonly><button type="button" id="copyAccountName" class="copy-btn">Copy</button></div></div>
-        <div class="form-group"><label>Account Number</label><div style="display:flex;"><input type="text" id="bankAccountNumber" value="1000123456789" readonly><button type="button" id="copyAccountNumber" class="copy-btn">Copy</button></div></div>
-        <div class="form-group"><label>FT Reference Code</label><input type="text" id="ftCode" placeholder="e.g., FT26110L6GG0"></div>
-        <button id="confirmRecharge" class="btn">Submit</button><button class="btn-outline" id="closeRechargeModal">Cancel</button>`;
+  // ================= NAVIGATION & AUTH =================
+  document.querySelectorAll(".nav-item").forEach(item => {
+      item.onclick = () => {
+          let page = item.dataset.page;
+          document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+          document.getElementById(page + "Page").classList.add("active");
+          document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
+          item.classList.add("active");
+          if (page === "home") renderHomePage();
+          else if (page === "wealth") renderWealthPage();
+          else if (page === "task") renderTaskPage();
+          else if (page === "mine") renderMinePage();
+      };
+  });
 
-    document.getElementById("withdrawContent").innerHTML = `<div class="modal-header">💸 Withdraw</div><p>Withdrawable Balance: <span id="withdrawableBalance">0</span> ETB<br>Min: 300 ETB</p>
-        <div class="form-group"><label>Amount</label><input type="number" id="withdrawAmount"></div>
-        <div class="form-group"><label>Account Name</label><input id="withdrawAccountName"></div>
-        <div class="form-group"><label>CBE Account</label><input id="withdrawAccountNumber"></div>
-        <div class="form-group"><label>Pay Password</label><input type="password" id="withdrawPayPassword" maxlength="6"></div>
-        <button id="confirmWithdraw" class="btn">Submit</button><button class="btn-outline" id="closeWithdrawModal">Cancel</button>`;
+  function getUrlParameter(name) {
+      let url = window.location.href;
+      let regex = new RegExp('[?&]' + name + '=([^&#]*)');
+      let results = regex.exec(url);
+      return results === null ? null : decodeURIComponent(results[1].replace(/\+/g, ' '));
+  }
 
-    document.getElementById("investContent").innerHTML = `<div class="modal-header" id="investProductName"></div><p id="investDetails"></p>
-        <div class="form-group"><label>Pay Password</label><input type="password" id="investPayPassword" maxlength="6"></div>
-        <button id="confirmInvest" class="btn">Buy Now</button><button class="btn-outline" id="closeInvestModal">Cancel</button><div id="investError" class="warning"></div>`;
+  // ================= SERVICE BLOCK CHECK =================
+  window.addEventListener('load', async () => {
+      let refVal = getUrlParameter("ref");
+      if (refVal) document.getElementById("inviteCodeReg").value = refVal;
+      
+      try {
+          showLoading(true);
+          const startSnap = await get(ref(db, "cotton_block_start"));
+          const endSnap = await get(ref(db, "cotton_block_end"));
+          let blockStart = startSnap.exists() ? startSnap.val() : null;
+          let blockEnd = endSnap.exists() ? endSnap.val() : null;
+          
+          if (blockStart && blockEnd) {
+              let now = new Date();
+              let start = new Date(blockStart);
+              let end = new Date(blockEnd);
 
-    document.getElementById("cashGiftContent").innerHTML = `<div class="modal-header">🎁 Cash Gift</div><input type="text" id="giftCode" placeholder="Redemption code">
-        <button id="claimGift" class="btn mt-2">Claim</button><button class="btn-outline" id="closeGiftModal">Cancel</button>`;
+              if (now >= start && now <= end) {
+                  document.getElementById("maintenanceScreen").style.display = "flex";
+                  document.getElementById("maintenanceTime").innerText = `Expected return: ${end.toLocaleString()}`;
+                  showLoading(false);
+                  return; 
+              }
+          }
+          
+          await loadData();
+          showLoading(false);
+      } catch (e) {
+          console.error("Init error:", e);
+          showLoading(false);
+      }
+  });
 
-    document.getElementById("exchangeContent").innerHTML = `<div class="modal-header">🔄 Exchange</div><p>Wealth Wallet: <span id="wealthWalletAmount">0</span> ETB</p>
-        <div class="form-group"><label>Amount</label><input type="number" id="exchangeAmount"></div>
-        <button id="confirmExchange" class="btn">Exchange</button><button class="btn-outline" id="closeExchangeModal">Cancel</button>`;
+  // ================= LOGIN / REGISTER LOGIC =================
+  document.getElementById("showRegister").onclick = (e) => {
+      e.preventDefault();
+      document.getElementById("loginForm").style.display = "none";
+      document.getElementById("registerForm").style.display = "block";
+  };
+  document.getElementById("showLogin").onclick = (e) => {
+      e.preventDefault();
+      document.getElementById("registerForm").style.display = "none";
+      document.getElementById("loginForm").style.display = "block";
+  };
 
-    setTimeout(() => {
-        document.getElementById("confirmRecharge").onclick = () => {
-            let ft = document.getElementById("ftCode").value.trim().toUpperCase();
-            let ftRecord = validFTTransactions.find(t => t.code === ft && !t.usedBy);
-            if (!ftRecord) { alert("Invalid FT code or already used."); return; }
-            
-            users = JSON.parse(localStorage.getItem("cotton_users")) || [];
-            let user = users.find(u => u.phone === currentUser);
-            user.balance += ftRecord.amount;
-            user.rechargeBalance += ftRecord.amount;
-            ftRecord.usedBy = currentUser;
-            addTransaction(currentUser, "recharge", ftRecord.amount, `Recharge via FT ${ft}`);
-            saveAllData();
-            refreshAllUI();
-            document.getElementById("rechargeModal").style.display = "none";
-            alert(`✅ Recharge successful!`);
-        };
-        document.getElementById("closeRechargeModal").onclick = () => document.getElementById("rechargeModal").style.display = "none";
-        document.getElementById("confirmWithdraw").onclick = () => {
-            let amount = parseFloat(document.getElementById("withdrawAmount").value);
-            let accName = document.getElementById("withdrawAccountName").value;
-            let accNum = document.getElementById("withdrawAccountNumber").value;
-            let payPass = document.getElementById("withdrawPayPassword").value;
-            
-            users = JSON.parse(localStorage.getItem("cotton_users")) || [];
-            let user = users.find(u => u.phone === currentUser);
-            
-            if (isNaN(amount) || amount < 300) alert("Min 300 ETB");
-            else if (user.balance < amount) alert("Insufficient balance");
-            else if (payPass !== user.payPassword) alert("Incorrect pay password");
-            else if (!accName || !accNum) alert("Enter bank details");
-            else {
-                user.balance -= amount;
-                addTransaction(currentUser, "withdraw", -amount, `Withdraw to ${accName} - ${accNum}`);
-                saveAllData();
-                refreshAllUI();
-                document.getElementById("withdrawModal").style.display = "none";
-                alert(`Withdrawal request submitted.`);
-            }
-        };
-        document.getElementById("closeWithdrawModal").onclick = () => document.getElementById("withdrawModal").style.display = "none";
-        document.getElementById("closeInvestModal").onclick = () => document.getElementById("investModal").style.display = "none";
-        document.getElementById("claimGift").onclick = () => {
-            let code = document.getElementById("giftCode").value.trim().toUpperCase();
-            let gift = giftCodes.find(g => g.code === code);
-            if (!gift) { alert("Invalid code"); return; }
-            if (gift.usedBy) { alert("Code already used"); return; }
-            
-            users = JSON.parse(localStorage.getItem("cotton_users")) || [];
-            let user = users.find(u => u.phone === currentUser);
-            
-            user.balance += gift.value;
-            gift.usedBy = currentUser;
-            addTransaction(currentUser, "gift", gift.value, `Redeemed code ${code}`);
-            saveAllData();
-            refreshAllUI();
-            document.getElementById("cashGiftModal").style.display = "none";
-            alert(`You received ${gift.value} ETB!`);
-        };
-        document.getElementById("closeGiftModal").onclick = () => document.getElementById("cashGiftModal").style.display = "none";
-        document.getElementById("confirmExchange").onclick = () => {
-            let amount = parseFloat(document.getElementById("exchangeAmount").value);
-            
-            users = JSON.parse(localStorage.getItem("cotton_users")) || [];
-            let user = users.find(u => u.phone === currentUser);
-            
-            if (isNaN(amount) || amount <= 0) alert("Enter positive amount");
-            else if (user.wealthWallet < amount) alert("Insufficient wealth wallet");
-            else {
-                user.wealthWallet -= amount;
-                user.balance += amount;
-                addTransaction(currentUser, "exchange", amount, `Exchanged from wealth wallet`);
-                saveAllData();
-                refreshAllUI();
-                document.getElementById("exchangeModal").style.display = "none";
-                alert(`Exchanged successfully.`);
-            }
-        };
-        document.getElementById("closeExchangeModal").onclick = () => document.getElementById("exchangeModal").style.display = "none";
-    }, 50);
+  document.getElementById("doRegister").onclick = async () => {
+      let phone = document.getElementById("regPhone").value.trim();
+      let fullName = document.getElementById("fullName").value.trim();
+      let pass = document.getElementById("regPassword").value;
+      let confirm = document.getElementById("confirmPassword").value;
+      let payPass = document.getElementById("payPassword").value;
+      let invite = document.getElementById("inviteCodeReg").value.trim().toUpperCase();
+      
+      if (!phone || !fullName || !pass || !confirm || !payPass) { document.getElementById("regMessage").innerText = "Please fill all fields"; return; }
+      if (pass !== confirm) { document.getElementById("regMessage").innerText = "Passwords mismatch"; return; }
+      if (payPass.length !== 6 || isNaN(payPass)) { document.getElementById("regMessage").innerText = "Pay password must be 6 digits"; return; }
+      
+      showLoading(true);
+      try {
+          const userSnap = await get(ref(db, "cotton_users/" + phone));
+          if (userSnap.exists()) { 
+              document.getElementById("regMessage").innerText = "Phone already registered"; 
+              showLoading(false);
+              return; 
+          }
+          
+          let referredBy = null;
+          if (invite) {
+              const usersSnap = await get(ref(db, "cotton_users"));
+              let allUsers = usersSnap.exists() ? usersSnap.val() : {};
+              let refUser = Object.values(allUsers).find(u => u.inviteCode === invite);
+              if (refUser) referredBy = refUser.phone;
+              else { 
+                  document.getElementById("regMessage").innerText = "Invalid invite code"; 
+                  showLoading(false);
+                  return; 
+              }
+          }
+          
+          let newUser = {
+              phone, fullName, password: pass, payPassword: payPass,
+              inviteCode: generateInviteCode(), referredBy,
+              balance: 0, rechargeBalance: 0, wealthWallet: 0, rewardWallet: 0, totalEarnings: 0,
+              vipLevel: 0, lastDailyBonus: null, lastVideoTaskDate: null,
+              shareReferralCount: 0, shareRewardClaimed: false, isBanned: false,
+              profilePic: "", 
+              createdAt: new Date().toISOString()
+          };
+          
+          await set(ref(db, "cotton_users/" + phone), newUser);
+          
+          alert("Registration successful! Please login.");
+          document.getElementById("registerForm").style.display = "none";
+          document.getElementById("loginForm").style.display = "block";
+          document.getElementById("regMessage").innerText = "";
+      } catch (e) {
+          alert("Registration error: " + e.message);
+      }
+      showLoading(false);
+  };
 
-    // ================= INIT =================
-    loadData();
+  document.getElementById("doLogin").onclick = async () => {
+      let phone = document.getElementById("loginPhone").value.trim();
+      let pass = document.getElementById("loginPassword").value;
+      
+      if (!phone || !pass) { document.getElementById("loginMessage").innerText = "Please enter phone and password"; return; }
+      
+      showLoading(true);
+      try {
+          const userSnap = await get(ref(db, "cotton_users/" + phone));
+          if (!userSnap.exists()) {
+              document.getElementById("loginMessage").innerText = "Invalid phone or password. Try demo: 0947655291 / 123456";
+              showLoading(false);
+              return;
+          }
+          
+          let checkUser = userSnap.val();
+          
+          if (checkUser.isBanned) {
+              document.getElementById("loginMessage").innerText = "❌ አካውንትዎ በአድሚን ተከልክሏል! (Account Banned)";
+              showLoading(false);
+              return;
+          }
+          
+          if (checkUser.password !== pass) {
+              document.getElementById("loginMessage").innerText = "Invalid phone or password. Try demo: 0947655291 / 123456";
+              showLoading(false);
+              return;
+          }
+          
+          currentUser = phone;
+          document.getElementById("authContainer").style.display = "none";
+          document.getElementById("appContainer").style.display = "block";
+          await refreshAllUI();
+          document.querySelector(".nav-item[data-page='home']").click();
+      } catch (e) {
+          alert("Login error: " + e.message);
+      }
+      showLoading(false);
+  };
+
+  window.biometricLogin = async function() {
+      if (!window.PublicKeyCredential) {
+          alert("ይህ ብራውዘር የፊት አሻራ መግቢያን አይደግፍም።");
+          return;
+      }
+
+      if (confirm("የፊት አሻራዎን (Face ID / Fingerprint) ለመጠቀም ይፈቅዳሉ?")) {
+          showLoading(true);
+          try {
+              const userSnap = await get(ref(db, "cotton_users/0947655291"));
+              if(userSnap.exists()) {
+                  currentUser = "0947655291";
+                  document.getElementById("authContainer").style.display = "none";
+                  document.getElementById("appContainer").style.display = "block";
+                  await refreshAllUI();
+                  document.querySelector(".nav-item[data-page='home']").click();
+                  alert("በተሳካ ሁኔታ ገብተዋል!");
+              } else {
+                  alert("እባክዎ መጀመሪያ በስልክ ቁጥርዎ ይግቡ።");
+              }
+          } catch(e) {
+              alert("Error: " + e.message);
+          }
+          showLoading(false);
+      }
+  }
+
+  // ================= MODALS SETUP =================
+  document.getElementById("rechargeContent").innerHTML = `<div class="modal-header">💳 Recharge Wallet</div><p>Bank: Commercial Bank of Ethiopia</p>
+      <div class="form-group"><label>Account Name</label><div style="display:flex;"><input type="text" id="bankAccountName" value="Cotton Exporter PLC" readonly><button type="button" id="copyAccountName" class="copy-btn">Copy</button></div></div>
+      <div class="form-group"><label>Account Number</label><div style="display:flex;"><input type="text" id="bankAccountNumber" value="1000123456789" readonly><button type="button" id="copyAccountNumber" class="copy-btn">Copy</button></div></div>
+      <div class="form-group"><label>FT Reference Code</label><input type="text" id="ftCode" placeholder="e.g., FT26110L6GG0"></div>
+      <button id="confirmRecharge" class="btn">Submit</button><button class="btn-outline" id="closeRechargeModal">Cancel</button>`;
+
+  document.getElementById("withdrawContent").innerHTML = `<div class="modal-header">💸 Withdraw</div><p>Withdrawable Balance: <span id="withdrawableBalance">0</span> ETB<br>Min: 300 ETB</p>
+      <div class="form-group"><label>Amount</label><input type="number" id="withdrawAmount"></div>
+      <div class="form-group"><label>Account Name</label><input id="withdrawAccountName"></div>
+      <div class="form-group"><label>CBE Account</label><input id="withdrawAccountNumber"></div>
+      <div class="form-group"><label>Pay Password</label><input type="password" id="withdrawPayPassword" maxlength="6"></div>
+      <button id="confirmWithdraw" class="btn">Submit</button><button class="btn-outline" id="closeWithdrawModal">Cancel</button>`;
+
+  document.getElementById("investContent").innerHTML = `<div class="modal-header" id="investProductName"></div><p id="investDetails"></p>
+      <div class="form-group"><label>Pay Password</label><input type="password" id="investPayPassword" maxlength="6"></div>
+      <button id="confirmInvest" class="btn">Buy Now</button><button class="btn-outline" id="closeInvestModal">Cancel</button><div id="investError" class="warning"></div>`;
+
+  document.getElementById("cashGiftContent").innerHTML = `<div class="modal-header">🎁 Cash Gift</div><input type="text" id="giftCode" placeholder="Redemption code">
+      <button id="claimGift" class="btn mt-2">Claim</button><button class="btn-outline" id="closeGiftModal">Cancel</button>`;
+
+  document.getElementById("exchangeContent").innerHTML = `<div class="modal-header">🔄 Exchange</div><p>Wealth Wallet: <span id="wealthWalletAmount">0</span> ETB</p>
+      <div class="form-group"><label>Amount</label><input type="number" id="exchangeAmount"></div>
+      <button id="confirmExchange" class="btn">Exchange</button><button class="btn-outline" id="closeExchangeModal">Cancel</button>`;
+
+  setTimeout(() => {
+      document.getElementById("copyAccountName").onclick = () => {
+          navigator.clipboard.writeText("Cotton Exporter PLC");
+          alert("Copied!");
+      };
+      document.getElementById("copyAccountNumber").onclick = () => {
+          navigator.clipboard.writeText("1000123456789");
+          alert("Copied!");
+      };
+      document.getElementById("confirmRecharge").onclick = async () => {
+          let ft = document.getElementById("ftCode").value.trim().toUpperCase();
+          
+          showLoading(true);
+          try {
+              const ftSnap = await get(ref(db, "cotton_ft_transactions/" + ft));
+              if (!ftSnap.exists() || ftSnap.val().usedBy) { 
+                  alert("Invalid FT code or already used."); 
+                  showLoading(false);
+                  return; 
+              }
+              
+              let ftRecord = ftSnap.val();
+              let user = users[currentUser];
+              
+              user.balance = (user.balance || 0) + ftRecord.amount;
+              user.rechargeBalance = (user.rechargeBalance || 0) + ftRecord.amount;
+              
+              await set(ref(db, "cotton_ft_transactions/" + ft + "/usedBy"), currentUser);
+              await addTransaction(currentUser, "recharge", ftRecord.amount, `Recharge via FT ${ft}`);
+              await saveUser(currentUser);
+              
+              document.getElementById("rechargeModal").style.display = "none";
+              refreshAllUI();
+              alert(`✅ Recharge successful!`);
+          } catch(e) {
+              alert("Error: " + e.message);
+          }
+          showLoading(false);
+      };
+      document.getElementById("closeRechargeModal").onclick = () => document.getElementById("rechargeModal").style.display = "none";
+      
+      document.getElementById("confirmWithdraw").onclick = async () => {
+          let amount = parseFloat(document.getElementById("withdrawAmount").value);
+          let accName = document.getElementById("withdrawAccountName").value;
+          let accNum = document.getElementById("withdrawAccountNumber").value;
+          let payPass = document.getElementById("withdrawPayPassword").value;
+          
+          let user = users[currentUser];
+          
+          if (isNaN(amount) || amount < 300) alert("Min 300 ETB");
+          else if ((user.balance || 0) < amount) alert("Insufficient balance");
+          else if (payPass !== user.payPassword) alert("Incorrect pay password");
+          else if (!accName || !accNum) alert("Enter bank details");
+          else {
+              showLoading(true);
+              try {
+                  user.balance -= amount;
+                  await addTransaction(currentUser, "withdraw", -amount, `Withdraw to ${accName} - ${accNum}`);
+                  await saveUser(currentUser);
+                  document.getElementById("withdrawModal").style.display = "none";
+                  refreshAllUI();
+                  alert(`Withdrawal request submitted.`);
+              } catch(e) {
+                  alert("Error: " + e.message);
+              }
+              showLoading(false);
+          }
+      };
+      document.getElementById("closeWithdrawModal").onclick = () => document.getElementById("withdrawModal").style.display = "none";
+      
+      document.getElementById("claimGift").onclick = async () => {
+          let code = document.getElementById("giftCode").value.trim().toUpperCase();
+          
+          showLoading(true);
+          try {
+              const giftSnap = await get(ref(db, "cotton_giftcodes/" + code));
+              if (!giftSnap.exists()) { alert("Invalid code"); showLoading(false); return; }
+              
+              let gift = giftSnap.val();
+              if (gift.usedBy) { alert("Code already used"); showLoading(false); return; }
+              
+              let user = users[currentUser];
+              user.balance = (user.balance || 0) + gift.value;
+              
+              await set(ref(db, "cotton_giftcodes/" + code + "/usedBy"), currentUser);
+              await addTransaction(currentUser, "gift", gift.value, `Redeemed code ${code}`);
+              await saveUser(currentUser);
+              
+              document.getElementById("cashGiftModal").style.display = "none";
+              refreshAllUI();
+              alert(`You received ${gift.value} ETB!`);
+          } catch(e) {
+              alert("Error: " + e.message);
+          }
+          showLoading(false);
+      };
+      document.getElementById("closeGiftModal").onclick = () => document.getElementById("cashGiftModal").style.display = "none";
+      
+      document.getElementById("confirmExchange").onclick = async () => {
+          let amount = parseFloat(document.getElementById("exchangeAmount").value);
+          let user = users[currentUser];
+          
+          if (isNaN(amount) || amount <= 0) alert("Enter positive amount");
+          else if ((user.wealthWallet || 0) < amount) alert("Insufficient wealth wallet");
+          else {
+              showLoading(true);
+              try {
+                  user.wealthWallet -= amount;
+                  user.balance = (user.balance || 0) + amount;
+                  await addTransaction(currentUser, "exchange", amount, `Exchanged from wealth wallet`);
+                  await saveUser(currentUser);
+                  document.getElementById("exchangeModal").style.display = "none";
+                  refreshAllUI();
+                  alert(`Exchanged successfully.`);
+              } catch(e) {
+                  alert("Error: " + e.message);
+              }
+              showLoading(false);
+          }
+      };
+      document.getElementById("closeExchangeModal").onclick = () => document.getElementById("exchangeModal").style.display = "none";
+  }, 50);
+
+  // Expose necessary functions to window
+  window.biometricLogin = biometricLogin;
 </script>
 </body>
 </html>
