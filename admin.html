@@ -1,1123 +1,497 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>Cotton Exporter - Admin Control System</title>
-<style>
-* { margin:0; padding:0; box-sizing:border-box; font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif; }
-body { background:#f5f7fb; padding:0; margin:0; min-height:100vh; display:flex; flex-direction:column; }
-.auth-container, .app-container { max-width:550px; margin:0 auto; width:100%; background:white; min-height:100vh; box-shadow:0 0 20px rgba(0,0,0,0.05); position:relative; }
-.auth-container { display:flex; flex-direction:column; justify-content:center; padding:2rem 1.5rem; }
-.app-container { display:none; padding-bottom:70px; }
-.header { padding:1.2rem 1rem; background:white; border-bottom:1px solid #eef2f6; position:sticky; top:0; z-index:10; display:flex; justify-content:space-between; align-items:center;}
-.header h1 { font-size:1.5rem; font-weight:700; color:#1e3a5f; }
-.header p { font-size:0.75rem; color:#6c7a89; }
-.form-group { margin-bottom:1.2rem; }
-label { display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.4rem; color:#1e3a5f; }
-input, select, textarea { width:100%; padding:0.8rem 1rem; border:1px solid #cfdfed; border-radius:2rem; font-size:0.95rem; background:white; outline:none; }
-textarea { border-radius:1rem; }
-.btn { width:100%; background:#1e3a5f; color:white; border:none; padding:0.85rem; border-radius:3rem; font-weight:bold; font-size:1rem; cursor:pointer; }
-.btn-outline { background:transparent; border:1px solid #1e3a5f; color:#1e3a5f; }
-.btn-danger { background:#dc2626; color:white; }
-.btn-success { background:#16a34a; color:white; }
-.btn-warning { background:#f59e0b; color:white; }
-.toggle-link { text-align:center; margin-top:1rem; font-size:0.85rem; }
-.toggle-link a { color:#2c7da0; text-decoration:none; font-weight:600; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Cotton Exporter - Admin System</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+        body { background: #f5f7fb; padding-bottom: 50px; color: #1e293b; }
+        
+        /* Header */
+        .header { background: white; padding: 1.2rem 1rem; border-bottom: 1px solid #eef2f6; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 1.5rem; font-weight: 700; color: #1e3a5f; }
+        .header p { font-size: 0.75rem; color: #6c7a89; }
+        .admin-icon { background: #f59e0b; width: 45px; height: 45px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; color: white; cursor: pointer; }
 
-.balance-card { background:linear-gradient(135deg,#1e3a5f,#0f2c48); color:white; border-radius:1.5rem; padding:1.2rem; margin:1rem; text-align:center; }
-.balance-amount { font-size:2rem; font-weight:bold; margin:0.5rem 0; color:#10b981; }
-.recharge-wallet { color:#ef4444; }
-.action-btn-recharge { background:#ef4444; color:white; padding:0.5rem; border-radius:1rem; border:none; margin:0.2rem; font-weight:bold;}
-.action-btn-withdraw { background:#f59e0b; color:white; padding:0.5rem; border-radius:1rem; border:none; margin:0.2rem; font-weight:bold;}
+        /* Layout */
+        .container { max-width: 800px; margin: 0 auto; padding: 1rem; }
+        
+        /* Login */
+        #loginScreen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 80vh; }
+        .login-box { background: white; padding: 2rem; border-radius: 1.5rem; width: 90%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center;}
+        .login-box h2 { color: #1e3a5f; margin-bottom: 1.5rem; }
+        
+        /* Inputs & Buttons */
+        input { width: 100%; padding: 0.8rem 1rem; border: 1px solid #cfdfed; border-radius: 2rem; font-size: 1rem; outline: none; margin-bottom: 1rem; }
+        button { padding: 0.8rem 1rem; border: none; border-radius: 2rem; font-weight: bold; cursor: pointer; font-size: 0.9rem; display: flex; justify-content: center; align-items: center; gap: 5px; transition: 0.2s;}
+        .btn-primary { background: #1e3a5f; color: white; width: 100%; }
+        .btn-danger { background: #ef4444; color: white; }
+        .btn-success { background: #10b981; color: white; }
+        .btn-warning { background: #f59e0b; color: white; }
+        .btn-blue { background: #3b82f6; color: white; }
+        .btn-gray { background: #64748b; color: white; }
 
-.products-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); gap:1rem; padding:1rem; }
-.product-card { background:white; border-radius:1.25rem; padding:1rem; box-shadow:0 8px 20px rgba(0,0,0,0.05); border:1px solid #eef2f6; text-align:center; }
-.product-card h4 { font-size:1.2rem; font-weight:700; color:#1e3a5f; margin-bottom:0.5rem; }
-.product-price { font-size:1.3rem; font-weight:800; color:#d97706; margin:0.25rem 0; }
-.product-detail { font-size:0.75rem; color:#4b5563; display:flex; justify-content:space-between; margin-top:0.3rem; }
-.invest-now { margin-top:0.75rem; width:100%; background:#1e3a5f; color:white; border:none; padding:0.5rem; border-radius:2rem; font-weight:600; cursor:pointer; }
+        /* Dashboard Sections */
+        #dashboard { display: none; }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; margin-top: 1rem;}
+        .top-bar h2 { font-size: 1.8rem; color: #1e3a5f; }
+        .exit-btn { background: #ef4444; color: white; padding: 0.6rem 1.2rem; border-radius: 2rem; font-size: 0.9rem; border:none; cursor:pointer;}
+        
+        .tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; background: #e2e8f0; padding: 0.3rem; border-radius: 2rem; width: fit-content; overflow-x: auto;}
+        .tab { padding: 0.6rem 1.2rem; border-radius: 2rem; cursor: pointer; font-weight: 600; color: #64748b; background: transparent; white-space: nowrap;}
+        .tab.active { background: #1e3a5f; color: white; }
 
-.bottom-nav { position:fixed; bottom:0; left:0; right:0; max-width:550px; margin:0 auto; background:white; display:flex; justify-content:space-around; padding:0.6rem 0.5rem; border-top:1px solid #eef2f6; z-index:20; }
-.nav-item { text-align:center; flex:1; cursor:pointer; font-size:0.7rem; color:#8a9bb0; }
-.nav-item.active { color:#1e3a5f; font-weight:bold; }
-.nav-icon { font-size:1.4rem; display:block; }
+        .search-box { position: relative; margin-bottom: 1rem; }
+        .search-box input { padding-left: 2.5rem; border-radius: 2rem; background: white; border: 1px solid #cfdfed; }
+        .search-icon { position: absolute; left: 1rem; top: 0.8rem; color: #94a3b8; }
 
-.page { display:none; padding:0.5rem 1rem 1rem; }
-.page.active { display:block; }
+        /* Content Cards */
+        .content-section { display: none; }
+        .content-section.active { display: block; }
 
-.order-card, .transaction-item { background:#f9fbfd; border-radius:1rem; padding:0.8rem; margin-bottom:0.8rem; border:1px solid #eef2f6; }
-.wealth-stats { background:#eef2f9; border-radius:1rem; padding:1rem; margin:1rem 0; }
-.flex-between { display:flex; justify-content:space-between; align-items:center; }
-.tag { background:#cfdfed; padding:0.2rem 0.6rem; border-radius:2rem; font-size:0.7rem; }
-.tag-red { background:#fecaca; color:#991b1b; }
-.tag-green { background:#bbf7d0; color:#166534; }
-.tag-yellow { background:#fef08a; color:#854d0e; }
-.copy-btn { background:#2c7da0; color:white; border:none; padding:0.2rem 0.6rem; border-radius:2rem; font-size:0.7rem; cursor:pointer; margin-left:0.5rem; }
-.video-timer { background:#fef3c7; padding:0.5rem; border-radius:2rem; text-align:center; margin-top:0.5rem; }
-.modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index:1000; overflow-y:auto; padding:1rem; }
-.modal-content { background:white; width:100%; max-width:400px; border-radius:1.5rem; padding:1.5rem; max-height:90vh; overflow-y:auto; }
-.warning { color:#d97706; font-size:0.75rem; }
-.text-center { text-align:center; }
-.mt-1 { margin-top:0.25rem; } .mt-2 { margin-top:0.5rem; } .mt-3 { margin-top:1rem; }
-.mb-2 { margin-bottom:0.5rem; }
+        /* User Card */
+        .user-card { background: white; border-radius: 1rem; padding: 1.2rem; margin-bottom: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.02); border: 1px solid #eef2f6; }
+        .user-info h4 { font-size: 1.1rem; color: #1e3a5f; margin-bottom: 0.3rem; }
+        .user-info p { color: #475569; font-size: 0.9rem; margin-bottom: 1rem; }
+        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+        .action-grid button { width: 100%; padding: 0.6rem; border-radius: 0.8rem; font-size: 0.85rem; }
 
-.flower-border-box { position:relative; padding:1.5rem 1.2rem; margin:1.5rem 0; border:none !important; border-radius:1rem; background-color:#fff; z-index:1; box-shadow:0 4px 15px rgba(0,0,0,0.05); }
-.flower-border-box::before { content:""; position:absolute; top:-12px; left:-12px; right:-12px; bottom:-12px; border-radius:1.2rem; background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">🌺</text></svg>'),url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">💛</text></svg>'),url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">🌼</text></svg>'),url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">💚</text></svg>'); background-position:top left,top right,bottom left,bottom right; background-repeat:repeat-x; background-size:24px 24px; z-index:-1; }
-.flower-border-box::after { content:""; position:absolute; top:0; left:-12px; right:-12px; bottom:0; border-radius:1.2rem; background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">🌺</text></svg>'),url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">💛</text></svg>'),url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">🌼</text></svg>'),url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">💚</text></svg>'); background-position:top left,top right,bottom left,bottom right; background-repeat:repeat-y; background-size:24px 24px; z-index:-1; }
+        /* Product Card */
+        .add-product-btn { background: #10b981; color: white; padding: 1rem; border-radius: 2rem; width: 100%; font-size: 1.1rem; margin-bottom: 1.5rem; display: flex; justify-content: center; align-items: center; gap: 10px; border: none; cursor: pointer;}
+        .product-card { background: white; border-radius: 1rem; padding: 1.2rem; margin-bottom: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.02); border: 1px solid #eef2f6; }
+        .product-card h4 { color: #1e3a5f; font-size: 1.2rem; margin-bottom: 0.5rem; }
+        .product-card p { color: #475569; font-size: 0.9rem; margin-bottom: 0.2rem; }
+        .product-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
+        .product-actions button { flex: 1; border-radius: 0.8rem; }
 
-.wealth-bg { background-color:#e0f2fe !important; }
-.task-bg-black { background-color:#f3f4f6 !important; }
-.task-bg-red { background-color:#fef2f2 !important; }
-.task-bg-yellow { background-color:#fefce8 !important; }
-.mine-bg-blue { background-color:#e0f2fe !important; }
-.mine-bg-green { background-color:#dcfce7 !important; }
-.admin-bg { background-color:#fef3c7 !important; border:2px dashed #f59e0b !important; }
-
-.dotted-blue-btn { background:transparent; border:2px dotted #3b82f6 !important; color:#10b981; border-radius:2rem; padding:0.5rem 1rem; font-weight:600; cursor:pointer; width:100%; text-align:center; margin-top:0.5rem; }
-.dotted-blue-btn:hover { background:#e0f2fe; }
-
-/* Admin specific */
-.admin-tabs { display:flex; gap:0.3rem; margin:1rem 0; overflow-x:auto; padding-bottom:0.3rem; }
-.admin-tab { padding:0.5rem 0.8rem; background:#f1f5f9; border-radius:2rem; font-size:0.75rem; font-weight:600; white-space:nowrap; cursor:pointer; border:none; }
-.admin-tab.active { background:#1e3a5f; color:white; }
-.user-row { background:white; border:1px solid #eef2f6; border-radius:0.8rem; padding:0.7rem; margin-bottom:0.5rem; font-size:0.8rem; }
-.user-row .name { font-weight:700; color:#1e3a5f; }
-.user-actions { display:flex; gap:0.3rem; flex-wrap:wrap; margin-top:0.5rem; }
-.user-actions button { font-size:0.65rem; padding:0.3rem 0.5rem; border-radius:1rem; border:none; cursor:pointer; }
-.badge-unread { background:#dc2626; color:white; font-size:0.6rem; padding:0.15rem 0.4rem; border-radius:2rem; margin-left:0.3rem; }
-.admin-stat-card { background:linear-gradient(135deg,#1e3a5f,#2c5282); color:white; border-radius:1rem; padding:1rem; margin-bottom:0.8rem; }
-.admin-stat-card .num { font-size:1.5rem; font-weight:800; color:#10b981; }
-.search-box { width:100%; padding:0.6rem 1rem; border-radius:2rem; border:1px solid #cfdfed; margin-bottom:0.5rem; }
-.pending-item { background:#fef3c7; border:1px solid #f59e0b; border-radius:0.8rem; padding:0.7rem; margin-bottom:0.5rem; font-size:0.8rem; }
-</style>
+        /* Modals */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 1000; padding: 1rem; }
+        .modal-content { background: white; width: 100%; max-width: 450px; border-radius: 1.5rem; padding: 1.5rem; max-height: 90vh; overflow-y: auto; }
+        .modal-content h3 { color: #1e3a5f; margin-bottom: 1rem; border-bottom: 1px solid #eef2f6; padding-bottom: 0.5rem; }
+        .info-row { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px dashed #e2e8f0; font-size: 0.9rem; }
+        .info-row strong { color: #1e293b; }
+        .info-row span { color: #475569; text-align: right; word-break: break-all;}
+        .close-btn { background: #ef4444; color: white; width: 100%; margin-top: 1rem; border-radius: 0.8rem; }
+    </style>
 </head>
 <body>
 
-<!-- Authentication Container -->
-<div id="authContainer" class="auth-container">
-    <div id="loginForm" style="display:none;">
-        <h2 style="text-align:center;">Cotton Exporter</h2>
-        <p class="text-center" style="margin-bottom:1.5rem;">Sign in to your account</p>
-        <div class="form-group"><label>📞 Phone Number</label><input type="tel" id="loginPhone" placeholder="+251 912345678"></div>
-        <div class="form-group"><label>🔒 Password</label><input type="password" id="loginPassword" placeholder="Enter password"></div>
-        <button id="doLogin" class="btn">Login</button>
-        <div class="toggle-link">Don't have an account? <a href="#" id="showRegister">Sign up</a></div>
-        <div id="loginMessage" class="warning text-center mt-2"></div>
+<!-- Header -->
+<div class="header">
+    <div>
+        <h1>Cotton Exporter</h1>
+        <p>The first checkpoint of quality control</p>
     </div>
-
-    <div id="registerForm" style="display:block;">
-        <h2 style="text-align:center;">Cotton Exporter</h2>
-        <p class="text-center">Create an account to start investing</p>
-        <div class="form-group"><label>📞 Phone Number</label><input type="tel" id="regPhone" placeholder="+251 912345678"></div>
-        <div class="form-group"><label>👤 Full Name</label><input type="text" id="fullName" placeholder="Full name"></div>
-        <div class="form-group"><label>🔒 Login Password</label><input type="password" id="regPassword" placeholder="Password"></div>
-        <div class="form-group"><label>✅ Confirm Password</label><input type="password" id="confirmPassword" placeholder="Confirm password"></div>
-        <div class="form-group"><label>🔐 6-Digit Pay Password</label><input type="password" id="payPassword" maxlength="6" placeholder="6 digits"></div>
-        <div class="form-group"><label>🔗 Invite Code (Optional)</label><input type="text" id="inviteCodeReg" placeholder="Enter sponsor code"></div>
-        <button id="doRegister" class="btn">Sign Up</button>
-        <div class="toggle-link">Already have an account? <a href="#" id="showLogin">Sign in</a></div>
-        <div id="regMessage" class="warning text-center mt-2"></div>
-    </div>
+    <div class="admin-icon">⚙️</div>
 </div>
 
-<!-- Main App Container -->
-<div id="appContainer" class="app-container">
-    <div class="header">
-        <div>
-            <h1>Cotton Exporter</h1>
-            <p>The first checkpoint of quality control</p>
+<div class="container">
+    <!-- Login Screen -->
+    <div id="loginScreen">
+        <div class="login-box">
+            <h2>🔐 Admin Login</h2>
+            <input type="password" id="adminPass" placeholder="Enter admin password">
+            <button class="btn-primary" onclick="login()">Login</button>
+            <p id="loginError" style="color: #ef4444; margin-top: 0.5rem; font-size: 0.85rem;"></p>
         </div>
-        <button id="adminBtn" style="display:none; background:#f59e0b; color:white; border:none; padding:0.4rem 0.7rem; border-radius:1rem; font-size:0.7rem; font-weight:bold; cursor:pointer;">⚙️ Admin</button>
     </div>
 
-    <div id="homePage" class="page active"></div>
-    <div id="wealthPage" class="page"></div>
-    <div id="taskPage" class="page"></div>
-    <div id="minePage" class="page"></div>
-    <div id="adminPage" class="page"></div>
+    <!-- Dashboard -->
+    <div id="dashboard">
+        <div class="top-bar">
+            <h2>⚙️ Admin Dashboard</h2>
+            <button class="exit-btn" onclick="logout()">Exit Admin</button>
+        </div>
 
-    <div class="bottom-nav">
-        <div class="nav-item active" data-page="home"><span class="nav-icon">🏠</span><br>Home</div>
-        <div class="nav-item" data-page="wealth"><span class="nav-icon">💰</span><br>Wealth</div>
-        <div class="nav-item" data-page="task"><span class="nav-icon">📋</span><br>Task</div>
-        <div class="nav-item" data-page="mine"><span class="nav-icon">👤</span><br>Mine</div>
+        <div class="tabs">
+            <div class="tab active" id="tabUsers" onclick="switchTab('users')">👥 Users</div>
+            <div class="tab" id="tabProducts" onclick="switchTab('products')">📦 Products</div>
+            <div class="tab" id="tabSettings" onclick="switchTab('settings')">⚙️ Settings</div>
+        </div>
+
+        <!-- Users Section -->
+        <div id="usersSection" class="content-section active">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchUser" placeholder="Search user..." onkeyup="renderUsers()">
+            </div>
+            <div id="usersList"></div>
+        </div>
+
+        <!-- Products Section -->
+        <div id="productsSection" class="content-section">
+            <button class="add-product-btn" onclick="openProductModal()">➕ Add New Product</button>
+            <div id="productsList"></div>
+        </div>
+
+        <!-- Settings Section (Link/Service Control) -->
+        <div id="settingsSection" class="content-section">
+            <div class="product-card">
+                <h4>🔗 System Link Control</h4>
+                <p style="margin-bottom: 1rem;">ለሁሉም ተጠቃሚዎች የሚሆን የአገልግሎት ማቆሚያ (Maintenance Mode)። ማገድ ሲፈልጉ የሚፈልጉትን ሰዓት ያስገቡ።</p>
+                
+                <label style="font-weight: bold; color: #475569;">Start Time (From)</label>
+                <input type="datetime-local" id="blockStartTime" style="margin-bottom: 0.5rem; width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 0.5rem;">
+                
+                <label style="font-weight: bold; color: #475569;">End Time (To)</label>
+                <input type="datetime-local" id="blockEndTime" style="margin-bottom: 1rem; width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 0.5rem;">
+                
+                <button class="btn-danger" style="width: 100%; margin-bottom: 0.5rem;" onclick="blockService()">🚫 Block Service</button>
+                <button class="btn-success" style="width: 100%;" onclick="unblockService()">✅ Unblock Service</button>
+
+                <div id="serviceStatus" style="margin-top: 1rem; font-weight: bold; text-align: center; color: #1e3a5f;"></div>
+            </div>
+        </div>
     </div>
 </div>
 
-<!-- Modals -->
-<div id="rechargeModal" class="modal"></div>
-<div id="withdrawModal" class="modal"></div>
-<div id="investModal" class="modal"></div>
-<div id="cashGiftModal" class="modal"></div>
-<div id="exchangeModal" class="modal"></div>
-<div id="adminActionModal" class="modal"></div>
+<!-- View User Modal -->
+<div id="viewUserModal" class="modal">
+    <div class="modal-content">
+        <h3>👤 User Details</h3>
+        <div id="userDetailsContent"></div>
+        <button class="close-btn" onclick="closeModal('viewUserModal')">Close</button>
+    </div>
+</div>
+
+<!-- Edit Balance Modal -->
+<div id="editBalanceModal" class="modal">
+    <div class="modal-content">
+        <h3>💰 Edit Balance</h3>
+        <p id="editBalUserName" style="margin-bottom: 1rem; font-weight: bold;"></p>
+        <input type="number" id="editBalanceInput" placeholder="Enter new balance">
+        <button class="btn-success" style="width:100%; margin-bottom: 0.5rem;" onclick="saveBalance()">Save Balance</button>
+        <button class="close-btn" onclick="closeModal('editBalanceModal')">Cancel</button>
+    </div>
+</div>
+
+<!-- Add/Edit Product Modal -->
+<div id="productModal" class="modal">
+    <div class="modal-content">
+        <h3 id="productModalTitle">📦 Add Product</h3>
+        <input type="hidden" id="editProductKey">
+        <label>Product Name</label>
+        <input type="text" id="prodName" placeholder="e.g. Young">
+        <label>Icon (Emoji)</label>
+        <input type="text" id="prodIcon" placeholder="e.g. 🌱">
+        <label>Price (ETB)</label>
+        <input type="number" id="prodPrice">
+        <label>Total Return (ETB)</label>
+        <input type="number" id="prodTotal">
+        <label>Daily (ETB)</label>
+        <input type="number" id="prodDaily">
+        <label>Days</label>
+        <input type="number" id="prodDays">
+        
+        <button class="btn-success" style="width:100%; margin-bottom: 0.5rem;" onclick="saveProduct()">Save Product</button>
+        <button class="close-btn" onclick="closeModal('productModal')">Cancel</button>
+    </div>
+</div>
 
 <script>
-// ============ DATA ============
-let currentUser = null;
-let users = [];
-let investments = [];
-let transactions = [];
-let giftCodes = [];
-let validFTTransactions = [];
-let adminActions = []; // log of admin actions
-let settings = { minWithdraw:300, referralBonus:50, siteName:'Cotton Exporter' };
+    const ADMIN_PASS = "admin123";
+    let users = [];
+    let products = {};
+    let transactions = [];
 
-const ADMIN_PHONE = "0947655291"; // demo admin (also a demo user)
-const ADMIN_PASSWORD = "123456";
+    const defaultProducts = {
+        young: { name: "Young", price: 1000, totalReturn: 1800, daily: 40, days: 45, icon: "🌱" },
+        bestOne: { name: "Best One", price: 2500, totalReturn: 4840, daily: 110, days: 44, icon: "⭐" },
+        onlyEthiopians: { name: "Only For Ethiopians", price: 5000, totalReturn: 9900, daily: 220, days: 45, icon: "🇪🇹" },
+        mandheling: { name: "Mandheling", price: 8000, totalReturn: 15300, daily: 340, days: 45, icon: "☕" },
+        antigua: { name: "Antigua", price: 20000, totalReturn: 45000, daily: 1000, days: 45, icon: "🏝️" },
+        tarrazu: { name: "Tarrazú", price: 40000, totalReturn: 100000, daily: 2500, days: 40, icon: "⛰️" }
+    };
 
-const PRODUCTS = {
-    young: { name:"Young", price:1000, totalReturn:1800, daily:40, days:45, icon:"🌱" },
-    bestOne: { name:"Best One", price:2500, totalReturn:4840, daily:110, days:44, icon:"⭐" },
-    onlyEthiopians: { name:"Only For Ethiopians", price:5000, totalReturn:9900, daily:220, days:45, icon:"🇪🇹" },
-    mandheling: { name:"Mandheling", price:8000, totalReturn:15300, daily:340, days:45, icon:"☕" },
-    antigua: { name:"Antigua", price:20000, totalReturn:45000, daily:1000, days:45, icon:"🏝️" },
-    tarrazu: { name:"Tarrazú", price:40000, totalReturn:100000, daily:2500, days:40, icon:"⛰️" }
-};
-
-// ============ STORAGE ============
-function saveData() {
-    localStorage.setItem("cotton_users", JSON.stringify(users));
-    localStorage.setItem("cotton_investments", JSON.stringify(investments));
-    localStorage.setItem("cotton_transactions", JSON.stringify(transactions));
-    localStorage.setItem("cotton_giftcodes", JSON.stringify(giftCodes));
-    localStorage.setItem("cotton_ft_transactions", JSON.stringify(validFTTransactions));
-    localStorage.setItem("cotton_admin_actions", JSON.stringify(adminActions));
-    localStorage.setItem("cotton_settings", JSON.stringify(settings));
-}
-
-function loadData() {
-    try {
-        let u = localStorage.getItem("cotton_users"); if (u) users = JSON.parse(u);
-        let inv = localStorage.getItem("cotton_investments"); if (inv) investments = JSON.parse(inv);
-        let tr = localStorage.getItem("cotton_transactions"); if (tr) transactions = JSON.parse(tr);
-        let gc = localStorage.getItem("cotton_giftcodes"); if (gc) giftCodes = JSON.parse(gc);
-        let ft = localStorage.getItem("cotton_ft_transactions"); if (ft) validFTTransactions = JSON.parse(ft);
-        let aa = localStorage.getItem("cotton_admin_actions"); if (aa) adminActions = JSON.parse(aa);
-        let st = localStorage.getItem("cotton_settings"); if (st) settings = JSON.parse(st);
-    } catch(e) { console.error(e); }
-
-    if (users.length === 0) {
-        users.push({
-            phone: ADMIN_PHONE, fullName:"Demo Admin", password: ADMIN_PASSWORD, payPassword:"123456",
-            inviteCode: generateInviteCode(), referredBy:null,
-            balance:5000, rechargeBalance:5000, wealthWallet:0, rewardWallet:0, totalEarnings:0,
-            vipLevel:0, lastDailyBonus:null, lastVideoTaskDate:null,
-            shareReferralCount:0, shareRewardClaimed:false, isAdmin:true,
-            isBanned:false, banUntil:null, banReason:"", createdAt:new Date().toISOString(),
-            isReadByAdmin:true, linkedReferralLinkBlocked:false, referralBlockUntil:null,
-            rechargeHistory:[], rejectedRecharges:0
-        });
-    }
-    for (let u of users) {
-        if (u.rechargeBalance === undefined) u.rechargeBalance = 0;
-        if (u.lastVideoTaskDate === undefined) u.lastVideoTaskDate = null;
-        if (u.isBanned === undefined) u.isBanned = false;
-        if (u.banUntil === undefined) u.banUntil = null;
-        if (u.isReadByAdmin === undefined) u.isReadByAdmin = true;
-        if (u.rechargeHistory === undefined) u.rechargeHistory = [];
-        if (u.rejectedRecharges === undefined) u.rejectedRecharges = 0;
-        if (u.isAdmin === undefined) u.isAdmin = (u.phone === ADMIN_PHONE);
-        if (u.linkedReferralLinkBlocked === undefined) u.linkedReferralLinkBlocked = false;
-        if (u.referralBlockUntil === undefined) u.referralBlockUntil = null;
-    }
-    saveData();
-}
-
-function generateInviteCode() { return Math.random().toString(36).substring(2,8).toUpperCase(); }
-
-function addTransaction(userPhone, type, amount, desc, extra) {
-    let tx = { id:Date.now()+Math.random(), userPhone, type, amount, description:desc, timestamp:new Date().toISOString() };
-    if (extra) Object.assign(tx, extra);
-    transactions.unshift(tx);
-    saveData();
-    return tx;
-}
-
-// ============ BAN CHECK ============
-function isUserBanned(user) {
-    if (!user) return false;
-    if (user.isBanned && (!user.banUntil || new Date(user.banUntil) > new Date())) return true;
-    if (user.isBanned && user.banUntil && new Date(user.banUntil) <= new Date()) {
-        user.isBanned = false;
-        user.banUntil = null;
-        user.banReason = "";
-        saveData();
-    }
-    return false;
-}
-
-// ============ DAILY INCOME ============
-function processDailyIncomes() {
-    let now = new Date();
-    for (let inv of investments) {
-        let user = users.find(u => u.phone === inv.userPhone);
-        if (!user || isUserBanned(user)) continue;
-        let last = new Date(inv.lastIncomeDate);
-        let daysDiff = Math.floor((now - last)/86400000);
-        if (daysDiff > 0 && inv.daysLeft > 0) {
-            let income = inv.dailyRate * daysDiff;
-            if (income > 0) {
-                user.wealthWallet += income;
-                user.totalEarnings += income;
-                inv.lastIncomeDate = now.toISOString();
-                inv.daysLeft -= daysDiff;
-                addTransaction(user.phone, "income", income, `Daily income from ${inv.productName}`);
-                let referrer = users.find(u => u.phone === user.referredBy);
-                if (referrer && !isUserBanned(referrer)) {
-                    let pct = referrer.vipLevel===1?0.05:referrer.vipLevel===2?0.09:referrer.vipLevel===3?0.12:0;
-                    if (pct>0) {
-                        let c = income*pct;
-                        referrer.wealthWallet += c;
-                        referrer.totalEarnings += c;
-                        addTransaction(referrer.phone,"commission",c,`Team commission from ${user.fullName}`);
-                    }
-                }
-            }
+    function loadData() {
+        users = JSON.parse(localStorage.getItem("cotton_users")) || [];
+        products = JSON.parse(localStorage.getItem("cotton_products")) || JSON.parse(JSON.stringify(defaultProducts));
+        transactions = JSON.parse(localStorage.getItem("cotton_transactions")) || [];
+        
+        // Ensure demo user exists if empty
+        if(users.length === 0) {
+            users.push({
+                phone: "0947655291", fullName: "Demo User", password: "123456", payPassword: "123456",
+                inviteCode: "DEMO12", balance: 5000, rechargeBalance: 5000, wealthWallet: 0, rewardWallet: 0,
+                totalEarnings: 0, vipLevel: 0, isBanned: false
+            });
             saveData();
         }
     }
-    for (let u of users) {
-        let hasPurchase = investments.some(i => i.userPhone === u.phone);
-        let rc = users.filter(usr => usr.referredBy === u.phone).length;
-        if (rc>=20 && hasPurchase) u.vipLevel=3;
-        else if (rc>=5 && hasPurchase) u.vipLevel=2;
-        else if (hasPurchase) u.vipLevel=1;
-        else u.vipLevel=0;
+
+    function saveData() {
+        localStorage.setItem("cotton_users", JSON.stringify(users));
+        localStorage.setItem("cotton_products", JSON.stringify(products));
+        localStorage.setItem("cotton_transactions", JSON.stringify(transactions));
     }
-    saveData();
-}
 
-function refreshAllUI() {
-    if (!currentUser) return;
-    processDailyIncomes();
-    renderHomePage();
-    renderWealthPage();
-    renderTaskPage();
-    renderMinePage();
-    if (isCurrentUserAdmin()) renderAdminPage();
-}
-
-function isCurrentUserAdmin() {
-    let u = users.find(u => u.phone === currentUser);
-    return u && u.isAdmin === true;
-}
-
-// ============ HOME ============
-function renderHomePage() {
-    let user = users.find(u => u.phone === currentUser);
-    if (!user) return;
-    if (isUserBanned(user)) {
-        document.getElementById("homePage").innerHTML = `
-            <div class="flower-border-box task-bg-red" style="margin:2rem 1rem; text-align:center;">
-                <h2>🚫 Account Suspended</h2>
-                <p>${user.banReason || 'Your account is suspended.'}</p>
-                <p>Until: ${user.banUntil ? new Date(user.banUntil).toLocaleString() : 'Permanent'}</p>
-            </div>`;
-        return;
+    function login() {
+        if (document.getElementById("adminPass").value === ADMIN_PASS) {
+            document.getElementById("loginScreen").style.display = "none";
+            document.getElementById("dashboard").style.display = "block";
+            loadData();
+            renderUsers();
+            renderProducts();
+            loadServiceStatus();
+        } else {
+            document.getElementById("loginError").innerText = "Incorrect Password!";
+        }
     }
-    let unreadCount = 0;
-    document.getElementById("homePage").innerHTML = `
-        <div class="balance-card">
-            <div>${settings.siteName} - The first checkpoint</div>
-            <div class="balance-amount">${user.balance.toFixed(2)} ETB</div>
-            <div>Wallet Balance</div>
-            <div style="margin-top:0.5rem; display:flex; justify-content:center; gap:10px;">
-                <button class="action-btn-recharge" id="openRecharge">➕ Recharge</button>
-                <button class="action-btn-withdraw" id="openWithdraw">➖ Withdraw</button>
-            </div>
-            <div style="margin-top:0.5rem; font-size:0.8rem;">💰 Recharge Wallet: <span class="recharge-wallet">${user.rechargeBalance.toFixed(2)} ETB</span></div>
-        </div>
-        <h3 style="margin:1rem 0 0 1rem;">📈 Investment Products</h3>
-        <div class="products-grid" id="productsGrid"></div>`;
-    let grid = document.getElementById("productsGrid");
-    for (let [key, prod] of Object.entries(PRODUCTS)) {
-        let card = document.createElement("div");
-        card.className = "product-card";
-        card.innerHTML = `
-            <h4>${prod.icon} ${prod.name}</h4>
-            <div class="product-price">${prod.price.toLocaleString()} ETB</div>
-            <div class="product-detail"><span>Total:</span><span>${prod.totalReturn.toLocaleString()} ETB</span></div>
-            <div class="product-detail"><span>Daily:</span><span>${prod.daily} ETB</span></div>
-            <div class="product-detail"><span>${prod.days} Days</span></div>
-            <button class="invest-now" data-product="${key}">Invest Now</button>`;
-        grid.appendChild(card);
+
+    function logout() { location.reload(); }
+
+    function switchTab(tab) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.content-section').forEach(c => c.classList.remove('active'));
+        
+        if (tab === 'users') {
+            document.getElementById('tabUsers').classList.add('active');
+            document.getElementById('usersSection').classList.add('active');
+        } else if (tab === 'products') {
+            document.getElementById('tabProducts').classList.add('active');
+            document.getElementById('productsSection').classList.add('active');
+        } else {
+            document.getElementById('tabSettings').classList.add('active');
+            document.getElementById('settingsSection').classList.add('active');
+        }
     }
-    document.querySelectorAll(".invest-now").forEach(btn => {
-        btn.onclick = () => openInvestModal(btn.dataset.product);
-    });
-    document.getElementById("openRecharge").onclick = () => document.getElementById("rechargeModal").style.display="flex";
-    document.getElementById("openWithdraw").onclick = () => {
-        document.getElementById("withdrawableBalance").innerText = user.balance.toFixed(2);
-        document.getElementById("withdrawModal").style.display="flex";
-    };
-}
 
-// ============ WEALTH ============
-function renderWealthPage() {
-    let user = users.find(u => u.phone === currentUser);
-    if (isUserBanned(user)) { document.getElementById("wealthPage").innerHTML=""; return; }
-    let userInvestments = investments.filter(i => i.userPhone === currentUser);
-    let lastBonus = user.lastDailyBonus ? new Date(user.lastDailyBonus) : null;
-    let now = new Date();
-    let canReceive = !lastBonus || (now-lastBonus) >= 86400000;
-    let status = canReceive ? "✅ Ready to claim" : `⏳ Next: ${new Date(lastBonus.getTime()+86400000).toLocaleString()}`;
-    document.getElementById("wealthPage").innerHTML = `
-        <div class="flower-border-box wealth-bg">
-            <div class="flex-between"><span>Wealth Wallet</span><span>${user.wealthWallet.toFixed(2)} ETB</span></div>
-            <div class="flex-between"><span>Reward Wallet</span><span>${(user.rewardWallet||0).toFixed(2)} ETB</span></div>
-            <div class="flex-between"><span>Total Earnings</span><span>${user.totalEarnings.toFixed(2)} ETB</span></div>
-            <div class="flex-between mt-2"><span>🎁 Daily Receive</span><button id="dailyReceiveBtn" class="btn-outline" ${!canReceive?'disabled':''}>Claim</button></div>
-            <div class="warning text-center mt-1">${status}</div>
-            <button id="exchangeToBalance" class="btn-outline mt-2">Exchange Wealth → Balance</button>
-        </div>
-        <div class="flex-between" style="margin:1rem 0;"><strong>Active Orders</strong><span>${userInvestments.length}</span></div>
-        <div id="ordersList"></div>`;
-    let ordersDiv = document.getElementById("ordersList");
-    if (userInvestments.length===0) ordersDiv.innerHTML="<p>No active investments.</p>";
-    else {
-        ordersDiv.innerHTML = userInvestments.map(inv=>`
-            <div class="order-card">
-                <div class="flex-between"><strong>${inv.productName}</strong><span class="tag tag-green">Active</span></div>
-                <div>Investment: ${inv.amount} ETB</div><div>Daily: ${inv.dailyRate} ETB</div>
-                <div>Remaining: ${inv.daysLeft} days</div><div>Started: ${new Date(inv.startDate).toLocaleDateString()}</div>
-            </div>`).join('');
-    }
-    document.getElementById("exchangeToBalance").onclick = () => {
-        document.getElementById("wealthWalletAmount").innerText = user.wealthWallet.toFixed(2);
-        document.getElementById("exchangeModal").style.display="flex";
-    };
-    let btn = document.getElementById("dailyReceiveBtn");
-    if (btn) btn.onclick = () => {
-        if (!canReceive) { alert("Wait 24 hours."); return; }
-        let bonus = Math.floor(Math.random()*41)+10;
-        user.wealthWallet += bonus;
-        user.totalEarnings += bonus;
-        user.lastDailyBonus = now.toISOString();
-        addTransaction(currentUser,"daily_bonus",bonus,`Daily bonus: ${bonus} ETB`);
-        saveData(); refreshAllUI();
-        alert(`You received ${bonus} ETB!`);
-    };
-}
+    // --- USER MANAGEMENT ---
+    function renderUsers() {
+        let search = document.getElementById("searchUser").value.toLowerCase();
+        let list = document.getElementById("usersList");
+        list.innerHTML = "";
 
-// ============ TASK ============
-function renderTaskPage() {
-    let user = users.find(u => u.phone === currentUser);
-    if (isUserBanned(user)) { document.getElementById("taskPage").innerHTML=""; return; }
-    let lastVideo = user.lastVideoTaskDate ? new Date(user.lastVideoTaskDate) : null;
-    let now = new Date();
-    let canWatch = !lastVideo || (now-lastVideo)>=86400000;
-    let videoStatus = canWatch ? "✅ Ready" : `⏳ ${Math.ceil((lastVideo.getTime()+86400000-now)/3600000)}h`;
-    let shareReq = 2;
-    let shareProg = user.shareReferralCount || 0;
-    let shareDone = user.shareRewardClaimed === true;
-    let shareStatus = shareDone ? "✅ Claimed" : `${shareProg}/${shareReq}`;
-    let linkBlocked = user.linkedReferralLinkBlocked && user.referralBlockUntil && new Date(user.referralBlockUntil) > now;
-    document.getElementById("taskPage").innerHTML = `
-        <div style="padding:1rem;">
-            <h3>📋 Daily Tasks</h3>
-            <div class="flower-border-box task-bg-black">
-                <div class="flex-between"><span>🎬 Watch video (60 sec)</span><span class="tag">${videoStatus}</span></div>
-                <button id="watchVideoBtn" class="btn-outline mt-2" ${!canWatch?'disabled':''}>Watch Video</button>
-                <div id="videoTimer" class="video-timer" style="display:none;"></div>
-            </div>
-            <div class="flower-border-box task-bg-red">
-                <div class="flex-between"><span>📢 Share referral</span><span class="tag">${shareStatus}</span></div>
-                ${linkBlocked ? `<div class="warning mt-2">🚫 Referral link blocked until ${new Date(user.referralBlockUntil).toLocaleString()}</div>` : `
-                <div class="mt-2">Invite 2 friends:</div>
-                <div class="flex-between mt-2">
-                    <input type="text" id="referralLinkInput" readonly value="${window.location.href.split('#')[0].split('?')[0]}?ref=${user.inviteCode}" style="font-size:0.75rem;">
-                    <button id="copyReferralLink" class="copy-btn">Copy</button>
-                </div>`}
-                <div class="warning mt-2">Reward (${settings.referralBonus} ETB) after 2 registrations.</div>
-            </div>
-            <div class="flower-border-box task-bg-yellow">
-                <h3 class="mt-2">📜 Task History</h3>
-                <div id="taskTransactionsList"></div>
-            </div>
-        </div>`;
-    let taskTx = transactions.filter(tx => tx.userPhone === currentUser && (tx.type==="video_task"||tx.type==="share_task"));
-    let txDiv = document.getElementById("taskTransactionsList");
-    if (taskTx.length===0) txDiv.innerHTML="<p>No task transactions yet.</p>";
-    else txDiv.innerHTML = taskTx.map(tx=>`
-        <div class="transaction-item flex-between">
-            <div><strong>${tx.type==="video_task"?"🎬 Video":"📢 Share"}</strong><br><small>${new Date(tx.timestamp).toLocaleString()}</small></div>
-            <div style="color:#2b9348">+${tx.amount.toFixed(2)} ETB</div>
-        </div>`).join('');
-    let wb = document.getElementById("watchVideoBtn");
-    if (wb) wb.onclick = () => {
-        if (!canWatch) { alert("Once per day."); return; }
-        let timerDiv = document.getElementById("videoTimer");
-        let sec = 60; timerDiv.style.display="block";
-        timerDiv.innerHTML = `⏳ ${sec}s remaining...`;
-        let iv = setInterval(()=>{
-            sec--; timerDiv.innerHTML=`⏳ ${sec}s remaining...`;
-            if (sec<=0) {
-                clearInterval(iv); timerDiv.style.display="none";
-                user.rewardWallet = (user.rewardWallet||0)+20;
-                user.lastVideoTaskDate = new Date().toISOString();
-                addTransaction(currentUser,"video_task",20,"Video task reward");
-                saveData(); refreshAllUI();
-                alert("You earned 20 ETB!");
-            }
-        },1000);
-    };
-    let cb = document.getElementById("copyReferralLink");
-    if (cb) cb.onclick = () => {
-        let inp = document.getElementById("referralLinkInput");
-        inp.select(); navigator.clipboard.writeText(inp.value);
-        alert("Copied!");
-    };
-}
+        let filtered = users.filter(u => u.phone.includes(search) || u.fullName.toLowerCase().includes(search));
 
-// ============ MINE ============
-function renderMinePage() {
-    let user = users.find(u => u.phone === currentUser);
-    let rc = users.filter(u => u.referredBy === currentUser).length;
-    let rechargeTotal = transactions.filter(t=>t.userPhone===currentUser&&t.type==="recharge").reduce((a,t)=>a+t.amount,0);
-    document.getElementById("minePage").innerHTML = `
-        <div style="padding:1rem;">
-            <div class="flower-border-box mine-bg-blue">
-                <div>${user.fullName}</div><div>VIP ${user.vipLevel}</div><div>📱 ${user.phone}</div>
-            </div>
-            <div class="flower-border-box mine-bg-green">
-                <div class="flex-between"><span>Total Earnings</span><span>${user.totalEarnings.toFixed(2)} ETB</span></div>
-                <div class="flex-between"><span>Reward Wallet</span><span>${(user.rewardWallet||0).toFixed(2)} ETB</span></div>
-                <div class="flex-between"><span>Total Recharged</span><span>${rechargeTotal.toFixed(2)} ETB</span></div>
-            </div>
-            <div class="order-card" style="padding:1.5rem 1rem;margin-bottom:1.5rem;">
-                <div>🔗 Invite Code: <strong>${user.inviteCode}</strong></div>
-                <button id="copyInviteLink" class="dotted-blue-btn">Copy Link</button>
-            </div>
-            <div class="order-card" style="padding:1.5rem 1rem;margin-bottom:1.5rem;">
-                <div>👥 My Team (${rc})</div>
-                <button id="viewTeam" class="dotted-blue-btn">Team Details</button>
-            </div>
-            <div class="order-card" style="padding:1.5rem 1rem;margin-bottom:1.5rem;">
-                <div>🎁 Cash Gift</div>
-                <button id="openCashGift" class="dotted-blue-btn">Redeem Code</button>
-            </div>
-            <div class="order-card">
-                <div>⚙️ Settings</div>
-                <button id="logoutBtn" class="btn-outline mt-2" style="background:#b91c1c;color:white;">Sign Out</button>
-            </div>
-            <div class="wealth-stats mt-3">
-                <strong>VIP Rules</strong><br>
-                - VIP0: No purchase<br>
-                - VIP1: Purchased product (5%)<br>
-                - VIP2: 5+ referrals (9%)<br>
-                - VIP3: 20+ referrals (12%)
-            </div>
-        </div>`;
-    document.getElementById("copyInviteLink").onclick = () => {
-        let link = `${window.location.href.split('#')[0].split('?')[0]}?ref=${user.inviteCode}`;
-        navigator.clipboard.writeText(link); alert("Copied!");
-    };
-    document.getElementById("viewTeam").onclick = () => {
-        let team = users.filter(u => u.referredBy === currentUser);
-        if (team.length===0) alert("No team yet.");
-        else alert(team.map(m=>`${m.fullName} - ${m.phone}`).join("\n"));
-    };
-    document.getElementById("openCashGift").onclick = () => document.getElementById("cashGiftModal").style.display="flex";
-    document.getElementById("logoutBtn").onclick = () => {
-        currentUser = null;
-        document.getElementById("appContainer").style.display="none";
-        document.getElementById("authContainer").style.display="flex";
-        document.getElementById("adminBtn").style.display="none";
-    };
-}
-
-// ============ ADMIN PAGE ============
-function renderAdminPage() {
-    if (!isCurrentUserAdmin()) return;
-    let unreadUsers = users.filter(u=>!u.isReadByAdmin && u.phone!==currentUser);
-    let totalBalances = users.reduce((a,u)=>a+u.balance,0);
-    let totalRecharge = transactions.filter(t=>t.type==="recharge").reduce((a,t)=>a+t.amount,0);
-    let totalUsers = users.length;
-    let bannedCount = users.filter(u=>u.isBanned).length;
-    let pendingRecharges = transactions.filter(t=>t.type==="recharge"&&t.status==="pending");
-    let rejectedRecharges = transactions.filter(t=>t.type==="recharge"&&t.status==="rejected");
-    document.getElementById("adminPage").innerHTML = `
-        <div style="padding:1rem;">
-            <h2 style="color:#1e3a5f;">⚙️ Admin Dashboard</h2>
-            <div class="admin-stat-card">
-                <div class="flex-between"><span>Total Users</span><span class="num">${totalUsers}</span></div>
-                <div class="flex-between"><span>Total Wallet Balance</span><span class="num">${totalBalances.toFixed(0)} ETB</span></div>
-                <div class="flex-between"><span>Total Recharge</span><span class="num">${totalRecharge.toFixed(0)} ETB</span></div>
-                <div class="flex-between"><span>Banned Users</span><span class="num">${bannedCount}</span></div>
-                <div class="flex-between"><span>Unread New Users</span><span class="num" style="color:#ef4444;">${unreadUsers.length}</span></div>
-            </div>
-            <div class="admin-tabs">
-                <button class="admin-tab active" data-tab="users">👥 Users</button>
-                <button class="admin-tab" data-tab="unread">🔔 Unread ${unreadUsers.length>0?'<span class="badge-unread">'+unreadUsers.length+'</span>':''}</button>
-                <button class="admin-tab" data-tab="recharges">💳 Recharges</button>
-                <button class="admin-tab" data-tab="gifts">🎁 Gift Codes</button>
-                <button class="admin-tab" data-tab="settings">⚙️ Settings</button>
-                <button class="admin-tab" data-tab="log">📋 Log</button>
-            </div>
-            <div id="adminTabContent"></div>
-        </div>`;
-    // tab switching
-    document.querySelectorAll(".admin-tab").forEach(t=>{
-        t.onclick = () => {
-            document.querySelectorAll(".admin-tab").forEach(x=>x.classList.remove("active"));
-            t.classList.add("active");
-            renderAdminTab(t.dataset.tab);
-        };
-    });
-    renderAdminTab("users");
-}
-
-function renderAdminTab(tab) {
-    let cont = document.getElementById("adminTabContent");
-    if (!cont) return;
-    if (tab==="users") {
-        cont.innerHTML = `
-            <input type="text" id="adminSearch" class="search-box" placeholder="🔍 Search by name or phone...">
-            <div id="userList"></div>`;
-        let render = (q="") => {
-            let list = users.filter(u=>u.phone!==currentUser && (q==="" || u.fullName.toLowerCase().includes(q.toLowerCase()) || u.phone.includes(q)));
-            let div = document.getElementById("userList");
-            if (list.length===0) { div.innerHTML="<p>No users found.</p>"; return; }
-            div.innerHTML = list.map(u=>{
-                let invCount = investments.filter(i=>i.userPhone===u.phone).length;
-                return `
-                <div class="user-row">
-                    <div class="name">${u.fullName} ${u.isBanned?'<span class="tag tag-red">BANNED</span>':''} ${!u.isReadByAdmin?'<span class="tag tag-yellow">NEW</span>':''}</div>
-                    <div>📱 ${u.phone} | VIP${u.vipLevel} | Inv: ${invCount}</div>
-                    <div>💰 Balance: ${u.balance.toFixed(2)} ETB | Recharge: ${u.rechargeBalance.toFixed(2)}</div>
-                    ${u.isBanned?`<div class="warning">Ban: ${u.banReason||''} ${u.banUntil?('until '+new Date(u.banUntil).toLocaleString()):'(permanent)'}</div>`:''}
-                    <div class="user-actions">
-                        <button class="btn-warning" onclick="adminAdjustBalance('${u.phone}')">💰 Balance</button>
-                        <button class="btn-danger" onclick="adminBanUser('${u.phone}')">${u.isBanned?'Unban':'🚫 Ban'}</button>
-                        <button class="btn-danger" onclick="adminDeleteUser('${u.phone}')">🗑️ Delete</button>
-                        <button class="btn-outline" onclick="adminViewUser('${u.phone}')">👁️ View</button>
-                        <button class="btn-success" onclick="adminMarkRead('${u.phone}')">✅ Read</button>
-                        <button class="btn-warning" onclick="adminBlockLink('${u.phone}')">🔗 Block Link</button>
-                    </div>
-                </div>`;
-            }).join('');
-        };
-        render();
-        document.getElementById("adminSearch").oninput = (e)=>render(e.target.value);
-    }
-    else if (tab==="unread") {
-        let list = users.filter(u=>!u.isReadByAdmin && u.phone!==currentUser);
-        if (list.length===0) cont.innerHTML="<p>No unread new users.</p>";
-        else cont.innerHTML = list.map(u=>`
-            <div class="user-row" style="border-left:4px solid #ef4444;">
-                <div class="name">🆕 ${u.fullName}</div>
-                <div>📱 ${u.phone} | Registered: ${new Date(u.createdAt).toLocaleString()}</div>
-                <div class="user-actions">
-                    <button class="btn-success" onclick="adminMarkRead('${u.phone}')">✅ Mark Read</button>
-                    <button class="btn-warning" onclick="adminAdjustBalance('${u.phone}')">💰 Add Balance</button>
-                    <button class="btn-outline" onclick="adminViewUser('${u.phone}')">👁️ View</button>
-                </div>
-            </div>`).join('');
-    }
-    else if (tab==="recharges") {
-        let rechTx = transactions.filter(t=>t.type==="recharge");
-        cont.innerHTML = `<h4>All Recharges (${rechTx.length})</h4><div id="rechList"></div>`;
-        let div = document.getElementById("rechList");
-        if (rechTx.length===0) div.innerHTML="<p>No recharges yet.</p>";
-        else div.innerHTML = rechTx.map(t=>{
-            let u = users.find(x=>x.phone===t.userPhone);
-            return `
-            <div class="user-row">
-                <div class="name">${u?u.fullName:t.userPhone}</div>
-                <div>Amount: <strong>${t.amount.toFixed(2)} ETB</strong> | ${new Date(t.timestamp).toLocaleString()}</div>
-                <div>${t.description}</div>
-                <div>Status: <span class="tag ${t.status==="success"?"tag-green":t.status==="rejected"?"tag-red":"tag-yellow"}">${t.status||"success"}</span></div>
-                ${(!t.status||t.status==="pending")?`
-                <div class="user-actions">
-                    <button class="btn-success" onclick="adminRechargeAction('${t.id}','success')">✅ Success</button>
-                    <button class="btn-danger" onclick="adminRechargeAction('${t.id}','rejected')">❌ Reject & Refund</button>
-                </div>`:''}
-            </div>`;
-        }).join('');
-    }
-    else if (tab==="gifts") {
-        cont.innerHTML = `
-            <div class="flower-border-box task-bg-yellow">
-                <h4>Create Gift Code</h4>
-                <input id="newGiftCode" placeholder="Code (e.g. GIFT100)">
-                <input type="number" id="newGiftValue" placeholder="Value (ETB)" class="mt-2">
-                <input type="number" id="newGiftExpires" placeholder="Expires (days, 0=never)" class="mt-2" value="30">
-                <button id="createGiftBtn" class="btn mt-2">Create</button>
-            </div>
-            <h4>All Gift Codes (${giftCodes.length})</h4>
-            <div id="giftList"></div>`;
-        document.getElementById("createGiftBtn").onclick = () => {
-            let code = document.getElementById("newGiftCode").value.trim().toUpperCase();
-            let val = parseFloat(document.getElementById("newGiftValue").value);
-            let expDays = parseInt(document.getElementById("newGiftExpires").value)||0;
-            if (!code || isNaN(val)) { alert("Fill code & value"); return; }
-            if (giftCodes.find(g=>g.code===code)) { alert("Exists"); return; }
-            giftCodes.push({ code, value:val, usedBy:null, active:true,
-                createdAt:new Date().toISOString(),
-                expiresAt: expDays>0 ? new Date(Date.now()+expDays*86400000).toISOString() : null });
-            saveData(); renderAdminTab("gifts");
-            adminLog(`Created gift code ${code} (${val} ETB)`);
-            alert("Created!");
-        };
-        let gl = document.getElementById("giftList");
-        if (giftCodes.length===0) gl.innerHTML="<p>No gift codes.</p>";
-        else gl.innerHTML = giftCodes.map(g=>`
-            <div class="user-row">
-                <div class="name">${g.code}</div>
-                <div>Value: ${g.value} ETB | ${g.usedBy?('Used by '+g.usedBy):'Unused'}</div>
-                <div>Expires: ${g.expiresAt?new Date(g.expiresAt).toLocaleString():'Never'} | Active: ${g.active!==false?'Yes':'No'}</div>
-                <div class="user-actions">
-                    <button class="${g.active!==false?'btn-danger':'btn-success'}" onclick="toggleGift('${g.code}')">${g.active!==false?'Deactivate':'Activate'}</button>
-                    <button class="btn-danger" onclick="deleteGift('${g.code}')">🗑️ Delete</button>
-                </div>
-            </div>`).join('');
-    }
-    else if (tab==="settings") {
-        cont.innerHTML = `
-            <div class="flower-border-box">
-                <h4>Site Settings</h4>
-                <label>Site Name</label><input id="setSiteName" value="${settings.siteName}">
-                <label class="mt-2">Min Withdraw (ETB)</label><input type="number" id="setMinWithdraw" value="${settings.minWithdraw}">
-                <label class="mt-2">Referral Bonus (ETB)</label><input type="number" id="setReferralBonus" value="${settings.referralBonus}">
-                <button id="saveSettingsBtn" class="btn mt-3">Save</button>
-            </div>`;
-        document.getElementById("saveSettingsBtn").onclick = () => {
-            settings.siteName = document.getElementById("setSiteName").value;
-            settings.minWithdraw = parseFloat(document.getElementById("setMinWithdraw").value);
-            settings.referralBonus = parseFloat(document.getElementById("setReferralBonus").value);
-            saveData(); adminLog("Updated settings"); alert("Saved!");
-        };
-    }
-    else if (tab==="log") {
-        cont.innerHTML = `<h4>Admin Action Log (${adminActions.length})</h4><div id="logList"></div>`;
-        let ll = document.getElementById("logList");
-        if (adminActions.length===0) ll.innerHTML="<p>No actions yet.</p>";
-        else ll.innerHTML = adminActions.slice(0,100).map(a=>`
-            <div class="user-row">
-                <div>${new Date(a.timestamp).toLocaleString()}</div>
-                <div>${a.action}</div>
-            </div>`).join('');
-    }
-}
-
-function adminLog(action) {
-    adminActions.unshift({ id:Date.now(), action, by:currentUser, timestamp:new Date().toISOString() });
-    saveData();
-}
-
-// ============ ADMIN ACTIONS (global) ============
-window.adminAdjustBalance = function(phone) {
-    let u = users.find(x=>x.phone===phone);
-    if (!u) return;
-    let val = prompt(`Adjust balance for ${u.fullName}\nCurrent: ${u.balance} ETB\nEnter amount (+add / -subtract):`);
-    if (val===null) return;
-    let n = parseFloat(val);
-    if (isNaN(n)) { alert("Invalid"); return; }
-    u.balance += n;
-    if (u.balance<0) u.balance=0;
-    addTransaction(phone, n>=0?"admin_credit":"admin_debit", n, `Admin ${n>=0?"credit":"debit"}`);
-    adminLog(`${n>=0?"Added":"Deducted"} ${Math.abs(n)} ETB ${n>=0?"to":"from"} ${u.fullName}`);
-    saveData(); renderAdminTab("users");
-    alert("Balance updated!");
-};
-
-window.adminBanUser = function(phone) {
-    let u = users.find(x=>x.phone===phone);
-    if (!u) return;
-    if (u.isBanned) {
-        u.isBanned=false; u.banUntil=null; u.banReason="";
-        adminLog(`Unbanned ${u.fullName}`);
-    } else {
-        let reason = prompt("Ban reason:") || "Policy violation";
-        let hours = prompt("Ban duration (hours, 0 = permanent):", "24");
-        if (hours===null) return;
-        let h = parseFloat(hours)||0;
-        u.isBanned=true;
-        u.banUntil = h>0 ? new Date(Date.now()+h*3600000).toISOString() : null;
-        u.banReason = reason;
-        adminLog(`Banned ${u.fullName} for ${h>0?h+'h':'permanent'} — ${reason}`);
-    }
-    saveData(); renderAdminTab("users");
-};
-
-window.adminDeleteUser = function(phone) {
-    let u = users.find(x=>x.phone===phone);
-    if (!u) return;
-    if (!confirm(`Delete ${u.fullName} (${u.phone})? This cannot be undone.`)) return;
-    users = users.filter(x=>x.phone!==phone);
-    investments = investments.filter(i=>i.userPhone!==phone);
-    adminLog(`Deleted user ${u.fullName} (${phone})`);
-    saveData(); renderAdminTab("users");
-};
-
-window.adminViewUser = function(phone) {
-    let u = users.find(x=>x.phone===phone);
-    if (!u) return;
-    let inv = investments.filter(i=>i.userPhone===phone);
-    let tx = transactions.filter(t=>t.userPhone===phone).slice(0,20);
-    let rechargeTotal = transactions.filter(t=>t.userPhone===phone&&t.type==="recharge"&&t.status!=="rejected").reduce((a,t)=>a+t.amount,0);
-    let html = `
-        <h3>👤 ${u.fullName}</h3>
-        <p>📱 ${u.phone} | VIP${u.vipLevel} ${u.isBanned?'<span class="tag tag-red">BANNED</span>':''}</p>
-        <p>💰 Balance: ${u.balance.toFixed(2)} ETB</p>
-        <p>💳 Recharge Wallet: ${u.rechargeBalance.toFixed(2)} ETB</p>
-        <p>🏦 Total Recharged: ${rechargeTotal.toFixed(2)} ETB</p>
-        <p>💎 Wealth: ${u.wealthWallet.toFixed(2)} | Reward: ${(u.rewardWallet||0).toFixed(2)}</p>
-        <p>🔗 Invite: ${u.inviteCode} | Referred by: ${u.referredBy||'-'}</p>
-        <p>👥 Team: ${users.filter(x=>x.referredBy===phone).length}</p>
-        <p>📈 Investments: ${inv.length}</p>
-        <p>📅 Registered: ${new Date(u.createdAt).toLocaleString()}</p>
-        <hr>
-        <h4>Recent Transactions</h4>
-        ${tx.map(t=>`<div style="font-size:0.75rem;margin:0.2rem 0;">${new Date(t.timestamp).toLocaleString()} — ${t.type}: ${t.amount} ${t.description}</div>`).join('')||'<p>None</p>'}`;
-    showAdminModal(html);
-};
-
-window.adminMarkRead = function(phone) {
-    let u = users.find(x=>x.phone===phone);
-    if (!u) return;
-    u.isReadByAdmin = true;
-    saveData();
-    if (document.querySelector(".admin-tab.active")) renderAdminTab(document.querySelector(".admin-tab.active").dataset.tab);
-};
-
-window.adminBlockLink = function(phone) {
-    let u = users.find(x=>x.phone===phone);
-    if (!u) return;
-    if (u.linkedReferralLinkBlocked) {
-        u.linkedReferralLinkBlocked=false;
-        u.referralBlockUntil=null;
-        adminLog(`Unblocked referral link for ${u.fullName}`);
-    } else {
-        let hours = prompt("Block referral link for how many hours?", "24");
-        if (hours===null) return;
-        let h = parseFloat(hours)||24;
-        u.linkedReferralLinkBlocked=true;
-        u.referralBlockUntil = new Date(Date.now()+h*3600000).toISOString();
-        adminLog(`Blocked referral link for ${u.fullName} for ${h}h`);
-    }
-    saveData(); renderAdminTab("users");
-};
-
-window.adminRechargeAction = function(txId, status) {
-    let tx = transactions.find(t=>String(t.id)===String(txId));
-    if (!tx) return;
-    let u = users.find(x=>x.phone===tx.userPhone);
-    if (!u) return;
-    if (status==="rejected") {
-        // refund
-        u.balance -= tx.amount;
-        if (u.balance<0) u.balance=0;
-        u.rejectedRecharges = (u.rejectedRecharges||0)+1;
-        tx.status = "rejected";
-        tx.description += " [REJECTED & REFUNDED]";
-        adminLog(`Rejected recharge of ${tx.amount} ETB for ${u.fullName} and refunded`);
-        alert("Rejected & refunded to user's account balance.");
-    } else {
-        tx.status = "success";
-        adminLog(`Approved recharge of ${tx.amount} ETB for ${u.fullName}`);
-        alert("Marked as success.");
-    }
-    saveData(); renderAdminTab("recharges");
-};
-
-window.toggleGift = function(code) {
-    let g = giftCodes.find(x=>x.code===code);
-    if (!g) return;
-    g.active = g.active===false ? true : false;
-    saveData(); renderAdminTab("gifts");
-};
-window.deleteGift = function(code) {
-    if (!confirm("Delete gift code?")) return;
-    giftCodes = giftCodes.filter(x=>x.code!==code);
-    saveData(); renderAdminTab("gifts");
-};
-
-function showAdminModal(html) {
-    let m = document.getElementById("adminActionModal");
-    m.innerHTML = `<div class="modal-content"><div id="adminModalBody">${html}</div>
-        <button class="btn mt-3" onclick="document.getElementById('adminActionModal').style.display='none'">Close</button></div>`;
-    m.style.display="flex";
-}
-
-// ============ INVEST ============
-function openInvestModal(productKey) {
-    let prod = PRODUCTS[productKey];
-    let user = users.find(u=>u.phone===currentUser);
-    if (isUserBanned(user)) { alert("Account suspended."); return; }
-    document.getElementById("investProductName").innerText = `${prod.icon} ${prod.name}`;
-    document.getElementById("investDetails").innerHTML = `Price: ${prod.price} ETB<br>Daily: ${prod.daily} ETB<br>Total Return: ${prod.totalReturn} ETB<br>Period: ${prod.days} Days<br>Available: ${user.balance.toFixed(2)} ETB`;
-    document.getElementById("investPayPassword").value="";
-    document.getElementById("investError").innerText="";
-    let modal = document.getElementById("investModal");
-    modal.style.display="flex";
-    document.getElementById("confirmInvest").onclick = () => {
-        let pp = document.getElementById("investPayPassword").value;
-        if (pp!==user.payPassword) { document.getElementById("investError").innerText="❌ Incorrect pay password"; return; }
-        if (user.balance<prod.price) { document.getElementById("investError").innerText="❌ Insufficient balance"; return; }
-        user.balance -= prod.price;
-        if (user.rechargeBalance>=prod.price) user.rechargeBalance -= prod.price;
-        else user.rechargeBalance = 0;
-        investments.push({ id:Date.now(), userPhone:currentUser, productKey, productName:prod.name,
-            amount:prod.price, startDate:new Date().toISOString(), lastIncomeDate:new Date().toISOString(),
-            dailyRate:prod.daily, daysLeft:prod.days, totalReturn:prod.totalReturn });
-        addTransaction(currentUser,"invest",-prod.price,`Purchased ${prod.name}`);
-        saveData(); modal.style.display="none"; refreshAllUI();
-        alert(`Invested in ${prod.name}!`);
-    };
-    document.getElementById("closeInvestModal").onclick = () => modal.style.display="none";
-}
-
-// ============ NAV ============
-document.querySelectorAll(".nav-item").forEach(item=>{
-    item.onclick = () => {
-        let page = item.dataset.page;
-        document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-        document.getElementById(page+"Page").classList.add("active");
-        document.querySelectorAll(".nav-item").forEach(n=>n.classList.remove("active"));
-        item.classList.add("active");
-        if (page==="home") renderHomePage();
-        else if (page==="wealth") renderWealthPage();
-        else if (page==="task") renderTaskPage();
-        else if (page==="mine") renderMinePage();
-    };
-});
-
-// admin button
-document.getElementById("adminBtn").onclick = () => {
-    document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-    document.getElementById("adminPage").classList.add("active");
-    document.querySelectorAll(".nav-item").forEach(n=>n.classList.remove("active"));
-    renderAdminPage();
-};
-
-// ============ URL ============
-function getUrlParameter(name) {
-    let regex = new RegExp('[?&]'+name+'=([^&#]*)');
-    let results = regex.exec(window.location.href);
-    return results===null?null:decodeURIComponent(results[1].replace(/\+/g,' '));
-}
-
-document.getElementById("showRegister").onclick = (e) => {
-    e.preventDefault();
-    document.getElementById("loginForm").style.display="none";
-    document.getElementById("registerForm").style.display="block";
-    let ref = getUrlParameter("ref");
-    if (ref) document.getElementById("inviteCodeReg").value = ref;
-};
-document.getElementById("showLogin").onclick = (e) => {
-    e.preventDefault();
-    document.getElementById("registerForm").style.display="none";
-    document.getElementById("loginForm").style.display="block";
-};
-window.addEventListener("load", () => {
-    let ref = getUrlParameter("ref");
-    if (ref) document.getElementById("inviteCodeReg").value = ref;
-});
-
-// ============ REGISTER ============
-document.getElementById("doRegister").onclick = () => {
-    let phone = document.getElementById("regPhone").value.trim();
-    let fullName = document.getElementById("fullName").value.trim();
-    let pass = document.getElementById("regPassword").value;
-    let conf = document.getElementById("confirmPassword").value;
-    let pp = document.getElementById("payPassword").value;
-    let invite = document.getElementById("inviteCodeReg").value.trim().toUpperCase();
-    if (!phone||!fullName||!pass||!conf||!pp) { document.getElementById("regMessage").innerText="Fill all fields"; return; }
-    if (pass!==conf) { document.getElementById("regMessage").innerText="Passwords mismatch"; return; }
-    if (pp.length!==6||isNaN(pp)) { document.getElementById("regMessage").innerText="Pay password 6 digits"; return; }
-    if (users.find(u=>u.phone===phone)) { document.getElementById("regMessage").innerText="Phone registered"; return; }
-    let referredBy = null;
-    if (invite) {
-        let refUser = users.find(u=>u.inviteCode===invite);
-        if (!refUser) { document.getElementById("regMessage").innerText="Invalid invite code"; return; }
-        // check if referral link is blocked
-        if (refUser.linkedReferralLinkBlocked && refUser.referralBlockUntil && new Date(refUser.referralBlockUntil)>new Date()) {
-            document.getElementById("regMessage").innerText="Invite code temporarily blocked";
+        if (filtered.length === 0) {
+            list.innerHTML = "<p style='text-align:center; color:#64748b;'>No users found.</p>";
             return;
         }
-        referredBy = refUser.phone;
+
+        filtered.forEach(u => {
+            let isBanned = u.isBanned === true;
+            let banText = isBanned ? "Unban" : "Ban";
+            let banIcon = isBanned ? "🔓" : "🚫";
+            let banBtnClass = isBanned ? "btn-success" : "btn-danger";
+
+            list.innerHTML += `
+                <div class="user-card">
+                    <div class="user-info">
+                        <h4>${u.fullName} ${isBanned ? '<span style="color:#ef4444; font-size:0.8rem;">(Banned)</span>' : ''}</h4>
+                        <p>📱 ${u.phone} | 💰 ${u.balance.toFixed(2)} ETB</p>
+                    </div>
+                    <div class="action-grid">
+                        <button class="btn-blue" onclick="openEditBalance('${u.phone}')">💰 Balance</button>
+                        <button class="${banBtnClass}" onclick="toggleBan('${u.phone}')">${banIcon} ${banText}</button>
+                        <button class="btn-danger" onclick="deleteUser('${u.phone}')">🗑️ Delete</button>
+                        <button class="btn-gray" onclick="viewUser('${u.phone}')">👁️ View</button>
+                    </div>
+                </div>
+            `;
+        });
     }
-    let newUser = {
-        phone, fullName, password:pass, payPassword:pp,
-        inviteCode:generateInviteCode(), referredBy,
-        balance:0, rechargeBalance:0, wealthWallet:0, rewardWallet:0, totalEarnings:0,
-        vipLevel:0, lastDailyBonus:null, lastVideoTaskDate:null,
-        shareReferralCount:0, shareRewardClaimed:false,
-        isAdmin:false, isBanned:false, banUntil:null, banReason:"",
-        isReadByAdmin:false, linkedReferralLinkBlocked:false, referralBlockUntil:null,
-        rechargeHistory:[], rejectedRecharges:0,
-        createdAt:new Date().toISOString()
-    };
-    users.push(newUser);
-    saveData();
-    if (referredBy) {
-        let r = users.find(u=>u.phone===referredBy);
-        if (r) {
-            r.shareReferralCount = (r.shareReferralCount||0)+1;
-            if (r.shareReferralCount>=2 && !r.shareRewardClaimed) {
-                r.shareRewardClaimed=true;
-                r.rewardWallet = (r.rewardWallet||0)+settings.referralBonus;
-                addTransaction(referredBy,"share_task",settings.referralBonus,"Share task reward (2 referrals)");
-            }
+
+    function viewUser(phone) {
+        let u = users.find(x => x.phone === phone);
+        if (!u) return;
+
+        // Get user's transactions to find FT codes or Bank details used
+        let userTx = transactions.filter(t => t.userPhone === phone);
+        let rechargeTx = userTx.filter(t => t.type === 'recharge').map(t => t.description).join('<br>') || 'None';
+        let withdrawTx = userTx.filter(t => t.type === 'withdraw').map(t => t.description).join('<br>') || 'None';
+
+        let detailsHtml = `
+            <div class="info-row"><strong>Full Name</strong> <span>${u.fullName}</span></div>
+            <div class="info-row"><strong>Phone</strong> <span>${u.phone}</span></div>
+            <div class="info-row"><strong>Invite Code</strong> <span>${u.inviteCode}</span></div>
+            <div class="info-row"><strong>VIP Level</strong> <span>VIP ${u.vipLevel}</span></div>
+            <div class="info-row"><strong>Login Pass</strong> <span>${u.password}</span></div>
+            <div class="info-row"><strong>Pay Pass</strong> <span>${u.payPassword}</span></div>
+            <div class="info-row"><strong>Main Balance</strong> <span>${u.balance.toFixed(2)} ETB</span></div>
+            <div class="info-row"><strong>Recharge Wallet</strong> <span>${(u.rechargeBalance || 0).toFixed(2)} ETB</span></div>
+            <div class="info-row"><strong>Wealth Wallet</strong> <span>${(u.wealthWallet || 0).toFixed(2)} ETB</span></div>
+            <div class="info-row"><strong>Reward Wallet</strong> <span>${(u.rewardWallet || 0).toFixed(2)} ETB</span></div>
+            <div class="info-row"><strong>Status</strong> <span>${u.isBanned ? '🔴 Banned' : '🟢 Active'}</span></div>
+            <div style="margin-top: 1rem; border-top: 1px solid #cbd5e1; padding-top: 1rem;">
+                <strong>Recharge/FT History:</strong><br>
+                <span style="font-size: 0.8rem; color: #475569;">${rechargeTx}</span>
+            </div>
+            <div style="margin-top: 0.5rem;">
+                <strong>Withdrawal History:</strong><br>
+                <span style="font-size: 0.8rem; color: #475569;">${withdrawTx}</span>
+            </div>
+        `;
+        document.getElementById("userDetailsContent").innerHTML = detailsHtml;
+        document.getElementById("viewUserModal").style.display = "flex";
+    }
+
+    function openEditBalance(phone) {
+        let u = users.find(x => x.phone === phone);
+        document.getElementById("editBalUserName").innerText = u.fullName + " (" + u.phone + ")";
+        document.getElementById("editBalanceInput").value = u.balance;
+        document.getElementById("editBalanceModal").style.display = "flex";
+        document.getElementById("editBalanceModal").setAttribute("data-phone", phone);
+    }
+
+    function saveBalance() {
+        let phone = document.getElementById("editBalanceModal").getAttribute("data-phone");
+        let u = users.find(x => x.phone === phone);
+        let newBal = parseFloat(document.getElementById("editBalanceInput").value);
+        if (u && !isNaN(newBal)) {
+            u.balance = newBal;
             saveData();
+            renderUsers();
+            closeModal('editBalanceModal');
+            alert("Balance updated successfully!");
         }
     }
-    alert("Registered! Please login.");
-    document.getElementById("registerForm").style.display="none";
-    document.getElementById("loginForm").style.display="block";
-    document.getElementById("regMessage").innerText="";
-};
 
-// ============ LOGIN ============
-document.getElementById("doLogin").onclick = () => {
-    let phone = document.getElementById("loginPhone").value.trim();
-    let pass = document.getElementById("loginPassword").value;
-    let user = users.find(u=>u.phone===phone && u.password===pass);
-    if (!user) { document.getElementById("loginMessage").innerText="Invalid credentials. Demo: 0947655291 / 123456"; return; }
-    if (isUserBanned(user)) {
-        document.getElementById("loginMessage").innerText=`Account suspended: ${user.banReason||''} ${user.banUntil?('until '+new Date(user.banUntil).toLocaleString()):'(permanent)'}`;
-        return;
+    function toggleBan(phone) {
+        let u = users.find(x => x.phone === phone);
+        if (u) {
+            u.isBanned = !u.isBanned;
+            saveData();
+            renderUsers();
+        }
     }
-    currentUser = phone;
-    document.getElementById("authContainer").style.display="none";
-    document.getElementById("appContainer").style.display="block";
-    document.getElementById("adminBtn").style.display = user.isAdmin ? "block" : "none";
-    refreshAllUI();
-    document.querySelector(".nav-item[data-page='home']").click();
-};
 
-// ============ MODALS ============
-function populateModals() {
-    document.getElementById("rechargeModal").innerHTML = `<div class="modal-content">
-        <div class="modal-header">💳 Recharge Wallet</div>
-        <p>Bank: Commercial Bank of Ethiopia</p>
-        <div class="form-group"><label>Account Name</label><div style="display:flex;"><input type="text" id="bankAccountName" value="Cotton Exporter PLC" readonly><button id="copyAccountName" class="copy-btn">Copy</button></div></div>
-        <div class="form-group"><label>Account Number</label><div style="display:flex;"><input type="text" id="bankAccountNumber" value="1000123456789" readonly><button id="copyAccountNumber" class="copy-btn">Copy</button></div></div>
-        <div class="form-group"><label>Amount (ETB)</label><input type="number" id="rechargeAmount" placeholder="Enter amount"></div>
-        <div class="form-group"><label>FT Reference Code</label><input type="text" id="ftCode" placeholder="e.g., FT26110L6GG0"></div>
-        <div class="form-group"><label>Cheque / Transaction Number</label><input type="text" id="chequeNum" placeholder="Transaction number"></div>
-        <button id="confirmRecharge" class="btn">Submit</button>
-        <button class="btn-outline mt-2" id="closeRechargeModal">Cancel</button>
-    </div>`;
-    document.getElementById("withdrawModal").innerHTML = `<div class="modal-content">
-        <div class="modal-header">💸 Withdraw</div>
-        <p>Withdrawable: <span id="withdrawableBalance">0</span> ETB<br>Min: ${settings.minWithdraw} ETB</p>
-        <div class="form-group"><label>Amount</label><input type="number" id="withdrawAmount"></div>
-        <div class="form-group"><label>Account Name</label><input id="withdrawAccountName"></div>
-        <div class="form-group"><label>CBE Account</label><input id="withdrawAccountNumber"></div>
-        <div class="form-group"><label>Pay Password</label><input type="password" id="withdrawPayPassword" maxlength="6"></div>
-        <button id="confirmWithdraw" class="btn">Submit</button>
-        <button class="btn-outline mt-2" id="closeWithdrawModal">Cancel</button>
-    </div>`;
-    document.getElementById("investModal").innerHTML = `<div class="modal-content">
-        <div class="modal-header" id="investProductName"></div>
-        <p id="investDetails"></p>
-        <div class="form-group"><label>Pay Password</label><input type="password" id="investPayPassword" maxlength="6"></div>
-        <button id="confirmInvest" class="btn">Buy Now</button>
-        <button class="btn-outline mt-2" id="closeInvestModal">Cancel</button>
-        <div id="investError" class="warning"></div>
-    </div>`;
-    document.getElementById("cashGiftModal").innerHTML = `<div class="modal-content">
-        <div class="modal-header">🎁 Cash Gift</div>
-        <input type="text" id="giftCode" placeholder="Redemption code">
-        <button id="claimGift" class="btn mt-2">Claim</button>
-        <button class="btn-outline mt-2" id="closeGiftModal">Cancel</button>
-    </div>`;
-    document.getElementById("exchangeModal").innerHTML = `<div class="modal-content">
-        <div class="modal-header">🔄 Exchange</div>
-        <p>Wealth: <span id="wealthWalletAmount">0</span> ETB</p>
-        <div class="form-group"><label>Amount</label><input type="number" id="exchangeAmount"></div>
-        <button id="confirmExchange" class="btn">Exchange</button>
-        <button class="btn-outline mt-2" id="closeExchangeModal">Cancel</button>
-    </div>`;
+    function deleteUser(phone) {
+        if (confirm("Are you sure you want to completely delete this user? This cannot be undone.")) {
+            users = users.filter(x => x.phone !== phone);
+            saveData();
+            renderUsers();
+        }
+    }
 
-    setTimeout(() => {
-        document.getElementById("confirmRecharge").onclick = () => {
-            let ft = document.getElementById("ftCode").value.trim().toUpperCase();
-            let amount = parseFloat(document.getElementById("rechargeAmount").value);
-            let cheque = document.getElementById("chequeNum").value.trim().toUpperCase();
-            if (!ft) { alert("Enter FT Code"); return; }
-            if (!cheque) { alert("Enter transaction number"); return; }
-            if (isNaN(amount)||amount<=0) { alert("Enter valid amount"); return; }
-            let isUsed = validFTTransactions.some(t=>t.code===ft||t.cheque===cheque);
-            if (isUsed) { alert("❌ Code/Cheque already used"); return; }
-            validFTTransactions.push({ code:ft, cheque, amount, usedBy:currentUser });
-            let user = users.find(u=>u.phone===currentUser);
-            // simulate network: create transaction as pending (admin can reject/approve)
-            let tx = addTransaction(currentUser,"recharge",amount,`Recharge via FT ${ft} (${amount} ETB)`,{ status:"pending" });
-            user.rechargeHistory.push({ amount, ft, cheque, timestamp:new Date().toISOString(), status:"pending" });
-            // ✅ immediately add balance, but mark transaction pending (admin may reject/refund)
-            user.balance += amount;
-            user.rechargeBalance += amount;
-            saveData(); refreshAllUI();
-            document.getElementById("rechargeModal").style.display="none";
-            alert(`✅ Recharge of ${amount} ETB submitted! Balance credited.`);
-        };
-        document.getElementById("closeRechargeModal").onclick = () => document.getElementById("rechargeModal").style.display="none";
-        document.getElementById("copyAccountName").onclick = () => { navigator.clipboard.writeText("Cotton Exporter PLC"); alert("Copied!"); };
-        document.getElementById("copyAccountNumber").onclick = () => { navigator.clipboard.writeText("1000123456789"); alert("Copied!"); };
-        document.getElementById("confirmWithdraw").onclick = () => {
-            let amount = parseFloat(document.getElementById("withdrawAmount").value);
-            let accName = document.getElementById("withdrawAccountName").value;
-            let accNum = document.getElementById("withdrawAccountNumber").value;
-            let pp = document.getElementById("withdrawPayPassword").value;
-            let user = users.find(u=>u.phone===currentUser);
-            if (isNaN(amount)||amount<settings.minWithdraw) alert(`Min ${settings.minWithdraw} ETB`);
-            else if (user.balance<amount) alert("Insufficient");
-            else if (pp!==user.payPassword) alert("Incorrect pay password");
-            else if (!accName||!accNum) alert("Enter bank details");
-            else {
-                user.balance -= amount;
-                addTransaction(currentUser,"withdraw",-amount,`Withdrawal to ${accName} - ${accNum}`);
-                saveData(); refreshAllUI();
-                document.getElementById("withdrawModal").style.display="none";
-                alert(`Withdrawal of ${amount} ETB submitted.`);
-            }
-        };
-        document.getElementById("closeWithdrawModal").onclick = () => document.getElementById("withdrawModal").style.display="none";
-        document.getElementById("closeInvestModal").onclick = () => document.getElementById("investModal").style.display="none";
-        document.getElementById("claimGift").onclick = () => {
-            let code = document.getElementById("giftCode").value.trim().toUpperCase();
-            let gift = giftCodes.find(g=>g.code===code);
-            if (!gift) { alert("Invalid"); return; }
-            if (gift.usedBy) { alert("Used"); return; }
-            if (gift.active===false) { alert("Blocked"); return; }
-            if (gift.expiresAt && new Date(gift.expiresAt)<new Date()) { alert("Expired"); return; }
-            let user = users.find(u=>u.phone===currentUser);
-            user.balance += gift.value;
-            gift.usedBy = currentUser;
-            addTransaction(currentUser,"gift",gift.value,`Redeemed ${code}`);
-            saveData(); refreshAllUI();
-            document.getElementById("cashGiftModal").style.display="none";
-            alert(`Received ${gift.value} ETB!`);
-        };
-        document.getElementById("closeGiftModal").onclick = () => document.getElementById("cashGiftModal").style.display="none";
-        document.getElementById("confirmExchange").onclick = () => {
-            let amount = parseFloat(document.getElementById("exchangeAmount").value);
-            let user = users.find(u=>u.phone===currentUser);
-            if (isNaN(amount)||amount<=0) alert("Enter positive");
-            else if (user.wealthWallet<amount) alert("Insufficient wealth");
-            else {
-                user.wealthWallet -= amount;
-                user.balance += amount;
-                addTransaction(currentUser,"exchange",amount,"Wealth → balance");
-                saveData(); refreshAllUI();
-                document.getElementById("exchangeModal").style.display="none";
-                alert(`Exchanged ${amount} ETB`);
-            }
-        };
-        document.getElementById("closeExchangeModal").onclick = () => document.getElementById("exchangeModal").style.display="none";
-    }, 50);
-}
+    // --- PRODUCT MANAGEMENT ---
+    function renderProducts() {
+        let list = document.getElementById("productsList");
+        list.innerHTML = "";
 
-// ============ INIT ============
-loadData();
-populateModals();
-console.log("✅ System ready. Admin demo: 0947655291 / 123456");
-console.log("📌 Admin can: adjust balance, ban/unban, delete, block links, approve/reject recharges, create gift codes, view unread users, etc.");
+        for (let key in products) {
+            let p = products[key];
+            list.innerHTML += `
+                <div class="product-card">
+                    <h4>${p.icon} ${p.name}</h4>
+                    <p>Price: <strong>${p.price} ETB</strong> | Daily: ${p.daily} ETB | Days: ${p.days}</p>
+                    <p>Total Return: ${p.totalReturn} ETB</p>
+                    <div class="product-actions">
+                        <button class="btn-warning" onclick="openProductModal('${key}')">✏️ Edit</button>
+                        <button class="btn-danger" onclick="deleteProduct('${key}')">🗑️ Delete</button>
+                    </div>
+                </div>
+            `;
+        }
+    }
+
+    function openProductModal(key = null) {
+        document.getElementById("productModal").style.display = "flex";
+        if (key) {
+            let p = products[key];
+            document.getElementById("productModalTitle").innerText = "✏️ Edit Product";
+            document.getElementById("editProductKey").value = key;
+            document.getElementById("prodName").value = p.name;
+            document.getElementById("prodIcon").value = p.icon;
+            document.getElementById("prodPrice").value = p.price;
+            document.getElementById("prodTotal").value = p.totalReturn;
+            document.getElementById("prodDaily").value = p.daily;
+            document.getElementById("prodDays").value = p.days;
+        } else {
+            document.getElementById("productModalTitle").innerText = "📦 Add Product";
+            document.getElementById("editProductKey").value = "";
+            document.getElementById("prodName").value = "";
+            document.getElementById("prodIcon").value = "📦";
+            document.getElementById("prodPrice").value = "";
+            document.getElementById("prodTotal").value = "";
+            document.getElementById("prodDaily").value = "";
+            document.getElementById("prodDays").value = "";
+        }
+    }
+
+    function saveProduct() {
+        let key = document.getElementById("editProductKey").value;
+        let name = document.getElementById("prodName").value;
+        let icon = document.getElementById("prodIcon").value || "📦";
+        let price = parseFloat(document.getElementById("prodPrice").value);
+        let total = parseFloat(document.getElementById("prodTotal").value);
+        let daily = parseFloat(document.getElementById("prodDaily").value);
+        let days = parseInt(document.getElementById("prodDays").value);
+
+        if (!name || isNaN(price) || isNaN(total) || isNaN(daily) || isNaN(days)) {
+            alert("Please fill all fields correctly!");
+            return;
+        }
+
+        if (!key) {
+            // Generate new key for new product
+            key = "prod_" + Date.now();
+        }
+
+        products[key] = { name, icon, price, totalReturn: total, daily, days };
+        saveData();
+        renderProducts();
+        closeModal('productModal');
+    }
+
+    function deleteProduct(key) {
+        if (confirm("Delete this product?")) {
+            delete products[key];
+            saveData();
+            renderProducts();
+        }
+    }
+
+    // --- SETTINGS (LINK/SERVICE CONTROL) ---
+    function blockService() {
+        let start = document.getElementById("blockStartTime").value;
+        let end = document.getElementById("blockEndTime").value;
+        
+        if(!start || !end) {
+            alert("Please select both Start and End time.");
+            return;
+        }
+
+        if(new Date(start) >= new Date(end)) {
+            alert("End time must be after Start time.");
+            return;
+        }
+
+        localStorage.setItem("cotton_block_start", start);
+        localStorage.setItem("cotton_block_end", end);
+        alert("Service blocked successfully for the selected time!");
+        loadServiceStatus();
+    }
+
+    function unblockService() {
+        localStorage.removeItem("cotton_block_start");
+        localStorage.removeItem("cotton_block_end");
+        alert("Service unblocked! Users can now access the app.");
+        loadServiceStatus();
+    }
+
+    function loadServiceStatus() {
+        let start = localStorage.getItem("cotton_block_start");
+        let end = localStorage.getItem("cotton_block_end");
+        let statusDiv = document.getElementById("serviceStatus");
+
+        if(start && end) {
+            statusDiv.innerHTML = `🔴 Service is scheduled to be BLOCKED from <br>${new Date(start).toLocaleString()} <br>to <br>${new Date(end).toLocaleString()}`;
+            statusDiv.style.color = "#ef4444";
+            document.getElementById("blockStartTime").value = start;
+            document.getElementById("blockEndTime").value = end;
+        } else {
+            statusDiv.innerHTML = `🟢 Service is currently ACTIVE (No blocks).`;
+            statusDiv.style.color = "#10b981";
+            document.getElementById("blockStartTime").value = "";
+            document.getElementById("blockEndTime").value = "";
+        }
+    }
+
+    function closeModal(id) {
+        document.getElementById(id).style.display = "none";
+    }
 </script>
 </body>
 </html>
