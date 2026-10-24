@@ -8,21 +8,17 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
         body { background: #f5f7fb; padding-bottom: 50px; color: #1e293b; }
         
-        /* Header */
         .header { background: white; padding: 1.2rem 1rem; border-bottom: 1px solid #eef2f6; display: flex; justify-content: space-between; align-items: center; }
         .header h1 { font-size: 1.5rem; font-weight: 700; color: #1e3a5f; }
         .header p { font-size: 0.75rem; color: #6c7a89; }
         .admin-icon { background: #f59e0b; width: 45px; height: 45px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; color: white; cursor: pointer; }
 
-        /* Layout */
         .container { max-width: 800px; margin: 0 auto; padding: 1rem; }
         
-        /* Login */
         #loginScreen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 80vh; }
         .login-box { background: white; padding: 2rem; border-radius: 1.5rem; width: 90%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center;}
         .login-box h2 { color: #1e3a5f; margin-bottom: 1.5rem; }
         
-        /* Inputs & Buttons */
         input { width: 100%; padding: 0.8rem 1rem; border: 1px solid #cfdfed; border-radius: 2rem; font-size: 1rem; outline: none; margin-bottom: 1rem; }
         button { padding: 0.8rem 1rem; border: none; border-radius: 2rem; font-weight: bold; cursor: pointer; font-size: 0.9rem; display: flex; justify-content: center; align-items: center; gap: 5px; transition: 0.2s;}
         .btn-primary { background: #1e3a5f; color: white; width: 100%; }
@@ -32,7 +28,6 @@
         .btn-blue { background: #3b82f6; color: white; }
         .btn-gray { background: #64748b; color: white; }
 
-        /* Dashboard Sections */
         #dashboard { display: none; }
         .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; margin-top: 1rem;}
         .top-bar h2 { font-size: 1.8rem; color: #1e3a5f; }
@@ -46,18 +41,15 @@
         .search-box input { padding-left: 2.5rem; border-radius: 2rem; background: white; border: 1px solid #cfdfed; }
         .search-icon { position: absolute; left: 1rem; top: 0.8rem; color: #94a3b8; }
 
-        /* Content Cards */
         .content-section { display: none; }
         .content-section.active { display: block; }
 
-        /* User Card */
         .user-card { background: white; border-radius: 1rem; padding: 1.2rem; margin-bottom: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.02); border: 1px solid #eef2f6; }
         .user-info h4 { font-size: 1.1rem; color: #1e3a5f; margin-bottom: 0.3rem; }
         .user-info p { color: #475569; font-size: 0.9rem; margin-bottom: 1rem; }
         .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
         .action-grid button { width: 100%; padding: 0.6rem; border-radius: 0.8rem; font-size: 0.85rem; }
 
-        /* Product Card */
         .add-product-btn { background: #10b981; color: white; padding: 1rem; border-radius: 2rem; width: 100%; font-size: 1.1rem; margin-bottom: 1.5rem; display: flex; justify-content: center; align-items: center; gap: 10px; border: none; cursor: pointer;}
         .product-card { background: white; border-radius: 1rem; padding: 1.2rem; margin-bottom: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.02); border: 1px solid #eef2f6; }
         .product-card h4 { color: #1e3a5f; font-size: 1.2rem; margin-bottom: 0.5rem; }
@@ -65,7 +57,6 @@
         .product-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
         .product-actions button { flex: 1; border-radius: 0.8rem; }
 
-        /* Modals */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 1000; padding: 1rem; }
         .modal-content { background: white; width: 100%; max-width: 450px; border-radius: 1.5rem; padding: 1.5rem; max-height: 90vh; overflow-y: auto; }
         .modal-content h3 { color: #1e3a5f; margin-bottom: 1rem; border-bottom: 1px solid #eef2f6; padding-bottom: 0.5rem; }
@@ -73,11 +64,15 @@
         .info-row strong { color: #1e293b; }
         .info-row span { color: #475569; text-align: right; word-break: break-all;}
         .close-btn { background: #ef4444; color: white; width: 100%; margin-top: 1rem; border-radius: 0.8rem; }
+
+        .admin-photo-container { display: flex; flex-direction: column; align-items: center; margin-bottom: 1rem; padding: 1rem; background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 1rem; }
+        .admin-photo-preview { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; background: #e2e8f0; margin-bottom: 0.5rem; display: none; }
+        .admin-photo-placeholder { width: 100px; height: 100px; border-radius: 50%; background: #e2e8f0; display: flex; justify-content: center; align-items: center; font-size: 2.5rem; color: #94a3b8; margin-bottom: 0.5rem; }
+        .upload-photo-btn { background: #3b82f6; color: white; padding: 0.5rem 1rem; border-radius: 2rem; font-size: 0.85rem; cursor: pointer; border: none; }
     </style>
 </head>
 <body>
 
-<!-- Header -->
 <div class="header">
     <div>
         <h1>Cotton Exporter</h1>
@@ -87,7 +82,6 @@
 </div>
 
 <div class="container">
-    <!-- Login Screen -->
     <div id="loginScreen">
         <div class="login-box">
             <h2>🔐 Admin Login</h2>
@@ -97,7 +91,6 @@
         </div>
     </div>
 
-    <!-- Dashboard -->
     <div id="dashboard">
         <div class="top-bar">
             <h2>⚙️ Admin Dashboard</h2>
@@ -110,7 +103,6 @@
             <div class="tab" id="tabSettings" onclick="switchTab('settings')">⚙️ Settings</div>
         </div>
 
-        <!-- Users Section -->
         <div id="usersSection" class="content-section active">
             <div class="search-box">
                 <span class="search-icon">🔍</span>
@@ -119,13 +111,11 @@
             <div id="usersList"></div>
         </div>
 
-        <!-- Products Section -->
         <div id="productsSection" class="content-section">
             <button class="add-product-btn" onclick="openProductModal()">➕ Add New Product</button>
             <div id="productsList"></div>
         </div>
 
-        <!-- Settings Section (Link/Service Control) -->
         <div id="settingsSection" class="content-section">
             <div class="product-card">
                 <h4>🔗 System Link Control</h4>
@@ -146,16 +136,23 @@
     </div>
 </div>
 
-<!-- View User Modal -->
 <div id="viewUserModal" class="modal">
     <div class="modal-content">
         <h3>👤 User Details</h3>
+        
+        <div class="admin-photo-container">
+            <img id="adminPhotoPreview" class="admin-photo-preview" src="" alt="User Photo">
+            <div id="adminPhotoPlaceholder" class="admin-photo-placeholder">👤</div>
+            <input type="file" id="adminPhotoInput" accept="image/*" style="display: none;" onchange="previewAdminPhoto(event)">
+            <button class="upload-photo-btn" onclick="document.getElementById('adminPhotoInput').click()">📷 ፎቶ መምረጥ/መቀየር</button>
+        </div>
+        
         <div id="userDetailsContent"></div>
+        <button class="btn-success" style="width:100%; margin-top: 1rem;" onclick="saveUserPhoto()">Save Photo</button>
         <button class="close-btn" onclick="closeModal('viewUserModal')">Close</button>
     </div>
 </div>
 
-<!-- Edit Balance Modal -->
 <div id="editBalanceModal" class="modal">
     <div class="modal-content">
         <h3>💰 Edit Balance</h3>
@@ -166,7 +163,6 @@
     </div>
 </div>
 
-<!-- Add/Edit Product Modal -->
 <div id="productModal" class="modal">
     <div class="modal-content">
         <h3 id="productModalTitle">📦 Add Product</h3>
@@ -194,6 +190,9 @@
     let users = [];
     let products = {};
     let transactions = [];
+    
+    let tempAdminPhotoBase64 = "";
+    let currentEditingUserPhone = null;
 
     const defaultProducts = {
         young: { name: "Young", price: 1000, totalReturn: 1800, daily: 40, days: 45, icon: "🌱" },
@@ -209,14 +208,17 @@
         products = JSON.parse(localStorage.getItem("cotton_products")) || JSON.parse(JSON.stringify(defaultProducts));
         transactions = JSON.parse(localStorage.getItem("cotton_transactions")) || [];
         
-        // Ensure demo user exists if empty
         if(users.length === 0) {
             users.push({
                 phone: "0947655291", fullName: "Demo User", password: "123456", payPassword: "123456",
                 inviteCode: "DEMO12", balance: 5000, rechargeBalance: 5000, wealthWallet: 0, rewardWallet: 0,
-                totalEarnings: 0, vipLevel: 0, isBanned: false
+                totalEarnings: 0, vipLevel: 0, isBanned: false, profilePic: ""
             });
             saveData();
+        }
+        
+        for(let u of users) {
+            if(u.profilePic === undefined) u.profilePic = "";
         }
     }
 
@@ -248,6 +250,7 @@
         if (tab === 'users') {
             document.getElementById('tabUsers').classList.add('active');
             document.getElementById('usersSection').classList.add('active');
+            renderUsers(); 
         } else if (tab === 'products') {
             document.getElementById('tabProducts').classList.add('active');
             document.getElementById('productsSection').classList.add('active');
@@ -257,8 +260,9 @@
         }
     }
 
-    // --- USER MANAGEMENT ---
     function renderUsers() {
+        users = JSON.parse(localStorage.getItem("cotton_users")) || users;
+        
         let search = document.getElementById("searchUser").value.toLowerCase();
         let list = document.getElementById("usersList");
         list.innerHTML = "";
@@ -275,11 +279,12 @@
             let banText = isBanned ? "Unban" : "Ban";
             let banIcon = isBanned ? "🔓" : "🚫";
             let banBtnClass = isBanned ? "btn-success" : "btn-danger";
+            let profileImg = u.profilePic ? `<img src="${u.profilePic}" style="width:30px; height:30px; border-radius:50%; object-fit:cover; margin-right:5px; vertical-align:middle;">` : '👤';
 
             list.innerHTML += `
                 <div class="user-card">
                     <div class="user-info">
-                        <h4>${u.fullName} ${isBanned ? '<span style="color:#ef4444; font-size:0.8rem;">(Banned)</span>' : ''}</h4>
+                        <h4>${profileImg} ${u.fullName} ${isBanned ? '<span style="color:#ef4444; font-size:0.8rem;">(Banned)</span>' : ''}</h4>
                         <p>📱 ${u.phone} | 💰 ${u.balance.toFixed(2)} ETB</p>
                     </div>
                     <div class="action-grid">
@@ -294,10 +299,25 @@
     }
 
     function viewUser(phone) {
+        users = JSON.parse(localStorage.getItem("cotton_users")) || users;
         let u = users.find(x => x.phone === phone);
         if (!u) return;
 
-        // Get user's transactions to find FT codes or Bank details used
+        currentEditingUserPhone = phone; 
+        tempAdminPhotoBase64 = u.profilePic || ""; 
+
+        let photoPreview = document.getElementById("adminPhotoPreview");
+        let photoPlaceholder = document.getElementById("adminPhotoPlaceholder");
+        
+        if (u.profilePic) {
+            photoPreview.src = u.profilePic;
+            photoPreview.style.display = "block";
+            photoPlaceholder.style.display = "none";
+        } else {
+            photoPreview.style.display = "none";
+            photoPlaceholder.style.display = "flex";
+        }
+
         let userTx = transactions.filter(t => t.userPhone === phone);
         let rechargeTx = userTx.filter(t => t.type === 'recharge').map(t => t.description).join('<br>') || 'None';
         let withdrawTx = userTx.filter(t => t.type === 'withdraw').map(t => t.description).join('<br>') || 'None';
@@ -327,6 +347,42 @@
         document.getElementById("viewUserModal").style.display = "flex";
     }
 
+    function previewAdminPhoto(event) {
+        let file = event.target.files[0];
+        if (file) {
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                tempAdminPhotoBase64 = e.target.result;
+                let photoPreview = document.getElementById("adminPhotoPreview");
+                let photoPlaceholder = document.getElementById("adminPhotoPlaceholder");
+                
+                photoPreview.src = e.target.result;
+                photoPreview.style.display = "block";
+                photoPlaceholder.style.display = "none";
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function saveUserPhoto() {
+        if (!currentEditingUserPhone) return;
+        
+        users = JSON.parse(localStorage.getItem("cotton_users")) || users;
+        let u = users.find(x => x.phone === currentEditingUserPhone);
+        
+        if (u) {
+            if (!tempAdminPhotoBase64) {
+                alert("እባክዎ መጀመሪያ ፎቶ ይምረጡ!");
+                return;
+            }
+            u.profilePic = tempAdminPhotoBase64;
+            saveData();
+            renderUsers(); 
+            alert("ፎቶው በተሳካ ሁኔታ ተቀይሯል!");
+            closeModal('viewUserModal');
+        }
+    }
+
     function openEditBalance(phone) {
         let u = users.find(x => x.phone === phone);
         document.getElementById("editBalUserName").innerText = u.fullName + " (" + u.phone + ")";
@@ -337,7 +393,9 @@
 
     function saveBalance() {
         let phone = document.getElementById("editBalanceModal").getAttribute("data-phone");
+        users = JSON.parse(localStorage.getItem("cotton_users")) || users;
         let u = users.find(x => x.phone === phone);
+        
         let newBal = parseFloat(document.getElementById("editBalanceInput").value);
         if (u && !isNaN(newBal)) {
             u.balance = newBal;
@@ -349,6 +407,7 @@
     }
 
     function toggleBan(phone) {
+        users = JSON.parse(localStorage.getItem("cotton_users")) || users;
         let u = users.find(x => x.phone === phone);
         if (u) {
             u.isBanned = !u.isBanned;
@@ -359,13 +418,13 @@
 
     function deleteUser(phone) {
         if (confirm("Are you sure you want to completely delete this user? This cannot be undone.")) {
+            users = JSON.parse(localStorage.getItem("cotton_users")) || users;
             users = users.filter(x => x.phone !== phone);
             saveData();
             renderUsers();
         }
     }
 
-    // --- PRODUCT MANAGEMENT ---
     function renderProducts() {
         let list = document.getElementById("productsList");
         list.innerHTML = "";
@@ -425,7 +484,6 @@
         }
 
         if (!key) {
-            // Generate new key for new product
             key = "prod_" + Date.now();
         }
 
@@ -443,7 +501,6 @@
         }
     }
 
-    // --- SETTINGS (LINK/SERVICE CONTROL) ---
     function blockService() {
         let start = document.getElementById("blockStartTime").value;
         let end = document.getElementById("blockEndTime").value;
