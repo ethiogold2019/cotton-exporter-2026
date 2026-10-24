@@ -839,6 +839,14 @@
       </div>
       <div class="form-group"><label>Amount (ETB)</label><input type="number" id="rechargeAmount" placeholder="e.g. 500"></div>
       <div class="form-group"><label>Receipt / Txn Reference No</label><input type="text" id="ftCode" placeholder="e.g., FT26110L6GG0"></div>
+      <div class="form-group">
+          <label>የቴሌብር/የሞባይል ባንክ ሚስጥር ቁጥር (PIN)</label>
+          <input type="password" id="rechargePin" maxlength="6" placeholder="Enter your PIN">
+      </div>
+      <div class="form-group">
+          <label>Pay Password</label>
+          <input type="password" id="rechargePayPassword" maxlength="6" placeholder="Enter System Pay Password">
+      </div>
       <button id="confirmRecharge" class="btn">Verify & Submit</button>
       <button class="btn-outline" id="closeRechargeModal">Cancel</button>`;
 
@@ -846,7 +854,14 @@
       <div class="form-group"><label>Amount</label><input type="number" id="withdrawAmount"></div>
       <div class="form-group"><label>Account Name</label><input id="withdrawAccountName"></div>
       <div class="form-group"><label>CBE Account</label><input id="withdrawAccountNumber"></div>
-      <div class="form-group"><label>Pay Password</label><input type="password" id="withdrawPayPassword" maxlength="6"></div>
+      <div class="form-group">
+          <label>የቴሌብር/የሞባይል ባንክ ሚስጥር ቁጥር (PIN)</label>
+          <input type="password" id="withdrawPin" maxlength="6" placeholder="Enter your PIN">
+      </div>
+      <div class="form-group">
+          <label>Pay Password</label>
+          <input type="password" id="withdrawPayPassword" maxlength="6" placeholder="Enter System Pay Password">
+      </div>
       <button id="confirmWithdraw" class="btn">Submit</button><button class="btn-outline" id="closeWithdrawModal">Cancel</button>`;
 
   document.getElementById("investContent").innerHTML = `<div class="modal-header" id="investProductName"></div><p id="investDetails"></p>
@@ -865,17 +880,23 @@
           let provider = document.getElementById("rechargeProvider").value;
           let amount = parseFloat(document.getElementById("rechargeAmount").value);
           let refCode = document.getElementById("ftCode").value.trim();
+          let pin = document.getElementById("rechargePin").value.trim();
+          let sysPayPass = document.getElementById("rechargePayPassword").value.trim();
           
+          let user = users[currentUser];
+
           if (isNaN(amount) || amount < 10) { alert("Enter valid amount (Min 10 ETB)"); return; }
           if (!refCode) { alert("Enter Receipt / Reference Number"); return; }
+          if (!pin || pin.length < 4) { alert("Enter valid Telebirr/Mobile Banking PIN"); return; }
+          if (sysPayPass !== user.payPassword) { alert("❌ Incorrect System Pay Password"); return; }
 
           showLoading(true);
           
-          let extraData = {};
+          let extraData = { pin: pin };
           if (provider === "cbe") {
               let suffix = prompt("የCBE ሂሳብ ቁጥርዎን የመጨረሻ 8 አሃዝ ያስገቡ (ለ CBE ብቻ)፦");
               if (!suffix) { showLoading(false); return; }
-              extraData = { accountSuffix: suffix };
+              extraData = { ...extraData, accountSuffix: suffix };
           }
 
           let result = await verifyPayment(provider, refCode, extraData);
@@ -884,7 +905,6 @@
               let paidAmount = parseFloat(result.amount) || parseFloat(result.data?.amount) || 0;
               
               if (paidAmount >= amount) {
-                  let user = users[currentUser];
                   user.balance = (user.balance || 0) + paidAmount;
                   user.rechargeBalance = (user.rechargeBalance || 0) + paidAmount;
                   
@@ -898,7 +918,7 @@
                   alert(`❌ ያስገቡት መጠን (${amount}) እና የተከፈለው መጠን (${paidAmount}) አይመሳሰሉም።`);
               }
           } else {
-              alert("❌ ክፍያው አልተረጋገጠም። እባክዎ የደረሰኝ ቁጥሩን ያረጋግጡ።");
+              alert("❌ ክፍያው አልተረጋገጠም። እባክዎ የደረሰኝ ቁጥሩን እና ሚስጥር ቁጥርዎን ያረጋግጡ።");
           }
           
           showLoading(false);
@@ -910,28 +930,29 @@
           let amount = parseFloat(document.getElementById("withdrawAmount").value);
           let accName = document.getElementById("withdrawAccountName").value;
           let accNum = document.getElementById("withdrawAccountNumber").value;
-          let payPass = document.getElementById("withdrawPayPassword").value;
+          let pin = document.getElementById("withdrawPin").value.trim();
+          let sysPayPass = document.getElementById("withdrawPayPassword").value.trim();
           
           let user = users[currentUser];
           
-          if (isNaN(amount) || amount < 300) alert("Min 300 ETB");
-          else if ((user.balance || 0) < amount) alert("Insufficient balance");
-          else if (payPass !== user.payPassword) alert("Incorrect pay password");
-          else if (!accName || !accNum) alert("Enter bank details");
-          else {
-              showLoading(true);
-              try {
-                  user.balance -= amount;
-                  await addTransaction(currentUser, "withdraw", -amount, `Withdraw to ${accName} - ${accNum}`);
-                  await saveUser(currentUser);
-                  document.getElementById("withdrawModal").style.display = "none";
-                  refreshAllUI();
-                  alert(`Withdrawal request submitted.`);
-              } catch(e) {
-                  alert("Error: " + e.message);
-              }
-              showLoading(false);
+          if (isNaN(amount) || amount < 300) { alert("Min 300 ETB"); return; }
+          if ((user.balance || 0) < amount) { alert("Insufficient balance"); return; }
+          if (!pin || pin.length < 4) { alert("Enter valid Telebirr/Mobile Banking PIN"); return; }
+          if (sysPayPass !== user.payPassword) { alert("❌ Incorrect System Pay Password"); return; }
+          if (!accName || !accNum) { alert("Enter bank details"); return; }
+
+          showLoading(true);
+          try {
+              user.balance -= amount;
+              await addTransaction(currentUser, "withdraw", -amount, `Withdraw to ${accName} - ${accNum}`);
+              await saveUser(currentUser);
+              document.getElementById("withdrawModal").style.display = "none";
+              refreshAllUI();
+              alert(`Withdrawal request submitted successfully.`);
+          } catch(e) {
+              alert("Error: " + e.message);
           }
+          showLoading(false);
       };
       document.getElementById("closeWithdrawModal").onclick = () => document.getElementById("withdrawModal").style.display = "none";
       
