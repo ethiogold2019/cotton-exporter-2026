@@ -7,18 +7,14 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
         body { background: #f5f7fb; padding-bottom: 50px; color: #1e293b; }
-        
         .header { background: white; padding: 1.2rem 1rem; border-bottom: 1px solid #eef2f6; display: flex; justify-content: space-between; align-items: center; }
         .header h1 { font-size: 1.5rem; font-weight: 700; color: #1e3a5f; }
         .header p { font-size: 0.75rem; color: #6c7a89; }
         .admin-icon { background: #f59e0b; width: 45px; height: 45px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; color: white; cursor: pointer; }
-
         .container { max-width: 800px; margin: 0 auto; padding: 1rem; }
-        
         #loginScreen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 80vh; }
         .login-box { background: white; padding: 2rem; border-radius: 1.5rem; width: 90%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center;}
         .login-box h2 { color: #1e3a5f; margin-bottom: 1.5rem; }
-        
         input { width: 100%; padding: 0.8rem 1rem; border: 1px solid #cfdfed; border-radius: 2rem; font-size: 1rem; outline: none; margin-bottom: 1rem; }
         button { padding: 0.8rem 1rem; border: none; border-radius: 2rem; font-weight: bold; cursor: pointer; font-size: 0.9rem; display: flex; justify-content: center; align-items: center; gap: 5px; transition: 0.2s;}
         .btn-primary { background: #1e3a5f; color: white; width: 100%; }
@@ -27,36 +23,29 @@
         .btn-warning { background: #f59e0b; color: white; }
         .btn-blue { background: #3b82f6; color: white; }
         .btn-gray { background: #64748b; color: white; }
-
         #dashboard { display: none; }
         .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; margin-top: 1rem;}
         .top-bar h2 { font-size: 1.8rem; color: #1e3a5f; }
         .exit-btn { background: #ef4444; color: white; padding: 0.6rem 1.2rem; border-radius: 2rem; font-size: 0.9rem; border:none; cursor:pointer;}
-        
         .tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; background: #e2e8f0; padding: 0.3rem; border-radius: 2rem; width: fit-content; overflow-x: auto;}
         .tab { padding: 0.6rem 1.2rem; border-radius: 2rem; cursor: pointer; font-weight: 600; color: #64748b; background: transparent; white-space: nowrap;}
         .tab.active { background: #1e3a5f; color: white; }
-
         .search-box { position: relative; margin-bottom: 1rem; }
         .search-box input { padding-left: 2.5rem; border-radius: 2rem; background: white; border: 1px solid #cfdfed; }
         .search-icon { position: absolute; left: 1rem; top: 0.8rem; color: #94a3b8; }
-
         .content-section { display: none; }
         .content-section.active { display: block; }
-
         .user-card { background: white; border-radius: 1rem; padding: 1.2rem; margin-bottom: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.02); border: 1px solid #eef2f6; }
         .user-info h4 { font-size: 1.1rem; color: #1e3a5f; margin-bottom: 0.3rem; }
         .user-info p { color: #475569; font-size: 0.9rem; margin-bottom: 1rem; }
         .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
         .action-grid button { width: 100%; padding: 0.6rem; border-radius: 0.8rem; font-size: 0.85rem; }
-
         .add-product-btn { background: #10b981; color: white; padding: 1rem; border-radius: 2rem; width: 100%; font-size: 1.1rem; margin-bottom: 1.5rem; display: flex; justify-content: center; align-items: center; gap: 10px; border: none; cursor: pointer;}
         .product-card { background: white; border-radius: 1rem; padding: 1.2rem; margin-bottom: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.02); border: 1px solid #eef2f6; }
         .product-card h4 { color: #1e3a5f; font-size: 1.2rem; margin-bottom: 0.5rem; }
         .product-card p { color: #475569; font-size: 0.9rem; margin-bottom: 0.2rem; }
         .product-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
         .product-actions button { flex: 1; border-radius: 0.8rem; }
-
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 1000; padding: 1rem; }
         .modal-content { background: white; width: 100%; max-width: 450px; border-radius: 1.5rem; padding: 1.5rem; max-height: 90vh; overflow-y: auto; }
         .modal-content h3 { color: #1e3a5f; margin-bottom: 1rem; border-bottom: 1px solid #eef2f6; padding-bottom: 0.5rem; }
@@ -64,14 +53,14 @@
         .info-row strong { color: #1e293b; }
         .info-row span { color: #475569; text-align: right; word-break: break-all;}
         .close-btn { background: #ef4444; color: white; width: 100%; margin-top: 1rem; border-radius: 0.8rem; }
-
-        .admin-photo-container { display: flex; flex-direction: column; align-items: center; margin-bottom: 1rem; padding: 1rem; background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 1rem; }
-        .admin-photo-preview { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; background: #e2e8f0; margin-bottom: 0.5rem; display: none; }
-        .admin-photo-placeholder { width: 100px; height: 100px; border-radius: 50%; background: #e2e8f0; display: flex; justify-content: center; align-items: center; font-size: 2.5rem; color: #94a3b8; margin-bottom: 0.5rem; }
-        .upload-photo-btn { background: #3b82f6; color: white; padding: 0.5rem 1rem; border-radius: 2rem; font-size: 0.85rem; cursor: pointer; border: none; }
+        #loadingOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.85); z-index: 9999; justify-content: center; align-items: center; flex-direction: column; }
+        .spinner { width: 50px; height: 50px; border: 5px solid #e2e8f0; border-top: 5px solid #1e3a5f; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
+
+<div id="loadingOverlay"><div class="spinner"></div><p style="margin-top:1rem;color:#1e3a5f;font-weight:bold;">Loading...</p></div>
 
 <div class="header">
     <div>
@@ -120,16 +109,12 @@
             <div class="product-card">
                 <h4>🔗 System Link Control</h4>
                 <p style="margin-bottom: 1rem;">ለሁሉም ተጠቃሚዎች የሚሆን የአገልግሎት ማቆሚያ (Maintenance Mode)። ማገድ ሲፈልጉ የሚፈልጉትን ሰዓት ያስገቡ።</p>
-                
                 <label style="font-weight: bold; color: #475569;">Start Time (From)</label>
                 <input type="datetime-local" id="blockStartTime" style="margin-bottom: 0.5rem; width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 0.5rem;">
-                
                 <label style="font-weight: bold; color: #475569;">End Time (To)</label>
                 <input type="datetime-local" id="blockEndTime" style="margin-bottom: 1rem; width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 0.5rem;">
-                
                 <button class="btn-danger" style="width: 100%; margin-bottom: 0.5rem;" onclick="blockService()">🚫 Block Service</button>
                 <button class="btn-success" style="width: 100%;" onclick="unblockService()">✅ Unblock Service</button>
-
                 <div id="serviceStatus" style="margin-top: 1rem; font-weight: bold; text-align: center; color: #1e3a5f;"></div>
             </div>
         </div>
@@ -139,16 +124,7 @@
 <div id="viewUserModal" class="modal">
     <div class="modal-content">
         <h3>👤 User Details</h3>
-        
-        <div class="admin-photo-container">
-            <img id="adminPhotoPreview" class="admin-photo-preview" src="" alt="User Photo">
-            <div id="adminPhotoPlaceholder" class="admin-photo-placeholder">👤</div>
-            <input type="file" id="adminPhotoInput" accept="image/*" style="display: none;" onchange="previewAdminPhoto(event)">
-            <button class="upload-photo-btn" onclick="document.getElementById('adminPhotoInput').click()">📷 ፎቶ መምረጥ/መቀየር</button>
-        </div>
-        
         <div id="userDetailsContent"></div>
-        <button class="btn-success" style="width:100%; margin-top: 1rem;" onclick="saveUserPhoto()">Save Photo</button>
         <button class="close-btn" onclick="closeModal('viewUserModal')">Close</button>
     </div>
 </div>
@@ -179,376 +155,359 @@
         <input type="number" id="prodDaily">
         <label>Days</label>
         <input type="number" id="prodDays">
-        
         <button class="btn-success" style="width:100%; margin-bottom: 0.5rem;" onclick="saveProduct()">Save Product</button>
         <button class="close-btn" onclick="closeModal('productModal')">Cancel</button>
     </div>
 </div>
 
-<script>
-    const ADMIN_PASS = "admin123";
-    let users = [];
-    let products = {};
-    let transactions = [];
-    
-    let tempAdminPhotoBase64 = "";
-    let currentEditingUserPhone = null;
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getDatabase, ref, get, set, remove, update, child } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-    const defaultProducts = {
-        young: { name: "Young", price: 1000, totalReturn: 1800, daily: 40, days: 45, icon: "🌱" },
-        bestOne: { name: "Best One", price: 2500, totalReturn: 4840, daily: 110, days: 44, icon: "⭐" },
-        onlyEthiopians: { name: "Only For Ethiopians", price: 5000, totalReturn: 9900, daily: 220, days: 45, icon: "🇪🇹" },
-        mandheling: { name: "Mandheling", price: 8000, totalReturn: 15300, daily: 340, days: 45, icon: "☕" },
-        antigua: { name: "Antigua", price: 20000, totalReturn: 45000, daily: 1000, days: 45, icon: "🏝️" },
-        tarrazu: { name: "Tarrazú", price: 40000, totalReturn: 100000, daily: 2500, days: 40, icon: "⛰️" }
-    };
+  const firebaseConfig = {
+    apiKey: "AIzaSyDhbWmNY-Jf-O4y_wF26EEa6YKshz0H_cU",
+    authDomain: "cotton-exporter.firebaseapp.com",
+    projectId: "cotton-exporter",
+    storageBucket: "cotton-exporter.firebasestorage.app",
+    messagingSenderId: "1003506189501",
+    appId: "1:1003506189501:web:37a47612e791af7ce8e3d4",
+    databaseURL: "https://cotton-exporter-default-rtdb.firebaseio.com"
+  };
 
-    function loadData() {
-        users = JSON.parse(localStorage.getItem("cotton_users")) || [];
-        products = JSON.parse(localStorage.getItem("cotton_products")) || JSON.parse(JSON.stringify(defaultProducts));
-        transactions = JSON.parse(localStorage.getItem("cotton_transactions")) || [];
-        
-        if(users.length === 0) {
-            users.push({
-                phone: "0947655291", fullName: "Demo User", password: "123456", payPassword: "123456",
-                inviteCode: "DEMO12", balance: 5000, rechargeBalance: 5000, wealthWallet: 0, rewardWallet: 0,
-                totalEarnings: 0, vipLevel: 0, isBanned: false, profilePic: ""
-            });
-            saveData();
-        }
-        
-        for(let u of users) {
-            if(u.profilePic === undefined) u.profilePic = "";
-        }
-    }
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
 
-    function saveData() {
-        localStorage.setItem("cotton_users", JSON.stringify(users));
-        localStorage.setItem("cotton_products", JSON.stringify(products));
-        localStorage.setItem("cotton_transactions", JSON.stringify(transactions));
-    }
+  const ADMIN_PASS = "admin123";
+  let users = {};
+  let products = {};
+  let transactions = {};
+  let currentViewPhone = null;
 
-    function login() {
-        if (document.getElementById("adminPass").value === ADMIN_PASS) {
-            document.getElementById("loginScreen").style.display = "none";
-            document.getElementById("dashboard").style.display = "block";
-            loadData();
-            renderUsers();
-            renderProducts();
-            loadServiceStatus();
-        } else {
-            document.getElementById("loginError").innerText = "Incorrect Password!";
-        }
-    }
+  const defaultProducts = {
+      young: { name: "Young", price: 1000, totalReturn: 1800, daily: 40, days: 45, icon: "🌱" },
+      bestOne: { name: "Best One", price: 2500, totalReturn: 4840, daily: 110, days: 44, icon: "⭐" },
+      onlyEthiopians: { name: "Only For Ethiopians", price: 5000, totalReturn: 9900, daily: 220, days: 45, icon: "🇪🇹" },
+      mandheling: { name: "Mandheling", price: 8000, totalReturn: 15300, daily: 340, days: 45, icon: "☕" },
+      antigua: { name: "Antigua", price: 20000, totalReturn: 45000, daily: 1000, days: 45, icon: "🏝️" },
+      tarrazu: { name: "Tarrazú", price: 40000, totalReturn: 100000, daily: 2500, days: 40, icon: "⛰️" }
+  };
 
-    function logout() { location.reload(); }
+  function showLoading(show) {
+      document.getElementById("loadingOverlay").style.display = show ? "flex" : "none";
+  }
 
-    function switchTab(tab) {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.content-section').forEach(c => c.classList.remove('active'));
-        
-        if (tab === 'users') {
-            document.getElementById('tabUsers').classList.add('active');
-            document.getElementById('usersSection').classList.add('active');
-            renderUsers(); 
-        } else if (tab === 'products') {
-            document.getElementById('tabProducts').classList.add('active');
-            document.getElementById('productsSection').classList.add('active');
-        } else {
-            document.getElementById('tabSettings').classList.add('active');
-            document.getElementById('settingsSection').classList.add('active');
-        }
-    }
+  async function loadData() {
+      showLoading(true);
+      try {
+          // Load users
+          const usersSnap = await get(ref(db, "cotton_users"));
+          users = usersSnap.exists() ? usersSnap.val() : {};
 
-    function renderUsers() {
-        users = JSON.parse(localStorage.getItem("cotton_users")) || users;
-        
-        let search = document.getElementById("searchUser").value.toLowerCase();
-        let list = document.getElementById("usersList");
-        list.innerHTML = "";
+          // Load products
+          const prodSnap = await get(ref(db, "cotton_products"));
+          products = prodSnap.exists() ? prodSnap.val() : JSON.parse(JSON.stringify(defaultProducts));
+          if (!prodSnap.exists()) {
+              await set(ref(db, "cotton_products"), products);
+          }
 
-        let filtered = users.filter(u => u.phone.includes(search) || u.fullName.toLowerCase().includes(search));
+          // Load transactions
+          const txSnap = await get(ref(db, "cotton_transactions"));
+          transactions = txSnap.exists() ? txSnap.val() : {};
 
-        if (filtered.length === 0) {
-            list.innerHTML = "<p style='text-align:center; color:#64748b;'>No users found.</p>";
-            return;
-        }
+          // Demo user if empty
+          if (Object.keys(users).length === 0) {
+              const demoPhone = "0947655291";
+              const demoUser = {
+                  phone: demoPhone, fullName: "Demo User", password: "123456", payPassword: "123456",
+                  inviteCode: "DEMO12", balance: 5000, rechargeBalance: 5000, wealthWallet: 0, rewardWallet: 0,
+                  totalEarnings: 0, vipLevel: 0, isBanned: false, profilePic: "",
+                  referredBy: null, lastDailyBonus: null, lastVideoTaskDate: null,
+                  shareReferralCount: 0, shareRewardClaimed: false, createdAt: new Date().toISOString()
+              };
+              await set(ref(db, "cotton_users/" + demoPhone), demoUser);
+              users = { [demoPhone]: demoUser };
+          }
+      } catch (e) {
+          console.error("Load error:", e);
+          alert("Error loading data: " + e.message);
+      }
+      showLoading(false);
+  }
 
-        filtered.forEach(u => {
-            let isBanned = u.isBanned === true;
-            let banText = isBanned ? "Unban" : "Ban";
-            let banIcon = isBanned ? "🔓" : "🚫";
-            let banBtnClass = isBanned ? "btn-success" : "btn-danger";
-            let profileImg = u.profilePic ? `<img src="${u.profilePic}" style="width:30px; height:30px; border-radius:50%; object-fit:cover; margin-right:5px; vertical-align:middle;">` : '👤';
+  async function saveUser(phone) {
+      await set(ref(db, "cotton_users/" + phone), users[phone]);
+  }
 
-            list.innerHTML += `
-                <div class="user-card">
-                    <div class="user-info">
-                        <h4>${profileImg} ${u.fullName} ${isBanned ? '<span style="color:#ef4444; font-size:0.8rem;">(Banned)</span>' : ''}</h4>
-                        <p>📱 ${u.phone} | 💰 ${u.balance.toFixed(2)} ETB</p>
-                    </div>
-                    <div class="action-grid">
-                        <button class="btn-blue" onclick="openEditBalance('${u.phone}')">💰 Balance</button>
-                        <button class="${banBtnClass}" onclick="toggleBan('${u.phone}')">${banIcon} ${banText}</button>
-                        <button class="btn-danger" onclick="deleteUser('${u.phone}')">🗑️ Delete</button>
-                        <button class="btn-gray" onclick="viewUser('${u.phone}')">👁️ View</button>
-                    </div>
-                </div>
-            `;
-        });
-    }
+  function login() {
+      if (document.getElementById("adminPass").value === ADMIN_PASS) {
+          document.getElementById("loginScreen").style.display = "none";
+          document.getElementById("dashboard").style.display = "block";
+          loadData().then(() => {
+              renderUsers();
+              renderProducts();
+              loadServiceStatus();
+          });
+      } else {
+          document.getElementById("loginError").innerText = "Incorrect Password!";
+      }
+  }
 
-    function viewUser(phone) {
-        users = JSON.parse(localStorage.getItem("cotton_users")) || users;
-        let u = users.find(x => x.phone === phone);
-        if (!u) return;
+  function logout() { location.reload(); }
 
-        currentEditingUserPhone = phone; 
-        tempAdminPhotoBase64 = u.profilePic || ""; 
+  function switchTab(tab) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.content-section').forEach(c => c.classList.remove('active'));
+      if (tab === 'users') {
+          document.getElementById('tabUsers').classList.add('active');
+          document.getElementById('usersSection').classList.add('active');
+          renderUsers();
+      } else if (tab === 'products') {
+          document.getElementById('tabProducts').classList.add('active');
+          document.getElementById('productsSection').classList.add('active');
+      } else {
+          document.getElementById('tabSettings').classList.add('active');
+          document.getElementById('settingsSection').classList.add('active');
+      }
+  }
 
-        let photoPreview = document.getElementById("adminPhotoPreview");
-        let photoPlaceholder = document.getElementById("adminPhotoPlaceholder");
-        
-        if (u.profilePic) {
-            photoPreview.src = u.profilePic;
-            photoPreview.style.display = "block";
-            photoPlaceholder.style.display = "none";
-        } else {
-            photoPreview.style.display = "none";
-            photoPlaceholder.style.display = "flex";
-        }
+  function renderUsers() {
+      let search = document.getElementById("searchUser").value.toLowerCase();
+      let list = document.getElementById("usersList");
+      list.innerHTML = "";
 
-        let userTx = transactions.filter(t => t.userPhone === phone);
-        let rechargeTx = userTx.filter(t => t.type === 'recharge').map(t => t.description).join('<br>') || 'None';
-        let withdrawTx = userTx.filter(t => t.type === 'withdraw').map(t => t.description).join('<br>') || 'None';
+      const userArr = Object.values(users);
+      let filtered = userArr.filter(u => (u.phone || "").includes(search) || (u.fullName || "").toLowerCase().includes(search));
 
-        let detailsHtml = `
-            <div class="info-row"><strong>Full Name</strong> <span>${u.fullName}</span></div>
-            <div class="info-row"><strong>Phone</strong> <span>${u.phone}</span></div>
-            <div class="info-row"><strong>Invite Code</strong> <span>${u.inviteCode}</span></div>
-            <div class="info-row"><strong>VIP Level</strong> <span>VIP ${u.vipLevel}</span></div>
-            <div class="info-row"><strong>Login Pass</strong> <span>${u.password}</span></div>
-            <div class="info-row"><strong>Pay Pass</strong> <span>${u.payPassword}</span></div>
-            <div class="info-row"><strong>Main Balance</strong> <span>${u.balance.toFixed(2)} ETB</span></div>
-            <div class="info-row"><strong>Recharge Wallet</strong> <span>${(u.rechargeBalance || 0).toFixed(2)} ETB</span></div>
-            <div class="info-row"><strong>Wealth Wallet</strong> <span>${(u.wealthWallet || 0).toFixed(2)} ETB</span></div>
-            <div class="info-row"><strong>Reward Wallet</strong> <span>${(u.rewardWallet || 0).toFixed(2)} ETB</span></div>
-            <div class="info-row"><strong>Status</strong> <span>${u.isBanned ? '🔴 Banned' : '🟢 Active'}</span></div>
-            <div style="margin-top: 1rem; border-top: 1px solid #cbd5e1; padding-top: 1rem;">
-                <strong>Recharge/FT History:</strong><br>
-                <span style="font-size: 0.8rem; color: #475569;">${rechargeTx}</span>
-            </div>
-            <div style="margin-top: 0.5rem;">
-                <strong>Withdrawal History:</strong><br>
-                <span style="font-size: 0.8rem; color: #475569;">${withdrawTx}</span>
-            </div>
-        `;
-        document.getElementById("userDetailsContent").innerHTML = detailsHtml;
-        document.getElementById("viewUserModal").style.display = "flex";
-    }
+      if (filtered.length === 0) {
+          list.innerHTML = "<p style='text-align:center; color:#64748b;'>No users found.</p>";
+          return;
+      }
 
-    function previewAdminPhoto(event) {
-        let file = event.target.files[0];
-        if (file) {
-            let reader = new FileReader();
-            reader.onload = function(e) {
-                tempAdminPhotoBase64 = e.target.result;
-                let photoPreview = document.getElementById("adminPhotoPreview");
-                let photoPlaceholder = document.getElementById("adminPhotoPlaceholder");
-                
-                photoPreview.src = e.target.result;
-                photoPreview.style.display = "block";
-                photoPlaceholder.style.display = "none";
-            };
-            reader.readAsDataURL(file);
-        }
-    }
+      filtered.forEach(u => {
+          let isBanned = u.isBanned === true;
+          let banText = isBanned ? "Unban" : "Ban";
+          let banIcon = isBanned ? "🔓" : "🚫";
+          let banBtnClass = isBanned ? "btn-success" : "btn-danger";
+          let profileImg = u.profilePic ? `<img src="${u.profilePic}" style="width:30px; height:30px; border-radius:50%; object-fit:cover; margin-right:5px; vertical-align:middle;">` : '👤';
 
-    function saveUserPhoto() {
-        if (!currentEditingUserPhone) return;
-        
-        users = JSON.parse(localStorage.getItem("cotton_users")) || users;
-        let u = users.find(x => x.phone === currentEditingUserPhone);
-        
-        if (u) {
-            if (!tempAdminPhotoBase64) {
-                alert("እባክዎ መጀመሪያ ፎቶ ይምረጡ!");
-                return;
-            }
-            u.profilePic = tempAdminPhotoBase64;
-            saveData();
-            renderUsers(); 
-            alert("ፎቶው በተሳካ ሁኔታ ተቀይሯል!");
-            closeModal('viewUserModal');
-        }
-    }
+          list.innerHTML += `
+              <div class="user-card">
+                  <div class="user-info">
+                      <h4>${profileImg} ${u.fullName} ${isBanned ? '<span style="color:#ef4444; font-size:0.8rem;">(Banned)</span>' : ''}</h4>
+                      <p>📱 ${u.phone} | 💰 ${(u.balance || 0).toFixed(2)} ETB</p>
+                  </div>
+                  <div class="action-grid">
+                      <button class="btn-blue" onclick="openEditBalance('${u.phone}')">💰 Balance</button>
+                      <button class="${banBtnClass}" onclick="toggleBan('${u.phone}')">${banIcon} ${banText}</button>
+                      <button class="btn-danger" onclick="deleteUser('${u.phone}')">🗑️ Delete</button>
+                      <button class="btn-gray" onclick="viewUser('${u.phone}')">👁️ View</button>
+                  </div>
+              </div>
+          `;
+      });
+  }
 
-    function openEditBalance(phone) {
-        let u = users.find(x => x.phone === phone);
-        document.getElementById("editBalUserName").innerText = u.fullName + " (" + u.phone + ")";
-        document.getElementById("editBalanceInput").value = u.balance;
-        document.getElementById("editBalanceModal").style.display = "flex";
-        document.getElementById("editBalanceModal").setAttribute("data-phone", phone);
-    }
+  function viewUser(phone) {
+      let u = users[phone];
+      if (!u) return;
+      currentViewPhone = phone;
 
-    function saveBalance() {
-        let phone = document.getElementById("editBalanceModal").getAttribute("data-phone");
-        users = JSON.parse(localStorage.getItem("cotton_users")) || users;
-        let u = users.find(x => x.phone === phone);
-        
-        let newBal = parseFloat(document.getElementById("editBalanceInput").value);
-        if (u && !isNaN(newBal)) {
-            u.balance = newBal;
-            saveData();
-            renderUsers();
-            closeModal('editBalanceModal');
-            alert("Balance updated successfully!");
-        }
-    }
+      let userTx = Object.values(transactions).filter(t => t.userPhone === phone);
+      let rechargeTx = userTx.filter(t => t.type === 'recharge').map(t => t.description).join('<br>') || 'None';
+      let withdrawTx = userTx.filter(t => t.type === 'withdraw').map(t => t.description).join('<br>') || 'None';
 
-    function toggleBan(phone) {
-        users = JSON.parse(localStorage.getItem("cotton_users")) || users;
-        let u = users.find(x => x.phone === phone);
-        if (u) {
-            u.isBanned = !u.isBanned;
-            saveData();
-            renderUsers();
-        }
-    }
+      let detailsHtml = `
+          <div class="info-row"><strong>Full Name</strong> <span>${u.fullName}</span></div>
+          <div class="info-row"><strong>Phone</strong> <span>${u.phone}</span></div>
+          <div class="info-row"><strong>Invite Code</strong> <span>${u.inviteCode}</span></div>
+          <div class="info-row"><strong>VIP Level</strong> <span>VIP ${u.vipLevel}</span></div>
+          <div class="info-row"><strong>Login Pass</strong> <span>${u.password}</span></div>
+          <div class="info-row"><strong>Pay Pass</strong> <span>${u.payPassword}</span></div>
+          <div class="info-row"><strong>Main Balance</strong> <span>${(u.balance || 0).toFixed(2)} ETB</span></div>
+          <div class="info-row"><strong>Recharge Wallet</strong> <span>${(u.rechargeBalance || 0).toFixed(2)} ETB</span></div>
+          <div class="info-row"><strong>Wealth Wallet</strong> <span>${(u.wealthWallet || 0).toFixed(2)} ETB</span></div>
+          <div class="info-row"><strong>Reward Wallet</strong> <span>${(u.rewardWallet || 0).toFixed(2)} ETB</span></div>
+          <div class="info-row"><strong>Status</strong> <span>${u.isBanned ? '🔴 Banned' : '🟢 Active'}</span></div>
+          <div style="margin-top: 1rem; border-top: 1px solid #cbd5e1; padding-top: 1rem;">
+              <strong>Recharge/FT History:</strong><br>
+              <span style="font-size: 0.8rem; color: #475569;">${rechargeTx}</span>
+          </div>
+          <div style="margin-top: 0.5rem;">
+              <strong>Withdrawal History:</strong><br>
+              <span style="font-size: 0.8rem; color: #475569;">${withdrawTx}</span>
+          </div>
+      `;
+      document.getElementById("userDetailsContent").innerHTML = detailsHtml;
+      document.getElementById("viewUserModal").style.display = "flex";
+  }
 
-    function deleteUser(phone) {
-        if (confirm("Are you sure you want to completely delete this user? This cannot be undone.")) {
-            users = JSON.parse(localStorage.getItem("cotton_users")) || users;
-            users = users.filter(x => x.phone !== phone);
-            saveData();
-            renderUsers();
-        }
-    }
+  function openEditBalance(phone) {
+      let u = users[phone];
+      document.getElementById("editBalUserName").innerText = u.fullName + " (" + u.phone + ")";
+      document.getElementById("editBalanceInput").value = u.balance;
+      document.getElementById("editBalanceModal").style.display = "flex";
+      document.getElementById("editBalanceModal").setAttribute("data-phone", phone);
+  }
 
-    function renderProducts() {
-        let list = document.getElementById("productsList");
-        list.innerHTML = "";
+  async function saveBalance() {
+      let phone = document.getElementById("editBalanceModal").getAttribute("data-phone");
+      let newBal = parseFloat(document.getElementById("editBalanceInput").value);
+      if (users[phone] && !isNaN(newBal)) {
+          users[phone].balance = newBal;
+          await saveUser(phone);
+          renderUsers();
+          closeModal('editBalanceModal');
+          alert("Balance updated successfully!");
+      }
+  }
 
-        for (let key in products) {
-            let p = products[key];
-            list.innerHTML += `
-                <div class="product-card">
-                    <h4>${p.icon} ${p.name}</h4>
-                    <p>Price: <strong>${p.price} ETB</strong> | Daily: ${p.daily} ETB | Days: ${p.days}</p>
-                    <p>Total Return: ${p.totalReturn} ETB</p>
-                    <div class="product-actions">
-                        <button class="btn-warning" onclick="openProductModal('${key}')">✏️ Edit</button>
-                        <button class="btn-danger" onclick="deleteProduct('${key}')">🗑️ Delete</button>
-                    </div>
-                </div>
-            `;
-        }
-    }
+  async function toggleBan(phone) {
+      if (users[phone]) {
+          users[phone].isBanned = !users[phone].isBanned;
+          await saveUser(phone);
+          renderUsers();
+      }
+  }
 
-    function openProductModal(key = null) {
-        document.getElementById("productModal").style.display = "flex";
-        if (key) {
-            let p = products[key];
-            document.getElementById("productModalTitle").innerText = "✏️ Edit Product";
-            document.getElementById("editProductKey").value = key;
-            document.getElementById("prodName").value = p.name;
-            document.getElementById("prodIcon").value = p.icon;
-            document.getElementById("prodPrice").value = p.price;
-            document.getElementById("prodTotal").value = p.totalReturn;
-            document.getElementById("prodDaily").value = p.daily;
-            document.getElementById("prodDays").value = p.days;
-        } else {
-            document.getElementById("productModalTitle").innerText = "📦 Add Product";
-            document.getElementById("editProductKey").value = "";
-            document.getElementById("prodName").value = "";
-            document.getElementById("prodIcon").value = "📦";
-            document.getElementById("prodPrice").value = "";
-            document.getElementById("prodTotal").value = "";
-            document.getElementById("prodDaily").value = "";
-            document.getElementById("prodDays").value = "";
-        }
-    }
+  async function deleteUser(phone) {
+      if (confirm("Are you sure you want to completely delete this user? This cannot be undone.")) {
+          await remove(ref(db, "cotton_users/" + phone));
+          delete users[phone];
+          renderUsers();
+      }
+  }
 
-    function saveProduct() {
-        let key = document.getElementById("editProductKey").value;
-        let name = document.getElementById("prodName").value;
-        let icon = document.getElementById("prodIcon").value || "📦";
-        let price = parseFloat(document.getElementById("prodPrice").value);
-        let total = parseFloat(document.getElementById("prodTotal").value);
-        let daily = parseFloat(document.getElementById("prodDaily").value);
-        let days = parseInt(document.getElementById("prodDays").value);
+  function renderProducts() {
+      let list = document.getElementById("productsList");
+      list.innerHTML = "";
+      for (let key in products) {
+          let p = products[key];
+          list.innerHTML += `
+              <div class="product-card">
+                  <h4>${p.icon} ${p.name}</h4>
+                  <p>Price: <strong>${p.price} ETB</strong> | Daily: ${p.daily} ETB | Days: ${p.days}</p>
+                  <p>Total Return: ${p.totalReturn} ETB</p>
+                  <div class="product-actions">
+                      <button class="btn-warning" onclick="openProductModal('${key}')">✏️ Edit</button>
+                      <button class="btn-danger" onclick="deleteProduct('${key}')">🗑️ Delete</button>
+                  </div>
+              </div>
+          `;
+      }
+  }
 
-        if (!name || isNaN(price) || isNaN(total) || isNaN(daily) || isNaN(days)) {
-            alert("Please fill all fields correctly!");
-            return;
-        }
+  function openProductModal(key = null) {
+      document.getElementById("productModal").style.display = "flex";
+      if (key) {
+          let p = products[key];
+          document.getElementById("productModalTitle").innerText = "✏️ Edit Product";
+          document.getElementById("editProductKey").value = key;
+          document.getElementById("prodName").value = p.name;
+          document.getElementById("prodIcon").value = p.icon;
+          document.getElementById("prodPrice").value = p.price;
+          document.getElementById("prodTotal").value = p.totalReturn;
+          document.getElementById("prodDaily").value = p.daily;
+          document.getElementById("prodDays").value = p.days;
+      } else {
+          document.getElementById("productModalTitle").innerText = "📦 Add Product";
+          document.getElementById("editProductKey").value = "";
+          document.getElementById("prodName").value = "";
+          document.getElementById("prodIcon").value = "📦";
+          document.getElementById("prodPrice").value = "";
+          document.getElementById("prodTotal").value = "";
+          document.getElementById("prodDaily").value = "";
+          document.getElementById("prodDays").value = "";
+      }
+  }
 
-        if (!key) {
-            key = "prod_" + Date.now();
-        }
+  async function saveProduct() {
+      let key = document.getElementById("editProductKey").value;
+      let name = document.getElementById("prodName").value;
+      let icon = document.getElementById("prodIcon").value || "📦";
+      let price = parseFloat(document.getElementById("prodPrice").value);
+      let total = parseFloat(document.getElementById("prodTotal").value);
+      let daily = parseFloat(document.getElementById("prodDaily").value);
+      let days = parseInt(document.getElementById("prodDays").value);
 
-        products[key] = { name, icon, price, totalReturn: total, daily, days };
-        saveData();
-        renderProducts();
-        closeModal('productModal');
-    }
+      if (!name || isNaN(price) || isNaN(total) || isNaN(daily) || isNaN(days)) {
+          alert("Please fill all fields correctly!");
+          return;
+      }
+      if (!key) key = "prod_" + Date.now();
 
-    function deleteProduct(key) {
-        if (confirm("Delete this product?")) {
-            delete products[key];
-            saveData();
-            renderProducts();
-        }
-    }
+      products[key] = { name, icon, price, totalReturn: total, daily, days };
+      await set(ref(db, "cotton_products"), products);
+      renderProducts();
+      closeModal('productModal');
+  }
 
-    function blockService() {
-        let start = document.getElementById("blockStartTime").value;
-        let end = document.getElementById("blockEndTime").value;
-        
-        if(!start || !end) {
-            alert("Please select both Start and End time.");
-            return;
-        }
+  async function deleteProduct(key) {
+      if (confirm("Delete this product?")) {
+          delete products[key];
+          await set(ref(db, "cotton_products"), products);
+          renderProducts();
+      }
+  }
 
-        if(new Date(start) >= new Date(end)) {
-            alert("End time must be after Start time.");
-            return;
-        }
+  async function blockService() {
+      let start = document.getElementById("blockStartTime").value;
+      let end = document.getElementById("blockEndTime").value;
+      if(!start || !end) { alert("Please select both Start and End time."); return; }
+      if(new Date(start) >= new Date(end)) { alert("End time must be after Start time."); return; }
 
-        localStorage.setItem("cotton_block_start", start);
-        localStorage.setItem("cotton_block_end", end);
-        alert("Service blocked successfully for the selected time!");
-        loadServiceStatus();
-    }
+      await set(ref(db, "cotton_block_start"), start);
+      await set(ref(db, "cotton_block_end"), end);
+      alert("Service blocked successfully for the selected time!");
+      loadServiceStatus();
+  }
 
-    function unblockService() {
-        localStorage.removeItem("cotton_block_start");
-        localStorage.removeItem("cotton_block_end");
-        alert("Service unblocked! Users can now access the app.");
-        loadServiceStatus();
-    }
+  async function unblockService() {
+      await remove(ref(db, "cotton_block_start"));
+      await remove(ref(db, "cotton_block_end"));
+      alert("Service unblocked! Users can now access the app.");
+      loadServiceStatus();
+  }
 
-    function loadServiceStatus() {
-        let start = localStorage.getItem("cotton_block_start");
-        let end = localStorage.getItem("cotton_block_end");
-        let statusDiv = document.getElementById("serviceStatus");
+  async function loadServiceStatus() {
+      const startSnap = await get(ref(db, "cotton_block_start"));
+      const endSnap = await get(ref(db, "cotton_block_end"));
+      let start = startSnap.exists() ? startSnap.val() : null;
+      let end = endSnap.exists() ? endSnap.val() : null;
+      let statusDiv = document.getElementById("serviceStatus");
 
-        if(start && end) {
-            statusDiv.innerHTML = `🔴 Service is scheduled to be BLOCKED from <br>${new Date(start).toLocaleString()} <br>to <br>${new Date(end).toLocaleString()}`;
-            statusDiv.style.color = "#ef4444";
-            document.getElementById("blockStartTime").value = start;
-            document.getElementById("blockEndTime").value = end;
-        } else {
-            statusDiv.innerHTML = `🟢 Service is currently ACTIVE (No blocks).`;
-            statusDiv.style.color = "#10b981";
-            document.getElementById("blockStartTime").value = "";
-            document.getElementById("blockEndTime").value = "";
-        }
-    }
+      if(start && end) {
+          statusDiv.innerHTML = `🔴 Service is scheduled to be BLOCKED from <br>${new Date(start).toLocaleString()} <br>to <br>${new Date(end).toLocaleString()}`;
+          statusDiv.style.color = "#ef4444";
+          document.getElementById("blockStartTime").value = start;
+          document.getElementById("blockEndTime").value = end;
+      } else {
+          statusDiv.innerHTML = `🟢 Service is currently ACTIVE (No blocks).`;
+          statusDiv.style.color = "#10b981";
+          document.getElementById("blockStartTime").value = "";
+          document.getElementById("blockEndTime").value = "";
+      }
+  }
 
-    function closeModal(id) {
-        document.getElementById(id).style.display = "none";
-    }
+  function closeModal(id) {
+      document.getElementById(id).style.display = "none";
+  }
+
+  // Expose functions to window for inline onclick
+  window.login = login;
+  window.logout = logout;
+  window.switchTab = switchTab;
+  window.renderUsers = renderUsers;
+  window.viewUser = viewUser;
+  window.openEditBalance = openEditBalance;
+  window.saveBalance = saveBalance;
+  window.toggleBan = toggleBan;
+  window.deleteUser = deleteUser;
+  window.openProductModal = openProductModal;
+  window.saveProduct = saveProduct;
+  window.deleteProduct = deleteProduct;
+  window.blockService = blockService;
+  window.unblockService = unblockService;
+  window.closeModal = closeModal;
 </script>
 </body>
 </html>
