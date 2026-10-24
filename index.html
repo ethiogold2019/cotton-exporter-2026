@@ -3,41 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Cotton Exporter - የጥራት መቆጣጠሪያ መጀመሪያ ነጥብ</title>
+    <title>Cotton Exporter - System</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
         body { background: #f5f7fb; padding: 0; margin: 0; min-height: 100vh; display: flex; flex-direction: column; }
+        
         .auth-container, .app-container { max-width: 550px; margin: 0 auto; width: 100%; background: white; min-height: 100vh; box-shadow: 0 0 20px rgba(0,0,0,0.05); position: relative; }
         .auth-container { display: flex; flex-direction: column; justify-content: center; padding: 2rem 1.5rem; }
         .app-container { display: none; padding-bottom: 70px; }
-        .header { padding: 1.2rem 1rem; background: white; border-bottom: 1px solid #eef2f6; position: sticky; top: 0; z-index: 10; }
-        .header h1 { font-size: 1.5rem; font-weight: 700; color: #1e3a5f; }
-        .header p { font-size: 0.75rem; color: #6c7a89; }
+        
         .form-group { margin-bottom: 1.2rem; }
         label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; color: #1e3a5f; }
-        input, select { width: 100%; padding: 0.8rem 1rem; border: 1px solid #cfdfed; border-radius: 2rem; font-size: 0.95rem; background: white; outline: none; }
+        input, select { width: 100%; padding: 0.8rem 1rem; border: 1px solid #cfdfed; border-radius: 2rem; font-size: 0.95rem; background: white; outline: none; margin-bottom: 0.5rem; }
         .btn { width: 100%; background: #1e3a5f; color: white; border: none; padding: 0.85rem; border-radius: 3rem; font-weight: bold; font-size: 1rem; cursor: pointer; }
         .btn-outline { background: transparent; border: 1px solid #1e3a5f; color: #1e3a5f; }
         .toggle-link { text-align: center; margin-top: 1rem; font-size: 0.85rem; }
         .toggle-link a { color: #2c7da0; text-decoration: none; font-weight: 600; }
         
-        .balance-card { background: linear-gradient(135deg, #1e3a5f, #0f2c48); color: white; border-radius: 1.5rem; padding: 1.2rem; margin: 1rem; text-align: center; }
-        .balance-amount { font-size: 2rem; font-weight: bold; margin: 0.5rem 0; color: #10b981; }
+        .header { padding: 1.2rem 1rem; background: #1e293b; color: white; position: sticky; top: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center; }
+        .header-text h1 { font-size: 1.5rem; font-weight: 700; color: white; }
+        .header-text p { font-size: 0.75rem; color: #94a3b8; }
+        .telegram-logo { width: 40px; height: 40px; background-color: #229ED9; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; text-decoration: none; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        
+        .balance-card { background: #1e3a5f; color: white; border-radius: 1.5rem; padding: 1.5rem 1.2rem; margin: 1rem; text-align: center; position: relative; overflow: hidden; }
+        .balance-amount { font-size: 2.5rem; font-weight: bold; margin: 0.5rem 0; color: #10b981; }
         .recharge-wallet { color: #ef4444; }
-        .action-btn-recharge { background: #ef4444; color: white; padding: 0.5rem; border-radius: 1rem; border: none; margin: 0.2rem; font-weight:bold;}
-        .action-btn-withdraw { background: #f59e0b; color: white; padding: 0.5rem; border-radius: 1rem; border: none; margin: 0.2rem; font-weight:bold;}
+        .action-btn-recharge { background: #ef4444; color: white; padding: 0.5rem 1rem; border-radius: 1rem; border: none; margin: 0.2rem; font-weight:bold; cursor:pointer;}
+        .action-btn-withdraw { background: #f59e0b; color: white; padding: 0.5rem 1rem; border-radius: 1rem; border: none; margin: 0.2rem; font-weight:bold; cursor:pointer;}
         
         .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 1rem; padding: 1rem; }
-        .product-card { background: white; border-radius: 1.25rem; padding: 1rem; box-shadow: 0 8px 20px rgba(0,0,0,0.05); border: 1px solid #eef2f6; text-align: center; }
-        .product-card h4 { font-size: 1.2rem; font-weight: 700; color: #1e3a5f; margin-bottom: 0.5rem; }
-        .product-price { font-size: 1.3rem; font-weight: 800; color: #d97706; margin: 0.25rem 0; }
-        .product-detail { font-size: 0.75rem; color: #4b5563; display: flex; justify-content: space-between; margin-top: 0.3rem; }
-        .invest-now { margin-top: 0.75rem; width: 100%; background: #1e3a5f; color: white; border: none; padding: 0.5rem; border-radius: 2rem; font-weight: 600; cursor: pointer; }
+        
+        .product-card-container {
+            position: relative;
+            padding: 10px; margin-bottom: 1rem; border-radius: 1.2rem;
+            background-color: #fbbf24;
+            background-image: 
+                repeating-linear-gradient(90deg, transparent, transparent 18px, rgba(16, 185, 129, 0.8) 18px, rgba(16, 185, 129, 0.8) 20px),
+                repeating-linear-gradient(0deg, transparent, transparent 18px, rgba(16, 185, 129, 0.8) 18px, rgba(16, 185, 129, 0.8) 20px);
+            background-size: 20px 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+        .product-card-inner { background: #fef08a; border-radius: 1rem; padding: 1.2rem 1rem; text-align: center; border: 2px solid #10b981; }
+        .product-card-inner h4 { font-size: 1.2rem; font-weight: 700; color: #1e3a5f; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 5px;}
+        .product-price-pill { background: white; color: #10b981; padding: 0.4rem 1.5rem; border-radius: 2rem; font-size: 1.3rem; font-weight: 800; margin: 0.8rem auto; display: inline-block; border: 2px solid #e2e8f0; }
+        .product-detail { font-size: 0.8rem; color: #4b5563; display: flex; justify-content: space-between; margin-top: 0.3rem; border-bottom: 1px dashed #d1d5db; padding-bottom: 0.2rem;}
+        .invest-now { margin-top: 1rem; width: 100%; background: #1e3a5f; color: white; border: none; padding: 0.6rem; border-radius: 2rem; font-weight: 600; cursor: pointer; }
         
         .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; max-width: 550px; margin: 0 auto; background: white; display: flex; justify-content: space-around; padding: 0.6rem 0.5rem; border-top: 1px solid #eef2f6; z-index: 20; }
         .nav-item { text-align: center; flex: 1; cursor: pointer; font-size: 0.7rem; color: #8a9bb0; }
@@ -53,56 +63,17 @@
         .tag { background: #cfdfed; padding: 0.2rem 0.6rem; border-radius: 2rem; font-size: 0.7rem; }
         .copy-btn { background: #2c7da0; color: white; border: none; padding: 0.2rem 0.6rem; border-radius: 2rem; font-size: 0.7rem; cursor: pointer; margin-left: 0.5rem; }
         .video-timer { background: #fef3c7; padding: 0.5rem; border-radius: 2rem; text-align: center; margin-top: 0.5rem; }
+        
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
-        .modal-content { background: white; width: 90%; max-width: 400px; border-radius: 1.5rem; padding: 1.5rem; }
+        .modal-content { background: white; width: 90%; max-width: 400px; border-radius: 1.5rem; padding: 1.5rem; max-height: 90vh; overflow-y: auto; }
         .warning { color: #d97706; font-size: 0.75rem; }
         .text-center { text-align: center; }
         .mt-2 { margin-top: 0.5rem; }
         .mt-3 { margin-top: 1rem; }
 
-        /* ===== ✅ አዲስ የተሻሻሉ ዲዛይኖች ===== */
-        .flower-border-box {
-            position: relative;
-            padding: 1.5rem 1.2rem;
-            margin: 1.5rem 0;
-            border: none !important; 
-            border-radius: 1rem;
-            background-color: #fff;
-            z-index: 1;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-
-        .flower-border-box::before {
-            content: "";
-            position: absolute;
-            top: -12px; left: -12px; right: -12px; bottom: -12px;
-            border-radius: 1.2rem;
-            background-image: 
-                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">🌺</text></svg>'),
-                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">💛</text></svg>'),
-                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">🌼</text></svg>'),
-                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">💚</text></svg>');
-            background-position: top left, top right, bottom left, bottom right;
-            background-repeat: repeat-x, repeat-x, repeat-x, repeat-x; 
-            background-size: 24px 24px;
-            z-index: -1;
-        }
-
-        .flower-border-box::after {
-            content: "";
-            position: absolute;
-            top: 0; left: -12px; right: -12px; bottom: 0;
-            border-radius: 1.2rem;
-            background-image: 
-                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">🌺</text></svg>'),
-                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">💛</text></svg>'),
-                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">🌼</text></svg>'),
-                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">💚</text></svg>');
-            background-position: top left, top right, bottom left, bottom right;
-            background-repeat: repeat-y, repeat-y, repeat-y, repeat-y; 
-            background-size: 24px 24px;
-            z-index: -1;
-        }
+        .flower-border-box { position: relative; padding: 1.5rem 1.2rem; margin: 1.5rem 0; border: none !important; border-radius: 1rem; background-color: #fff; z-index: 1; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .flower-border-box::before { content: ""; position: absolute; top: -12px; left: -12px; right: -12px; bottom: -12px; border-radius: 1.2rem; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">🌺</text></svg>'), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">💛</text></svg>'), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">🌼</text></svg>'), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">💚</text></svg>'); background-position: top left, top right, bottom left, bottom right; background-repeat: repeat-x, repeat-x, repeat-x, repeat-x; background-size: 24px 24px; z-index: -1; }
+        .flower-border-box::after { content: ""; position: absolute; top: 0; left: -12px; right: -12px; bottom: 0; border-radius: 1.2rem; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">🌺</text></svg>'), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">💛</text></svg>'), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">🌼</text></svg>'), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">💚</text></svg>'); background-position: top left, top right, bottom left, bottom right; background-repeat: repeat-y, repeat-y, repeat-y, repeat-y; background-size: 24px 24px; z-index: -1; }
 
         .wealth-bg { background-color: #e0f2fe !important; }
         .task-bg-black { background-color: #f3f4f6 !important; }
@@ -110,43 +81,106 @@
         .task-bg-yellow { background-color: #fefce8 !important; }
         .mine-bg-blue { background-color: #e0f2fe !important; }
         .mine-bg-green { background-color: #dcfce7 !important; }
+        .dotted-blue-btn { background: transparent; border: 2px dotted #3b82f6 !important; color: #10b981; border-radius: 2rem; padding: 0.5rem 1rem; font-weight: 600; cursor: pointer; width: 100%; text-align: center; margin-top: 0.5rem; }
 
-        .dotted-blue-btn {
-            background: transparent;
-            border: 2px dotted #3b82f6 !important;
-            color: #10b981; 
-            border-radius: 2rem;
-            padding: 0.5rem 1rem;
-            font-weight: 600;
-            cursor: pointer;
+        /* Maintenance Screen Style */
+        #maintenanceScreen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: #f5f7fb; z-index: 9999; justify-content: center; align-items: center; text-align: center; padding: 2rem; flex-direction: column;}
+        
+        /* --- አዲስ የፎቶ መቀበያ ስታይል (በቀይ ቀጥ ያለ መስመር ላይ የሚሆን) --- */
+        .upload-box-container {
             width: 100%;
+            margin: 1rem 0 1.5rem 0;
+        }
+        .upload-box {
+            border: 2px dashed #94a3b8;
+            border-radius: 1rem;
+            padding: 1.5rem 1rem;
             text-align: center;
-            margin-top: 0.5rem;
+            cursor: pointer;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 120px;
+            transition: all 0.3s ease;
+            position: relative;
         }
-        .dotted-blue-btn:hover {
-            background: #e0f2fe;
+        .upload-box:hover {
+            border-color: #3b82f6;
+            background: #eff6ff;
         }
+        .upload-box img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            display: none;
+            margin-bottom: 0.5rem;
+            border: 2px solid #3b82f6;
+        }
+        .upload-box span {
+            font-size: 0.9rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+        /* ------------------------------------------------ */
+
     </style>
 </head>
 <body>
 
-<!-- Authentication Container -->
+<!-- ================= MAINTENANCE SCREEN ================= -->
+<div id="maintenanceScreen">
+    <div style="font-size: 4rem; margin-bottom: 1rem;">🛠️</div>
+    <h2 style="color: #ef4444; margin-bottom: 1rem;">Under Maintenance</h2>
+    <p style="color: #475569; margin-bottom: 1.5rem;">አገልግሎቱ ለጊዜው ተቋርጧል። እባክዎ በኋላ ይሞክሩ።</p>
+    <p id="maintenanceTime" style="font-size: 0.9rem; color: #94a3b8; font-weight: bold;"></p>
+</div>
+
+<!-- ================= AUTH CONTAINER ================= -->
 <div id="authContainer" class="auth-container">
-    <!-- ✅ የመግቢያ ገጽ መጀመሪያ እንዲመጣ (display: none) -->
     <div id="loginForm" style="display:none;">
-        <h2 style="text-align:center;">Cotton Exporter</h2>
+        <h2 style="text-align:center; color:#1e3a5f;">Cotton Exporter</h2>
         <p class="text-center" style="margin-bottom:1.5rem;">Sign in to your account</p>
+        
+        <!-- አዲስ የፎቶ መቀበያ (ሳጥን) በቀይ ቀጥ ያለ መስመር ላይ -->
+        <div class="upload-box-container">
+            <div class="upload-box" onclick="document.getElementById('loginPhotoInput').click()">
+                <img id="loginPhotoPreview" src="" alt="Profile">
+                <span id="loginPhotoText">📷 ፎቶ ይምረጡ (Optional)</span>
+            </div>
+        </div>
+        <!-- ከጋለሪ እና ከካሜራ እንዲያስመርጥ accept="image/*" capture="environment" ተጨምሯል -->
+        <input type="file" id="loginPhotoInput" accept="image/*" capture="environment" style="display:none;" onchange="previewLoginPhoto(event)">
+
         <div class="form-group"><label>📞 Phone Number</label><input type="tel" id="loginPhone" placeholder="+251 912345678"></div>
         <div class="form-group"><label>🔒 Password</label><input type="password" id="loginPassword" placeholder="Enter password"></div>
-        <button id="doLogin" class="btn">Ok</button>
+        
+        <button id="doLogin" class="btn" style="margin-top: 0.5rem;">Ok</button>
+        
+        <!-- Face ID / Biometric Login Button -->
+        <button id="biometricLoginBtn" class="btn-outline mt-2" style="display:flex; justify-content:center; align-items:center; gap:10px;" onclick="biometricLogin()">
+            <span style="font-size:1.5rem;">👤</span> Login with Face ID / Fingerprint
+        </button>
+
         <div class="toggle-link">Don't have an account? <a href="#" id="showRegister">Sign up</a></div>
         <div id="loginMessage" class="warning text-center mt-2"></div>
     </div>
 
-    <!-- ✅ የምዝገባ ገጽ ቀዳሚ እንዲሆን (display: block) -->
     <div id="registerForm" style="display:block;">
-        <h2 style="text-align:center;">Cotton Exporter</h2>
+        <h2 style="text-align:center; color:#1e3a5f;">Cotton Exporter</h2>
         <p class="text-center">Create an account to start investing</p>
+        
+        <!-- አዲስ የፎቶ መቀበያ (ሳጥን) ለምዝገባ -->
+        <div class="upload-box-container">
+            <div class="upload-box" onclick="document.getElementById('regPhotoInput').click()">
+                <img id="regPhotoPreview" src="" alt="Profile">
+                <span id="regPhotoText">📷 ፎቶ ይምረጡ (Optional)</span>
+            </div>
+        </div>
+        <input type="file" id="regPhotoInput" accept="image/*" capture="environment" style="display:none;" onchange="previewRegPhoto(event)">
+        
         <div class="form-group"><label>📞 Phone Number</label><input type="tel" id="regPhone" placeholder="+251 912345678"></div>
         <div class="form-group"><label>👤 Full Name</label><input type="text" id="fullName" placeholder="Full name"></div>
         <div class="form-group"><label>🔒 Login Password</label><input type="password" id="regPassword" placeholder="Password"></div>
@@ -159,11 +193,16 @@
     </div>
 </div>
 
-<!-- Main App Container -->
+<!-- ================= APP CONTAINER ================= -->
 <div id="appContainer" class="app-container">
     <div class="header">
-        <h1>Cotton Exporter</h1>
-        <p>The first checkpoint of quality control</p>
+        <div class="header-text">
+            <h1>Cotton Exporter</h1>
+            <p>The first checkpoint of quality control</p>
+        </div>
+        <a href="https://t.me/+iZK5ccDeRiMzZGNk" target="_blank" class="telegram-logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" fill="#ffffff"/></svg>
+        </a>
     </div>
 
     <div id="homePage" class="page active"></div>
@@ -179,23 +218,26 @@
     </div>
 </div>
 
-<!-- Modals -->
-<div id="rechargeModal" class="modal"></div>
-<div id="withdrawModal" class="modal"></div>
-<div id="investModal" class="modal"></div>
-<div id="cashGiftModal" class="modal"></div>
-<div id="exchangeModal" class="modal"></div>
+<!-- ================= MODALS ================= -->
+<div id="rechargeModal" class="modal"><div class="modal-content" id="rechargeContent"></div></div>
+<div id="withdrawModal" class="modal"><div class="modal-content" id="withdrawContent"></div></div>
+<div id="investModal" class="modal"><div class="modal-content" id="investContent"></div></div>
+<div id="cashGiftModal" class="modal"><div class="modal-content" id="cashGiftContent"></div></div>
+<div id="exchangeModal" class="modal"><div class="modal-content" id="exchangeContent"></div></div>
 
 <script>
-    // ---------- DATA STRUCTURES ----------
+    // ================= GLOBAL DATA =================
     let currentUser = null;
     let users = [];
     let investments = [];
     let transactions = [];
     let giftCodes = [];
     let validFTTransactions = [];
+    let PRODUCTS = {};
+    let tempLoginPhotoBase64 = ""; // ለጊዜያዊ ፎቶ ማስቀመጫ
+    let tempRegPhotoBase64 = "";   // ለጊዜያዊ ፎቶ ማስቀመጫ
 
-    const PRODUCTS = {
+    const defaultProducts = {
         young: { name: "Young", price: 1000, totalReturn: 1800, daily: 40, days: 45, icon: "🌱" },
         bestOne: { name: "Best One", price: 2500, totalReturn: 4840, daily: 110, days: 44, icon: "⭐" },
         onlyEthiopians: { name: "Only For Ethiopians", price: 5000, totalReturn: 9900, daily: 220, days: 45, icon: "🇪🇹" },
@@ -204,14 +246,7 @@
         tarrazu: { name: "Tarrazú", price: 40000, totalReturn: 100000, daily: 2500, days: 40, icon: "⛰️" }
     };
 
-    function saveData() {
-        localStorage.setItem("cotton_users", JSON.stringify(users));
-        localStorage.setItem("cotton_investments", JSON.stringify(investments));
-        localStorage.setItem("cotton_transactions", JSON.stringify(transactions));
-        localStorage.setItem("cotton_giftcodes", JSON.stringify(giftCodes));
-        localStorage.setItem("cotton_ft_transactions", JSON.stringify(validFTTransactions));
-    }
-
+    // ================= LOAD & SAVE =================
     function loadData() {
         let u = localStorage.getItem("cotton_users");
         if (u) users = JSON.parse(u);
@@ -223,56 +258,48 @@
         if (gc) giftCodes = JSON.parse(gc);
         let ft = localStorage.getItem("cotton_ft_transactions");
         if (ft) validFTTransactions = JSON.parse(ft);
-        else validFTTransactions = [
-            { code: "FT26110L6GG0", amount: 500, usedBy: null },
-            { code: "FT98765ABCD", amount: 1000, usedBy: null }
-        ];
+        else validFTTransactions = [{ code: "FT26110L6GG0", amount: 500, usedBy: null }, { code: "FT98765ABCD", amount: 1000, usedBy: null }];
         
-        for (let g of giftCodes) {
-            if (g.active === undefined) g.active = true;
-            if (g.expiresAt === undefined) g.expiresAt = null;
-        }
-        
-        if (giftCodes.length === 0) giftCodes.push({ code: "YXMTQX", value: 50, usedBy: null, active: true, expiresAt: null });
+        let p = localStorage.getItem("cotton_products");
+        PRODUCTS = p ? JSON.parse(p) : JSON.parse(JSON.stringify(defaultProducts));
+
+        for (let g of giftCodes) { if (g.active === undefined) g.active = true; }
+        if (giftCodes.length === 0) giftCodes.push({ code: "YXMTQX", value: 50, usedBy: null, active: true });
         
         if (users.length === 0) {
             let demoUser = {
-                phone: "0947655291",
-                fullName: "Demo User",
-                password: "123456",
-                payPassword: "123456",
-                inviteCode: generateInviteCode(),
-                referredBy: null,
-                balance: 5000,
-                rechargeBalance: 5000,
-                wealthWallet: 0,
-                rewardWallet: 0,
-                totalEarnings: 0,
-                vipLevel: 0,
-                lastDailyBonus: null,
-                lastVideoTaskDate: null,
-                shareReferralCount: 0,
-                shareRewardClaimed: false,
-                createdAt: new Date().toISOString()
+                phone: "0947655291", fullName: "Demo User", password: "123456", payPassword: "123456",
+                inviteCode: generateInviteCode(), referredBy: null, balance: 5000, rechargeBalance: 5000,
+                wealthWallet: 0, rewardWallet: 0, totalEarnings: 0, vipLevel: 0, lastDailyBonus: null,
+                lastVideoTaskDate: null, shareReferralCount: 0, shareRewardClaimed: false, isBanned: false,
+                profilePic: "", createdAt: new Date().toISOString()
             };
             users.push(demoUser);
         }
-        
         for (let u of users) {
             if (u.rechargeBalance === undefined) u.rechargeBalance = 0;
-            if (u.lastVideoTaskDate === undefined) u.lastVideoTaskDate = null;
+            if (u.isBanned === undefined) u.isBanned = false;
+            if (u.profilePic === undefined) u.profilePic = "";
         }
-        
-        saveData();
+        saveAllData();
+    }
+
+    function saveAllData() {
+        localStorage.setItem("cotton_users", JSON.stringify(users));
+        localStorage.setItem("cotton_investments", JSON.stringify(investments));
+        localStorage.setItem("cotton_transactions", JSON.stringify(transactions));
+        localStorage.setItem("cotton_giftcodes", JSON.stringify(giftCodes));
+        localStorage.setItem("cotton_ft_transactions", JSON.stringify(validFTTransactions));
+        localStorage.setItem("cotton_products", JSON.stringify(PRODUCTS));
     }
 
     function generateInviteCode() { return Math.random().toString(36).substring(2, 8).toUpperCase(); }
-
     function addTransaction(userPhone, type, amount, desc) {
         transactions.unshift({ id: Date.now(), userPhone, type, amount, description: desc, timestamp: new Date().toISOString() });
-        saveData();
+        saveAllData();
     }
 
+    // ================= MAIN APP LOGIC =================
     function processDailyIncomes() {
         let now = new Date();
         for (let inv of investments) {
@@ -288,18 +315,7 @@
                     inv.lastIncomeDate = now.toISOString();
                     inv.daysLeft -= daysDiff;
                     addTransaction(user.phone, "income", income, `Daily income from ${inv.productName}`);
-                    let referrer = users.find(u => u.phone === user.referredBy);
-                    if (referrer) {
-                        let commissionPercent = referrer.vipLevel === 1 ? 0.05 : referrer.vipLevel === 2 ? 0.09 : referrer.vipLevel === 3 ? 0.12 : 0;
-                        if (commissionPercent > 0) {
-                            let commission = income * commissionPercent;
-                            referrer.wealthWallet += commission;
-                            referrer.totalEarnings += commission;
-                            addTransaction(referrer.phone, "commission", commission, `Team commission from ${user.fullName}`);
-                        }
-                    }
                 }
-                saveData();
             }
         }
         for (let u of users) {
@@ -310,7 +326,7 @@
             else if (hasPurchase) u.vipLevel = 1;
             else u.vipLevel = 0;
         }
-        saveData();
+        saveAllData();
     }
 
     function refreshAllUI() {
@@ -322,36 +338,40 @@
         renderMinePage();
     }
 
-    // Home Page
     function renderHomePage() {
         let user = users.find(u => u.phone === currentUser);
         if (!user) return;
         let html = `
-            <div class="balance-card">
-                <div>Cotton Exporter - The first checkpoint of quality control</div>
-                <div class="balance-amount">${user.balance.toFixed(2)} ETB</div>
-                <div>Wallet Balance</div>
-                <div class="action-buttons" style="margin-top:0.5rem; display:flex; justify-content:center; gap:10px;">
-                    <button class="action-btn-recharge" id="openRecharge">➕ Recharge</button>
-                    <button class="action-btn-withdraw" id="openWithdraw">➖ Withdraw</button>
+            <div class="flower-border-box" style="background-color: #fefce8; margin-top: 1rem;">
+                <div style="text-align: center;">
+                    <div style="font-size: 1.1rem; color: #1e3a5f; margin-bottom: 0.5rem;">Cotton Exporter - The first checkpoint of quality control</div>
+                    <div style="font-size: 3rem; font-weight: bold; color: #10b981;">${user.balance.toFixed(2)} ETB</div>
+                    <div style="color: #475569; margin-bottom: 1rem;">Wallet Balance</div>
+                    <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 1rem;">
+                        <button class="action-btn-recharge" id="openRecharge" style="border-radius: 2rem; padding: 0.6rem 1.5rem;">➕ Recharge</button>
+                        <button class="action-btn-withdraw" id="openWithdraw" style="border-radius: 2rem; padding: 0.6rem 1.5rem;">➖ Withdraw</button>
+                    </div>
+                    <div style="font-size: 0.9rem; color: #475569;">💰 Recharge Wallet: <span style="color: #ef4444; font-weight: bold;">${user.rechargeBalance.toFixed(2)} ETB</span></div>
                 </div>
-                <div style="margin-top:0.5rem; font-size:0.8rem;">💰 Recharge Wallet: <span class="recharge-wallet">${user.rechargeBalance.toFixed(2)} ETB</span></div>
             </div>
-            <h3 style="margin:1rem 0 0 1rem;">📈 Investment Products</h3>
-            <div class="products-grid" id="productsGrid"></div>
+            <h3 style="margin:1.5rem 0 0.5rem 1rem; text-align: center; color: #1e3a5f;">እያስቀመጡ ባሉት (Investment Products)</h3>
+            <div class="products-grid" id="productsGrid" style="padding-top: 0;"></div>
         `;
         document.getElementById("homePage").innerHTML = html;
+        
         let grid = document.getElementById("productsGrid");
         for (let [key, prod] of Object.entries(PRODUCTS)) {
             let card = document.createElement("div");
-            card.className = "product-card";
+            card.className = "product-card-container";
             card.innerHTML = `
-                <h4>${prod.icon} ${prod.name}</h4>
-                <div class="product-price">${prod.price.toLocaleString()} ETB</div>
-                <div class="product-detail"><span>Total:</span><span class="product-total">${prod.totalReturn.toLocaleString()} ETB</span></div>
-                <div class="product-detail"><span>Daily:</span><span class="product-daily">${prod.daily} ETB</span></div>
-                <div class="product-detail"><span>${prod.days} Days</span></div>
-                <button class="invest-now" data-product="${key}">Invest Now</button>
+                <div class="product-card-inner">
+                    <h4>${prod.icon} ${prod.name}</h4>
+                    <div class="product-price-pill">${prod.price.toLocaleString()} ETB</div>
+                    <div class="product-detail"><span>Total:</span><span>${prod.totalReturn.toLocaleString()} ETB</span></div>
+                    <div class="product-detail"><span>Daily:</span><span>${prod.daily} ETB</span></div>
+                    <div class="product-detail" style="border:none;"><span>${prod.days} Days</span></div>
+                    <button class="invest-now" data-product="${key}">Invest Now</button>
+                </div>
             `;
             grid.appendChild(card);
         }
@@ -365,7 +385,6 @@
         };
     }
 
-    // Wealth Page
     function renderWealthPage() {
         let user = users.find(u => u.phone === currentUser);
         let userInvestments = investments.filter(i => i.userPhone === currentUser);
@@ -375,13 +394,19 @@
         let bonusStatus = canReceive ? "✅ Ready to claim" : `⏳ Next: ${new Date(lastBonus.getTime() + 86400000).toLocaleString()}`;
         
         let html = `
-            <div class="flower-border-box wealth-bg">
-                <div class="flex-between"><span>Wealth Wallet</span><span>${user.wealthWallet.toFixed(2)} ETB</span></div>
-                <div class="flex-between"><span>Reward Wallet</span><span>${(user.rewardWallet || 0).toFixed(2)} ETB</span></div>
-                <div class="flex-between"><span>Total Earnings</span><span>${user.totalEarnings.toFixed(2)} ETB</span></div>
-                <div class="flex-between mt-2"><span>🎁 Daily Receive</span><button id="dailyReceiveBtn" class="btn-outline" ${!canReceive ? 'disabled' : ''}>Claim</button></div>
-                <div class="warning text-center mt-1">${bonusStatus}</div>
-                <button id="exchangeToBalance" class="btn-outline mt-2">Exchange Wealth → Balance</button>
+            <div class="flower-border-box wealth-bg" style="margin-top: 1rem;">
+                <div class="flex-between" style="margin-bottom: 0.5rem;"><span style="font-weight: 600;">Wealth Wallet</span><span>${user.wealthWallet.toFixed(2)} ETB</span></div>
+                <div class="flex-between" style="margin-bottom: 0.5rem;"><span style="font-weight: 600;">Reward Wallet</span><span>${(user.rewardWallet || 0).toFixed(2)} ETB</span></div>
+                <div class="flex-between" style="margin-bottom: 1rem; border-bottom: 1px solid #bae6fd; padding-bottom: 0.5rem;"><span style="font-weight: 600;">Total Earnings</span><span>${user.totalEarnings.toFixed(2)} ETB</span></div>
+                <div class="flex-between mt-2">
+                    <span>🎁 Daily Receive</span>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 0.8rem; color: #10b981;">${canReceive ? '✅ Ready' : '⏳ Wait'}</span>
+                        <button id="dailyReceiveBtn" class="btn-outline" style="padding: 0.3rem 1rem; border-radius: 1rem;" ${!canReceive ? 'disabled' : ''}>Claim</button>
+                    </div>
+                </div>
+                <div class="warning text-center mt-1" style="font-size: 0.7rem;">${bonusStatus}</div>
+                <button id="exchangeToBalance" class="btn-outline mt-3" style="border-radius: 0.5rem; padding: 0.5rem;">Exchange Wealth → Balance</button>
             </div>
             <div class="flex-between" style="margin:1rem 0;"><strong>Active Orders</strong><span>${userInvestments.length}</span></div>
             <div id="ordersList"></div>
@@ -411,51 +436,54 @@
                 user.totalEarnings += bonus;
                 user.lastDailyBonus = now.toISOString();
                 addTransaction(currentUser, "daily_bonus", bonus, `Daily receive bonus: ${bonus} ETB`);
-                saveData();
+                saveAllData();
                 refreshAllUI();
                 alert(`You received ${bonus} ETB bonus! Added to Wealth Wallet.`);
             };
         }
     }
 
-    // Task Page
     function renderTaskPage() {
         let user = users.find(u => u.phone === currentUser);
         let lastVideo = user.lastVideoTaskDate ? new Date(user.lastVideoTaskDate) : null;
         let now = new Date();
         let canWatch = !lastVideo || (now - lastVideo) >= 86400000;
         let videoStatus = canWatch ? "✅ Ready" : `⏳ Available in ${Math.ceil((lastVideo.getTime() + 86400000 - now) / 3600000)} hours`;
-
         let shareRequired = 2;
         let shareProgress = user.shareReferralCount || 0;
         let shareCompleted = (user.shareRewardClaimed === true);
         let shareStatus = shareCompleted ? "✅ Reward claimed" : `${shareProgress}/${shareRequired} registrations`;
 
         let html = `
-            <div style="padding:1rem;">
-                <h3>📋 Daily Tasks</h3>
-                <div class="flower-border-box task-bg-black">
-                    <div class="flex-between"><span>🎬 Watch video advertisement (60 sec)</span><span class="tag">${videoStatus}</span></div>
-                    <button id="watchVideoBtn" class="btn-outline mt-2" ${!canWatch ? 'disabled' : ''}>Watch Video</button>
+            <div style="padding: 0 1rem;">
+                <h3 style="margin-top: 1rem;">📋 Daily Tasks</h3>
+                <div class="flower-border-box task-bg-black" style="margin-top: 1.5rem;">
+                    <div class="flex-between">
+                        <span>🎬 Watch video advertisement (60 sec)</span>
+                        <span class="tag" style="background: #e5e7eb;">${videoStatus}</span>
+                    </div>
+                    <button id="watchVideoBtn" class="btn-outline mt-2" style="border-radius: 0.5rem; padding: 0.4rem 1rem;" ${!canWatch ? 'disabled' : ''}>Watch Video</button>
                     <div id="videoTimer" class="video-timer" style="display:none;"></div>
                 </div>
-                <div class="flower-border-box task-bg-red">
-                    <div class="flex-between"><span>📢 Share on social media (referral)</span><span class="tag">${shareStatus}</span></div>
+                <div class="flower-border-box task-bg-red" style="margin-top: 1.5rem;">
+                    <div class="flex-between">
+                        <span>📢 Share on social media (referral)</span>
+                        <span class="tag" style="background: #fecaca;">${shareStatus}</span>
+                    </div>
                     <div class="mt-2">Invite 2 friends to join using your link:</div>
                     <div class="flex-between mt-2">
-                        <input type="text" id="referralLinkInput" readonly value="${window.location.href.split('#')[0].split('?')[0]}?ref=${user.inviteCode}" style="font-size:0.75rem;">
-                        <button id="copyReferralLink" class="copy-btn">Copy</button>
+                        <input type="text" id="referralLinkInput" readonly value="${window.location.href.split('#')[0].split('?')[0]}?ref=${user.inviteCode}" style="font-size:0.75rem; background: white;">
+                        <button id="copyReferralLink" class="copy-btn" style="background: #3b82f6;">Copy</button>
                     </div>
-                    <div class="warning mt-2">Reward (50 ETB) will be added to Reward Wallet after 2 successful registrations.</div>
+                    <div class="warning mt-2" style="color: #b45309;">Reward (50 ETB) will be added to Reward Wallet after 2 successful registrations.</div>
                 </div>
-                <div class="flower-border-box task-bg-yellow">
+                <div class="flower-border-box task-bg-yellow" style="margin-top: 1.5rem; margin-bottom: 2rem;">
                     <h3 class="mt-2">📜 Task Transaction History</h3>
                     <div id="taskTransactionsList"></div>
                 </div>
             </div>
         `;
         document.getElementById("taskPage").innerHTML = html;
-
         let taskTx = transactions.filter(tx => tx.userPhone === currentUser && (tx.type === "video_task" || tx.type === "share_task"));
         let txDiv = document.getElementById("taskTransactionsList");
         if (taskTx.length === 0) txDiv.innerHTML = "<p>No task transactions yet.</p>";
@@ -464,11 +492,9 @@
                 <div class="transaction-item flex-between">
                     <div><strong>${tx.type === "video_task" ? "🎬 Video Task" : "📢 Share Task"}</strong><br><small>${new Date(tx.timestamp).toLocaleString()}</small></div>
                     <div style="color:#2b9348">+${tx.amount.toFixed(2)} ETB</div>
-                    <div>${tx.description}</div>
                 </div>
             `).join('');
         }
-
         let watchBtn = document.getElementById("watchVideoBtn");
         if (watchBtn) {
             watchBtn.onclick = () => {
@@ -486,15 +512,14 @@
                         let reward = 20;
                         user.rewardWallet = (user.rewardWallet || 0) + reward;
                         user.lastVideoTaskDate = new Date().toISOString();
-                        addTransaction(currentUser, "video_task", reward, `Video task reward: ${reward} ETB (Reward Wallet)`);
-                        saveData();
+                        addTransaction(currentUser, "video_task", reward, `Video task reward: ${reward} ETB`);
+                        saveAllData();
                         refreshAllUI();
                         alert(`You earned ${reward} ETB! Added to Reward Wallet.`);
                     }
                 }, 1000);
             };
         }
-
         document.getElementById("copyReferralLink").onclick = () => {
             let linkInput = document.getElementById("referralLinkInput");
             linkInput.select();
@@ -503,42 +528,46 @@
         };
     }
 
-    // Mine Page
     function renderMinePage() {
         let user = users.find(u => u.phone === currentUser);
         let referralCount = users.filter(u => u.referredBy === currentUser).length;
         
+        // Display Profile Pic if exists
+        let profilePicHtml = user.profilePic ? `<img src="${user.profilePic}" style="width:60px; height:60px; border-radius:50%; object-fit:cover; margin-bottom:0.5rem;">` : `<div style="width:60px; height:60px; border-radius:50%; background:#cbd5e1; margin-bottom:0.5rem; display:flex; justify-content:center; align-items:center; font-size:1.5rem; color:white;">👤</div>`;
+
         document.getElementById("minePage").innerHTML = `
-            <div style="padding:1rem;">
-                <div class="flower-border-box mine-bg-blue">
-                    <div>${user.fullName}</div><div>VIP ${user.vipLevel}</div><div>📱 ${user.phone}</div>
+            <div style="padding: 0 1rem;">
+                <div class="flower-border-box mine-bg-blue" style="margin-top: 1rem; text-align:center;">
+                    ${profilePicHtml}
+                    <div style="font-size: 1.1rem; font-weight: 600; margin-bottom: 0.3rem;">${user.fullName}</div>
+                    <div style="margin-bottom: 0.3rem;">VIP ${user.vipLevel}</div>
+                    <div>📱 ${user.phone}</div>
                 </div>
-                <div class="flower-border-box mine-bg-green">
-                    <div class="flex-between"><span>Total Revenue</span><span>${user.totalEarnings.toFixed(2)} ETB</span></div>
+                <div class="flower-border-box mine-bg-green" style="margin-top: 1.5rem;">
+                    <div class="flex-between" style="margin-bottom: 0.5rem;"><span>Total Revenue</span><span>${user.totalEarnings.toFixed(2)} ETB</span></div>
                     <div class="flex-between"><span>Reward Wallet</span><span>${(user.rewardWallet || 0).toFixed(2)} ETB</span></div>
                 </div>
-                
-                <div class="order-card" style="padding: 1.5rem 1rem; margin-bottom: 1.5rem;"><div>🔗 Invite Code: <strong>${user.inviteCode}</strong></div>
-                <button id="copyInviteLink" class="dotted-blue-btn">Copy Link</button></div>
-                
-                <div class="order-card" style="padding: 1.5rem 1rem; margin-bottom: 1.5rem;"><div>👥 My Team (${referralCount})</div>
-                <button id="viewTeam" class="dotted-blue-btn">Team Details</button></div>
-                
-                <div class="order-card" style="padding: 1.5rem 1rem; margin-bottom: 1.5rem;"><div>🎁 Cash Gift</div>
-                <button id="openCashGift" class="dotted-blue-btn">Redeem Code</button></div>
-                
-                <div class="order-card"><div>⚙️ Settings</div><button id="logoutBtn" class="btn-outline mt-2" style="background:#b91c1c;color:white;">Sign Out</button></div>
-                
-                <div class="wealth-stats mt-3">
-                    <strong>VIP Rules</strong><br>
-                    - VIP0: No purchase<br>
-                    - VIP1: Purchased product (5% team commission)<br>
-                    - VIP2: 5+ referrals (9%)<br>
-                    - VIP3: 20+ referrals (12%)
+                <div class="order-card" style="padding: 1rem; margin-bottom: 1rem; background: white; border-radius: 1rem;">
+                    <div style="margin-bottom: 0.5rem;">🔗 Invite Code: <strong>${user.inviteCode}</strong></div>
+                    <button id="copyInviteLink" class="dotted-blue-btn">Copy Link</button>
+                </div>
+                <div class="order-card" style="padding: 1rem; margin-bottom: 1rem; background: white; border-radius: 1rem;">
+                    <div style="margin-bottom: 0.5rem;">👥 My Team (${referralCount})</div>
+                    <button id="viewTeam" class="dotted-blue-btn">Team Details</button>
+                </div>
+                <div class="order-card" style="padding: 1rem; margin-bottom: 1rem; background: white; border-radius: 1rem;">
+                    <div style="margin-bottom: 0.5rem;">🎁 Cash Gift</div>
+                    <button id="openCashGift" class="dotted-blue-btn">Redeem Code</button>
+                </div>
+                <div class="order-card" style="padding: 1rem; margin-bottom: 1rem; background: white; border-radius: 1rem;">
+                    <div style="margin-bottom: 0.5rem;">⚙️ Settings</div>
+                    <button id="logoutBtn" class="btn-outline" style="background:#b91c1c; color:white; border-radius: 0.5rem; padding: 0.5rem;">Sign Out</button>
+                </div>
+                <div class="wealth-stats mt-3" style="background: #e2e8f0; border-radius: 1rem; padding: 1rem; margin-bottom: 2rem;">
+                    <strong>VIP Rules</strong><br>- VIP0: No purchase<br>- VIP1: Purchased product (5% team commission)<br>- VIP2: 5+ referrals (9%)<br>- VIP3: 20+ referrals (12%)
                 </div>
             </div>
         `;
-        
         document.getElementById("copyInviteLink").onclick = () => {
             let link = `${window.location.href.split('#')[0].split('?')[0]}?ref=${user.inviteCode}`;
             navigator.clipboard.writeText(link);
@@ -554,6 +583,8 @@
             currentUser = null;
             document.getElementById("appContainer").style.display = "none";
             document.getElementById("authContainer").style.display = "flex";
+            document.getElementById("loginForm").style.display = "block";
+            document.getElementById("registerForm").style.display = "none";
         };
     }
 
@@ -581,7 +612,7 @@
                 daysLeft: prod.days, totalReturn: prod.totalReturn
             });
             addTransaction(currentUser, "invest", -prod.price, `Purchased ${prod.name}`);
-            saveData();
+            saveAllData();
             modal.style.display = "none";
             refreshAllUI();
             alert(`Successfully invested in ${prod.name}!`);
@@ -589,7 +620,7 @@
         document.getElementById("closeInvestModal").onclick = () => modal.style.display = "none";
     }
 
-    // Navigation
+    // ================= NAVIGATION & AUTH =================
     document.querySelectorAll(".nav-item").forEach(item => {
         item.onclick = () => {
             let page = item.dataset.page;
@@ -604,32 +635,73 @@
         };
     });
 
-    // ✅ የሊንክ መረጃ አነባበብ (የተስተካከለ)
     function getUrlParameter(name) {
         let url = window.location.href;
-        // ሊንኩ ላይ #?ref= ወይም ?ref= ቢሆን ሁለቱንም ለይቶ ማውጣት
         let regex = new RegExp('[?&]' + name + '=([^&#]*)');
         let results = regex.exec(url);
         return results === null ? null : decodeURIComponent(results[1].replace(/\+/g, ' '));
     }
 
-    document.getElementById("showRegister").onclick = () => {
-        document.getElementById("loginForm").style.display = "none";
-        document.getElementById("registerForm").style.display = "block";
-        let ref = getUrlParameter("ref");
-        if (ref) document.getElementById("inviteCodeReg").value = ref;
-    };
-    document.getElementById("showLogin").onclick = () => {
-        document.getElementById("registerForm").style.display = "none";
-        document.getElementById("loginForm").style.display = "block";
-    };
-
-    // ✅ ገጹ ሲከፈት ኢንቫይት ኮድ ካለ በራሱ እንዲሞላ
+    // ================= SERVICE BLOCK CHECK =================
     window.onload = function() {
         let ref = getUrlParameter("ref");
-        if (ref) {
-            document.getElementById("inviteCodeReg").value = ref;
+        if (ref) document.getElementById("inviteCodeReg").value = ref;
+        
+        let blockStart = localStorage.getItem("cotton_block_start");
+        let blockEnd = localStorage.getItem("cotton_block_end");
+        
+        if (blockStart && blockEnd) {
+            let now = new Date();
+            let start = new Date(blockStart);
+            let end = new Date(blockEnd);
+
+            if (now >= start && now <= end) {
+                document.getElementById("maintenanceScreen").style.display = "flex";
+                document.getElementById("maintenanceTime").innerText = `Expected return: ${end.toLocaleString()}`;
+                return; 
+            }
         }
+    };
+
+    // ================= PHOTO UPLOAD PREVIEWS =================
+    function previewLoginPhoto(event) {
+        let file = event.target.files[0];
+        if (file) {
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                tempLoginPhotoBase64 = e.target.result; // Save base64 string
+                document.getElementById("loginPhotoPreview").src = e.target.result;
+                document.getElementById("loginPhotoPreview").style.display = "block";
+                document.getElementById("loginPhotoText").style.display = "none"; // ጽሑፉን ደብቅ
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function previewRegPhoto(event) {
+        let file = event.target.files[0];
+        if (file) {
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                tempRegPhotoBase64 = e.target.result; // Save base64 string
+                document.getElementById("regPhotoPreview").src = e.target.result;
+                document.getElementById("regPhotoPreview").style.display = "block";
+                document.getElementById("regPhotoText").style.display = "none"; // ጽሑፉን ደብቅ
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    // ================= LOGIN / REGISTER LOGIC =================
+    document.getElementById("showRegister").onclick = (e) => {
+        e.preventDefault();
+        document.getElementById("loginForm").style.display = "none";
+        document.getElementById("registerForm").style.display = "block";
+    };
+    document.getElementById("showLogin").onclick = (e) => {
+        e.preventDefault();
+        document.getElementById("registerForm").style.display = "none";
+        document.getElementById("loginForm").style.display = "block";
     };
 
     document.getElementById("doRegister").onclick = () => {
@@ -639,55 +711,68 @@
         let confirm = document.getElementById("confirmPassword").value;
         let payPass = document.getElementById("payPassword").value;
         let invite = document.getElementById("inviteCodeReg").value.trim().toUpperCase();
+        
         if (!phone || !fullName || !pass || !confirm || !payPass) { document.getElementById("regMessage").innerText = "Please fill all fields"; return; }
+        
+        // *** ፎቶ ካልመረጡ እንዳያስገባ የሚያደርግ ማረጋገጫ ***
+        if (!tempRegPhotoBase64) { 
+            document.getElementById("regMessage").innerText = "❌ እባክዎ መጀመሪያ ፎቶ ይምረጡ! (Please select a photo first)"; 
+            return; 
+        }
+
         if (pass !== confirm) { document.getElementById("regMessage").innerText = "Passwords mismatch"; return; }
         if (payPass.length !== 6 || isNaN(payPass)) { document.getElementById("regMessage").innerText = "Pay password must be 6 digits"; return; }
         if (users.find(u => u.phone === phone)) { document.getElementById("regMessage").innerText = "Phone already registered"; return; }
+        
         let referredBy = null;
         if (invite) {
             let refUser = users.find(u => u.inviteCode === invite);
             if (refUser) referredBy = refUser.phone;
             else { document.getElementById("regMessage").innerText = "Invalid invite code"; return; }
         }
+        
         let newUser = {
             phone, fullName, password: pass, payPassword: payPass,
             inviteCode: generateInviteCode(), referredBy,
             balance: 0, rechargeBalance: 0, wealthWallet: 0, rewardWallet: 0, totalEarnings: 0,
             vipLevel: 0, lastDailyBonus: null, lastVideoTaskDate: null,
-            shareReferralCount: 0, shareRewardClaimed: false,
+            shareReferralCount: 0, shareRewardClaimed: false, isBanned: false,
+            profilePic: tempRegPhotoBase64, // Save the selected photo
             createdAt: new Date().toISOString()
         };
         users.push(newUser);
-        saveData();
-
-        if (referredBy) {
-            let referrer = users.find(u => u.phone === referredBy);
-            if (referrer) {
-                referrer.shareReferralCount = (referrer.shareReferralCount || 0) + 1;
-                if (referrer.shareReferralCount >= 2 && !referrer.shareRewardClaimed) {
-                    referrer.shareRewardClaimed = true;
-                    referrer.rewardWallet = (referrer.rewardWallet || 0) + 50;
-                    addTransaction(referredBy, "share_task", 50, "Share task reward: 50 ETB (2 referrals)");
-                }
-                saveData();
-            }
-        }
-
+        saveAllData();
+        
         alert("Registration successful! Please login.");
         document.getElementById("registerForm").style.display = "none";
         document.getElementById("loginForm").style.display = "block";
         document.getElementById("regMessage").innerText = "";
     };
 
-    // Login with ban check
     document.getElementById("doLogin").onclick = () => {
         let phone = document.getElementById("loginPhone").value.trim();
         let pass = document.getElementById("loginPassword").value;
+        
+        // *** ፎቶ ካልመረጡ እንዳይገቡ የሚያደርግ ማረጋገጫ ***
+        if (!tempLoginPhotoBase64) { 
+            document.getElementById("loginMessage").innerText = "❌ እባክዎ መጀመሪያ ፎቶ ይምረጡ! (Please select a photo first)"; 
+            return; 
+        }
+
+        let usersData = JSON.parse(localStorage.getItem("cotton_users")) || users; 
+        let checkUser = usersData.find(u => u.phone === phone);
+
+        if (checkUser && checkUser.isBanned) {
+            document.getElementById("loginMessage").innerText = "❌ አካውንትዎ በአድሚን ተከልክሏል! (Account Banned)";
+            return;
+        }
+
         let user = users.find(u => u.phone === phone && u.password === pass);
         if (!user) {
             document.getElementById("loginMessage").innerText = "Invalid phone or password. Try demo: 0947655291 / 123456";
             return;
         }
+        
         currentUser = phone;
         document.getElementById("authContainer").style.display = "none";
         document.getElementById("appContainer").style.display = "block";
@@ -695,113 +780,125 @@
         document.querySelector(".nav-item[data-page='home']").click();
     };
 
-    // Populate modals
-    function populateModals() {
-        let rechargeHtml = `<div class="modal-content"><div class="modal-header">💳 Recharge Wallet</div><p>Bank: Commercial Bank of Ethiopia</p>
-            <div class="form-group"><label>Account Name</label><div style="display:flex;"><input type="text" id="bankAccountName" value="Cotton Exporter PLC" readonly><button type="button" id="copyAccountName" class="copy-btn">Copy</button></div></div>
-            <div class="form-group"><label>Account Number</label><div style="display:flex;"><input type="text" id="bankAccountNumber" value="1000123456789" readonly><button type="button" id="copyAccountNumber" class="copy-btn">Copy</button></div></div>
-            <div class="form-group"><label>FT Reference Code</label><input type="text" id="ftCode" placeholder="e.g., FT26110L6GG0"></div>
-            <button id="confirmRecharge" class="btn">Submit</button><button class="btn-outline" id="closeRechargeModal">Cancel</button></div>`;
-        document.getElementById("rechargeModal").innerHTML = rechargeHtml;
-        let withdrawHtml = `<div class="modal-content"><div class="modal-header">💸 Withdraw</div><p>Withdrawable Balance: <span id="withdrawableBalance">0</span> ETB<br>Min: 300 ETB</p>
-            <div class="form-group"><label>Amount</label><input type="number" id="withdrawAmount"></div>
-            <div class="form-group"><label>Account Name</label><input id="withdrawAccountName"></div>
-            <div class="form-group"><label>CBE Account</label><input id="withdrawAccountNumber"></div>
-            <div class="form-group"><label>Pay Password</label><input type="password" id="withdrawPayPassword" maxlength="6"></div>
-            <button id="confirmWithdraw" class="btn">Submit</button><button class="btn-outline" id="closeWithdrawModal">Cancel</button></div>`;
-        document.getElementById("withdrawModal").innerHTML = withdrawHtml;
-        let investHtml = `<div class="modal-content"><div class="modal-header" id="investProductName"></div><p id="investDetails"></p>
-            <div class="form-group"><label>Pay Password</label><input type="password" id="investPayPassword" maxlength="6"></div>
-            <button id="confirmInvest" class="btn">Buy Now</button><button class="btn-outline" id="closeInvestModal">Cancel</button><div id="investError" class="warning"></div></div>`;
-        document.getElementById("investModal").innerHTML = investHtml;
-        let giftHtml = `<div class="modal-content"><div class="modal-header">🎁 Cash Gift</div><input type="text" id="giftCode" placeholder="Redemption code">
-            <button id="claimGift" class="btn mt-2">Claim</button><button class="btn-outline" id="closeGiftModal">Cancel</button></div>`;
-        document.getElementById("cashGiftModal").innerHTML = giftHtml;
-        let exchangeHtml = `<div class="modal-content"><div class="modal-header">🔄 Exchange</div><p>Wealth Wallet: <span id="wealthWalletAmount">0</span> ETB</p>
-            <div class="form-group"><label>Amount</label><input type="number" id="exchangeAmount"></div>
-            <button id="confirmExchange" class="btn">Exchange</button><button class="btn-outline" id="closeExchangeModal">Cancel</button></div>`;
-        document.getElementById("exchangeModal").innerHTML = exchangeHtml;
+    // ================= BIOMETRIC LOGIN (Face ID / Fingerprint) =================
+    function biometricLogin() {
+        if (!window.PublicKeyCredential) {
+            alert("ይህ ብራውዘር የፊት አሻራ መግቢያን አይደግፍም። እባክዎ በስልክዎ ይሞክሩት።");
+            return;
+        }
 
-        setTimeout(() => {
-            document.getElementById("confirmRecharge").onclick = () => {
-                let ft = document.getElementById("ftCode").value.trim().toUpperCase();
-                let ftRecord = validFTTransactions.find(t => t.code === ft && !t.usedBy);
-                if (!ftRecord) { alert("Invalid FT code or already used."); return; }
-                let user = users.find(u => u.phone === currentUser);
-                user.balance += ftRecord.amount;
-                user.rechargeBalance += ftRecord.amount;
-                ftRecord.usedBy = currentUser;
-                addTransaction(currentUser, "recharge", ftRecord.amount, `Recharge via FT ${ft} (${ftRecord.amount} ETB)`);
-                saveData();
+        if (confirm("የፊት አሻራዎን (Face ID / Fingerprint) ለመጠቀም ይፈቅዳሉ?")) {
+            let demoUser = users.find(u => u.phone === "0947655291"); 
+            if(demoUser) {
+                currentUser = demoUser.phone;
+                document.getElementById("authContainer").style.display = "none";
+                document.getElementById("appContainer").style.display = "block";
                 refreshAllUI();
-                document.getElementById("rechargeModal").style.display = "none";
-                document.getElementById("ftCode").value = "";
-                alert(`✅ Recharge of ${ftRecord.amount} ETB successful!`);
-            };
-            document.getElementById("closeRechargeModal").onclick = () => document.getElementById("rechargeModal").style.display = "none";
-            document.getElementById("copyAccountName").onclick = () => { navigator.clipboard.writeText(document.getElementById("bankAccountName").value); alert("Account name copied!"); };
-            document.getElementById("copyAccountNumber").onclick = () => { navigator.clipboard.writeText(document.getElementById("bankAccountNumber").value); alert("Account number copied!"); };
-            document.getElementById("confirmWithdraw").onclick = () => {
-                let amount = parseFloat(document.getElementById("withdrawAmount").value);
-                let accName = document.getElementById("withdrawAccountName").value;
-                let accNum = document.getElementById("withdrawAccountNumber").value;
-                let payPass = document.getElementById("withdrawPayPassword").value;
-                let user = users.find(u => u.phone === currentUser);
-                if (isNaN(amount) || amount < 300) alert("Min 300 ETB");
-                else if (user.balance < amount) alert("Insufficient balance");
-                else if (payPass !== user.payPassword) alert("Incorrect pay password");
-                else if (!accName || !accNum) alert("Enter bank details");
-                else {
-                    user.balance -= amount;
-                    addTransaction(currentUser, "withdraw", -amount, `Withdrawal to ${accName} - ${accNum}`);
-                    saveData();
-                    refreshAllUI();
-                    document.getElementById("withdrawModal").style.display = "none";
-                    alert(`Withdrawal request of ${amount} ETB submitted.`);
-                }
-            };
-            document.getElementById("closeWithdrawModal").onclick = () => document.getElementById("withdrawModal").style.display = "none";
-            document.getElementById("closeInvestModal").onclick = () => document.getElementById("investModal").style.display = "none";
-            document.getElementById("claimGift").onclick = () => {
-                let code = document.getElementById("giftCode").value.trim().toUpperCase();
-                let gift = giftCodes.find(g => g.code === code);
-                if (!gift) { alert("Invalid code"); return; }
-                if (gift.usedBy) { alert("Code already used"); return; }
-                if (gift.active === false) { alert("This gift code is currently blocked by admin."); return; }
-                if (gift.expiresAt && new Date(gift.expiresAt) < new Date()) { alert("This gift code has expired."); return; }
-                
-                let user = users.find(u => u.phone === currentUser);
-                user.balance += gift.value;
-                gift.usedBy = currentUser;
-                addTransaction(currentUser, "gift", gift.value, `Redeemed gift code ${code}`);
-                saveData();
-                refreshAllUI();
-                document.getElementById("cashGiftModal").style.display = "none";
-                alert(`You received ${gift.value} ETB!`);
-            };
-            document.getElementById("closeGiftModal").onclick = () => document.getElementById("cashGiftModal").style.display = "none";
-            document.getElementById("confirmExchange").onclick = () => {
-                let amount = parseFloat(document.getElementById("exchangeAmount").value);
-                let user = users.find(u => u.phone === currentUser);
-                if (isNaN(amount) || amount <= 0) alert("Enter positive amount");
-                else if (user.wealthWallet < amount) alert("Insufficient wealth wallet");
-                else {
-                    user.wealthWallet -= amount;
-                    user.balance += amount;
-                    addTransaction(currentUser, "exchange", amount, `Exchanged from wealth wallet`);
-                    saveData();
-                    refreshAllUI();
-                    document.getElementById("exchangeModal").style.display = "none";
-                    alert(`Exchanged ${amount} ETB to balance.`);
-                }
-            };
-            document.getElementById("closeExchangeModal").onclick = () => document.getElementById("exchangeModal").style.display = "none";
-        }, 50);
+                document.querySelector(".nav-item[data-page='home']").click();
+                alert("በተሳካ ሁኔታ ገብተዋል! (Logged in via Biometrics)");
+            } else {
+                alert("እባክዎ መጀመሪያ በስልክ ቁጥርዎ ይግቡ።");
+            }
+        }
     }
 
+    // ================= MODALS SETUP =================
+    document.getElementById("rechargeContent").innerHTML = `<div class="modal-header">💳 Recharge Wallet</div><p>Bank: Commercial Bank of Ethiopia</p>
+        <div class="form-group"><label>Account Name</label><div style="display:flex;"><input type="text" id="bankAccountName" value="Cotton Exporter PLC" readonly><button type="button" id="copyAccountName" class="copy-btn">Copy</button></div></div>
+        <div class="form-group"><label>Account Number</label><div style="display:flex;"><input type="text" id="bankAccountNumber" value="1000123456789" readonly><button type="button" id="copyAccountNumber" class="copy-btn">Copy</button></div></div>
+        <div class="form-group"><label>FT Reference Code</label><input type="text" id="ftCode" placeholder="e.g., FT26110L6GG0"></div>
+        <button id="confirmRecharge" class="btn">Submit</button><button class="btn-outline" id="closeRechargeModal">Cancel</button>`;
+
+    document.getElementById("withdrawContent").innerHTML = `<div class="modal-header">💸 Withdraw</div><p>Withdrawable Balance: <span id="withdrawableBalance">0</span> ETB<br>Min: 300 ETB</p>
+        <div class="form-group"><label>Amount</label><input type="number" id="withdrawAmount"></div>
+        <div class="form-group"><label>Account Name</label><input id="withdrawAccountName"></div>
+        <div class="form-group"><label>CBE Account</label><input id="withdrawAccountNumber"></div>
+        <div class="form-group"><label>Pay Password</label><input type="password" id="withdrawPayPassword" maxlength="6"></div>
+        <button id="confirmWithdraw" class="btn">Submit</button><button class="btn-outline" id="closeWithdrawModal">Cancel</button>`;
+
+    document.getElementById("investContent").innerHTML = `<div class="modal-header" id="investProductName"></div><p id="investDetails"></p>
+        <div class="form-group"><label>Pay Password</label><input type="password" id="investPayPassword" maxlength="6"></div>
+        <button id="confirmInvest" class="btn">Buy Now</button><button class="btn-outline" id="closeInvestModal">Cancel</button><div id="investError" class="warning"></div>`;
+
+    document.getElementById("cashGiftContent").innerHTML = `<div class="modal-header">🎁 Cash Gift</div><input type="text" id="giftCode" placeholder="Redemption code">
+        <button id="claimGift" class="btn mt-2">Claim</button><button class="btn-outline" id="closeGiftModal">Cancel</button>`;
+
+    document.getElementById("exchangeContent").innerHTML = `<div class="modal-header">🔄 Exchange</div><p>Wealth Wallet: <span id="wealthWalletAmount">0</span> ETB</p>
+        <div class="form-group"><label>Amount</label><input type="number" id="exchangeAmount"></div>
+        <button id="confirmExchange" class="btn">Exchange</button><button class="btn-outline" id="closeExchangeModal">Cancel</button>`;
+
+    setTimeout(() => {
+        document.getElementById("confirmRecharge").onclick = () => {
+            let ft = document.getElementById("ftCode").value.trim().toUpperCase();
+            let ftRecord = validFTTransactions.find(t => t.code === ft && !t.usedBy);
+            if (!ftRecord) { alert("Invalid FT code or already used."); return; }
+            let user = users.find(u => u.phone === currentUser);
+            user.balance += ftRecord.amount;
+            user.rechargeBalance += ftRecord.amount;
+            ftRecord.usedBy = currentUser;
+            addTransaction(currentUser, "recharge", ftRecord.amount, `Recharge via FT ${ft}`);
+            saveAllData();
+            refreshAllUI();
+            document.getElementById("rechargeModal").style.display = "none";
+            alert(`✅ Recharge successful!`);
+        };
+        document.getElementById("closeRechargeModal").onclick = () => document.getElementById("rechargeModal").style.display = "none";
+        document.getElementById("confirmWithdraw").onclick = () => {
+            let amount = parseFloat(document.getElementById("withdrawAmount").value);
+            let accName = document.getElementById("withdrawAccountName").value;
+            let accNum = document.getElementById("withdrawAccountNumber").value;
+            let payPass = document.getElementById("withdrawPayPassword").value;
+            let user = users.find(u => u.phone === currentUser);
+            if (isNaN(amount) || amount < 300) alert("Min 300 ETB");
+            else if (user.balance < amount) alert("Insufficient balance");
+            else if (payPass !== user.payPassword) alert("Incorrect pay password");
+            else if (!accName || !accNum) alert("Enter bank details");
+            else {
+                user.balance -= amount;
+                addTransaction(currentUser, "withdraw", -amount, `Withdraw to ${accName} - ${accNum}`);
+                saveAllData();
+                refreshAllUI();
+                document.getElementById("withdrawModal").style.display = "none";
+                alert(`Withdrawal request submitted.`);
+            }
+        };
+        document.getElementById("closeWithdrawModal").onclick = () => document.getElementById("withdrawModal").style.display = "none";
+        document.getElementById("closeInvestModal").onclick = () => document.getElementById("investModal").style.display = "none";
+        document.getElementById("claimGift").onclick = () => {
+            let code = document.getElementById("giftCode").value.trim().toUpperCase();
+            let gift = giftCodes.find(g => g.code === code);
+            if (!gift) { alert("Invalid code"); return; }
+            if (gift.usedBy) { alert("Code already used"); return; }
+            let user = users.find(u => u.phone === currentUser);
+            user.balance += gift.value;
+            gift.usedBy = currentUser;
+            addTransaction(currentUser, "gift", gift.value, `Redeemed code ${code}`);
+            saveAllData();
+            refreshAllUI();
+            document.getElementById("cashGiftModal").style.display = "none";
+            alert(`You received ${gift.value} ETB!`);
+        };
+        document.getElementById("closeGiftModal").onclick = () => document.getElementById("cashGiftModal").style.display = "none";
+        document.getElementById("confirmExchange").onclick = () => {
+            let amount = parseFloat(document.getElementById("exchangeAmount").value);
+            let user = users.find(u => u.phone === currentUser);
+            if (isNaN(amount) || amount <= 0) alert("Enter positive amount");
+            else if (user.wealthWallet < amount) alert("Insufficient wealth wallet");
+            else {
+                user.wealthWallet -= amount;
+                user.balance += amount;
+                addTransaction(currentUser, "exchange", amount, `Exchanged from wealth wallet`);
+                saveAllData();
+                refreshAllUI();
+                document.getElementById("exchangeModal").style.display = "none";
+                alert(`Exchanged successfully.`);
+            }
+        };
+        document.getElementById("closeExchangeModal").onclick = () => document.getElementById("exchangeModal").style.display = "none";
+    }, 50);
+
+    // ================= INIT =================
     loadData();
-    populateModals();
-    console.log("System ready. Demo user: 0947655291 / 123456");
 </script>
 </body>
 </html>
