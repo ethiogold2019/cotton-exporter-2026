@@ -152,6 +152,9 @@
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
+  // ================= VERITAS API KEY =================
+  const VERITAS_API_KEY = "sk_live_b1086f5fd264e09fe01cd975ad6e7892daab97769d13b95b";
+
   let currentUser = null;
   let users = {};
   let investments = {};
@@ -258,6 +261,33 @@
       const tx = { id, userPhone, type, amount, description: desc, timestamp: new Date().toISOString() };
       transactions[id] = tx;
       await set(ref(db, "cotton_transactions/" + id), tx);
+  }
+
+  // ================= VERITAS VERIFICATION FUNCTION =================
+  async function verifyPayment(provider, referenceNumber, extraData = {}) {
+      try {
+          const bodyData = {
+              provider: provider,
+              reference: referenceNumber,
+              ...extraData
+          };
+
+          const response = await fetch("https://api.veritas.et/v1/verify", {
+              method: 'POST',
+              headers: { 
+                  "Content-Type": "application/json",
+                  "Authorization": `Bearer ${VERITAS_API_KEY}` 
+              },
+              body: JSON.stringify(bodyData)
+          });
+          
+          const data = await response.json();
+          console.log(`Veritas Response (${provider}):`, data);
+          return data;
+      } catch (error) {
+          console.error("Verification Error:", error);
+          return null;
+      }
   }
 
   // ================= MAIN APP LOGIC =================
@@ -796,11 +826,21 @@
   }
 
   // ================= MODALS SETUP =================
-  document.getElementById("rechargeContent").innerHTML = `<div class="modal-header">💳 Recharge Wallet</div><p>Bank: Commercial Bank of Ethiopia</p>
-      <div class="form-group"><label>Account Name</label><div style="display:flex;"><input type="text" id="bankAccountName" value="Cotton Exporter PLC" readonly><button type="button" id="copyAccountName" class="copy-btn">Copy</button></div></div>
-      <div class="form-group"><label>Account Number</label><div style="display:flex;"><input type="text" id="bankAccountNumber" value="1000123456789" readonly><button type="button" id="copyAccountNumber" class="copy-btn">Copy</button></div></div>
-      <div class="form-group"><label>FT Reference Code</label><input type="text" id="ftCode" placeholder="e.g., FT26110L6GG0"></div>
-      <button id="confirmRecharge" class="btn">Submit</button><button class="btn-outline" id="closeRechargeModal">Cancel</button>`;
+  document.getElementById("rechargeContent").innerHTML = `<div class="modal-header">💳 Recharge Wallet</div>
+      <p style="font-size:0.85rem;color:#475569;margin-bottom:0.5rem;">Pay via Telebirr / Bank to our account and enter the receipt number below:</p>
+      <div class="form-group">
+          <label>Payment Method</label>
+          <select id="rechargeProvider">
+              <option value="telebirr">Telebirr</option>
+              <option value="cbe">CBE (Commercial Bank of Ethiopia)</option>
+              <option value="abyssinia">Bank of Abyssinia</option>
+              <option value="mpesa">M-Pesa</option>
+          </select>
+      </div>
+      <div class="form-group"><label>Amount (ETB)</label><input type="number" id="rechargeAmount" placeholder="e.g. 500"></div>
+      <div class="form-group"><label>Receipt / Txn Reference No</label><input type="text" id="ftCode" placeholder="e.g., FT26110L6GG0"></div>
+      <button id="confirmRecharge" class="btn">Verify & Submit</button>
+      <button class="btn-outline" id="closeRechargeModal">Cancel</button>`;
 
   document.getElementById("withdrawContent").innerHTML = `<div class="modal-header">💸 Withdraw</div><p>Withdrawable Balance: <span id="withdrawableBalance">0</span> ETB<br>Min: 300 ETB</p>
       <div class="form-group"><label>Amount</label><input type="number" id="withdrawAmount"></div>
@@ -821,44 +861,49 @@
       <button id="confirmExchange" class="btn">Exchange</button><button class="btn-outline" id="closeExchangeModal">Cancel</button>`;
 
   setTimeout(() => {
-      document.getElementById("copyAccountName").onclick = () => {
-          navigator.clipboard.writeText("Cotton Exporter PLC");
-          alert("Copied!");
-      };
-      document.getElementById("copyAccountNumber").onclick = () => {
-          navigator.clipboard.writeText("1000123456789");
-          alert("Copied!");
-      };
       document.getElementById("confirmRecharge").onclick = async () => {
-          let ft = document.getElementById("ftCode").value.trim().toUpperCase();
+          let provider = document.getElementById("rechargeProvider").value;
+          let amount = parseFloat(document.getElementById("rechargeAmount").value);
+          let refCode = document.getElementById("ftCode").value.trim();
           
+          if (isNaN(amount) || amount < 10) { alert("Enter valid amount (Min 10 ETB)"); return; }
+          if (!refCode) { alert("Enter Receipt / Reference Number"); return; }
+
           showLoading(true);
-          try {
-              const ftSnap = await get(ref(db, "cotton_ft_transactions/" + ft));
-              if (!ftSnap.exists() || ftSnap.val().usedBy) { 
-                  alert("Invalid FT code or already used."); 
-                  showLoading(false);
-                  return; 
-              }
-              
-              let ftRecord = ftSnap.val();
-              let user = users[currentUser];
-              
-              user.balance = (user.balance || 0) + ftRecord.amount;
-              user.rechargeBalance = (user.rechargeBalance || 0) + ftRecord.amount;
-              
-              await set(ref(db, "cotton_ft_transactions/" + ft + "/usedBy"), currentUser);
-              await addTransaction(currentUser, "recharge", ftRecord.amount, `Recharge via FT ${ft}`);
-              await saveUser(currentUser);
-              
-              document.getElementById("rechargeModal").style.display = "none";
-              refreshAllUI();
-              alert(`✅ Recharge successful!`);
-          } catch(e) {
-              alert("Error: " + e.message);
+          
+          let extraData = {};
+          if (provider === "cbe") {
+              let suffix = prompt("የCBE ሂሳብ ቁጥርዎን የመጨረሻ 8 አሃዝ ያስገቡ (ለ CBE ብቻ)፦");
+              if (!suffix) { showLoading(false); return; }
+              extraData = { accountSuffix: suffix };
           }
+
+          let result = await verifyPayment(provider, refCode, extraData);
+          
+          if (result && (result.success === true || result.status === "success")) { 
+              let paidAmount = parseFloat(result.amount) || parseFloat(result.data?.amount) || 0;
+              
+              if (paidAmount >= amount) {
+                  let user = users[currentUser];
+                  user.balance = (user.balance || 0) + paidAmount;
+                  user.rechargeBalance = (user.rechargeBalance || 0) + paidAmount;
+                  
+                  await saveUser(currentUser);
+                  await addTransaction(currentUser, "recharge", paidAmount, `${provider.toUpperCase()} Recharge: ${refCode}`);
+                  refreshAllUI();
+                  
+                  document.getElementById("rechargeModal").style.display = "none";
+                  alert(`✅ ክፍያ ተረጋግጧል! ${paidAmount} ETB ተጨምሯል።`);
+              } else {
+                  alert(`❌ ያስገቡት መጠን (${amount}) እና የተከፈለው መጠን (${paidAmount}) አይመሳሰሉም።`);
+              }
+          } else {
+              alert("❌ ክፍያው አልተረጋገጠም። እባክዎ የደረሰኝ ቁጥሩን ያረጋግጡ።");
+          }
+          
           showLoading(false);
       };
+      
       document.getElementById("closeRechargeModal").onclick = () => document.getElementById("rechargeModal").style.display = "none";
       
       document.getElementById("confirmWithdraw").onclick = async () => {
