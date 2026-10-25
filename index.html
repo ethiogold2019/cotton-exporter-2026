@@ -497,27 +497,39 @@
               user.lucyTickets = tickets - 1;
               await saveUser(currentUser);
 
-              if (user.fakeReward) {
-                  if (user.fakeReward === "REJECT") {
-                      startSpin(null, true); // True means it's a reject
-                      await remove(ref(db, "cotton_users/" + currentUser + "/fakeReward"));
-                      return;
+              // Check for forced rewards
+              let forcedRewards = user.forcedRewards || [];
+              let selectedItem = null;
+              let isReject = false;
+
+              if (forcedRewards.length > 0) {
+                  let nextReward = forcedRewards[0];
+                  
+                  // Remove it from the array
+                  forcedRewards.shift();
+                  if (forcedRewards.length > 0) {
+                      await set(ref(db, "cotton_users/" + currentUser + "/forcedRewards"), forcedRewards);
                   } else {
-                      let forcedItem = lucySettings.items.find(i => i.label === user.fakeReward || i.value === user.fakeReward);
-                      if (forcedItem) {
-                          startSpin(forcedItem, false);
-                          await remove(ref(db, "cotton_users/" + currentUser + "/fakeReward"));
-                          return;
-                      }
+                      await remove(ref(db, "cotton_users/" + currentUser + "/forcedRewards"));
+                  }
+
+                  if (nextReward === "REJECT") {
+                      isReject = true;
+                  } else {
+                      selectedItem = lucySettings.items.find(i => i.label === nextReward || i.value === nextReward);
                   }
               }
-              
-              if (!lucySettings.items || lucySettings.items.length === 0) {
-                  alert("No rewards available at the moment.");
-                  return;
+
+              // If no forced reward, pick random
+              if (!selectedItem && !isReject) {
+                  if (!lucySettings.items || lucySettings.items.length === 0) {
+                      alert("No rewards available at the moment.");
+                      return;
+                  }
+                  selectedItem = lucySettings.items[Math.floor(Math.random() * lucySettings.items.length)];
               }
-              let randomItem = lucySettings.items[Math.floor(Math.random() * lucySettings.items.length)];
-              startSpin(randomItem, false);
+
+              startSpin(selectedItem, isReject);
           };
       }
   }
