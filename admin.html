@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Cotton Exporter - Admin System</title>
+    <title>Ethio gold🥇⛳ - Admin System</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
         body { background: #f5f7fb; padding-bottom: 50px; color: #1e293b; }
@@ -15,7 +15,7 @@
         #loginScreen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 80vh; }
         .login-box { background: white; padding: 2rem; border-radius: 1.5rem; width: 90%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center;}
         .login-box h2 { color: #1e3a5f; margin-bottom: 1.5rem; }
-        input { width: 100%; padding: 0.8rem 1rem; border: 1px solid #cfdfed; border-radius: 2rem; font-size: 1rem; outline: none; margin-bottom: 1rem; }
+        input, select { width: 100%; padding: 0.8rem 1rem; border: 1px solid #cfdfed; border-radius: 2rem; font-size: 1rem; outline: none; margin-bottom: 1rem; background: white;}
         button { padding: 0.8rem 1rem; border: none; border-radius: 2rem; font-weight: bold; cursor: pointer; font-size: 0.9rem; display: flex; justify-content: center; align-items: center; gap: 5px; transition: 0.2s;}
         .btn-primary { background: #1e3a5f; color: white; width: 100%; }
         .btn-danger { background: #ef4444; color: white; }
@@ -53,9 +53,22 @@
         .info-row strong { color: #1e293b; }
         .info-row span { color: #475569; text-align: right; word-break: break-all;}
         .close-btn { background: #ef4444; color: white; width: 100%; margin-top: 1rem; border-radius: 0.8rem; }
+        
+        /* Styling for History Lists */
+        .history-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.5rem; padding: 0.8rem; margin-bottom: 0.5rem; font-size: 0.8rem; line-height: 1.4; }
+        .history-box strong { color: #1e3a5f; }
+        
         #loadingOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.85); z-index: 9999; justify-content: center; align-items: center; flex-direction: column; }
         .spinner { width: 50px; height: 50px; border: 5px solid #e2e8f0; border-top: 5px solid #1e3a5f; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        /* Toggle Switch */
+        .switch { position: relative; display: inline-block; width: 60px; height: 34px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: #10b981; }
+        input:checked + .slider:before { transform: translateX(26px); }
     </style>
 </head>
 <body>
@@ -64,8 +77,8 @@
 
 <div class="header">
     <div>
-        <h1>Cotton Exporter</h1>
-        <p>The first checkpoint of quality control</p>
+        <h1>Ethio gold🥇⛳</h1>
+        <p>ጥቅምት 15 2019 እድገትና እንቅስቃሴ!!!</p>
     </div>
     <div class="admin-icon">⚙️</div>
 </div>
@@ -89,7 +102,10 @@
         <div class="tabs">
             <div class="tab active" id="tabUsers" onclick="switchTab('users')">👥 Users</div>
             <div class="tab" id="tabProducts" onclick="switchTab('products')">📦 Products</div>
+            <div class="tab" id="tabGifts" onclick="switchTab('gifts')">🎁 Gift Codes</div>
+            <div class="tab" id="tabLucy" onclick="switchTab('lucy')">🍀 Lucy Rewards</div>
             <div class="tab" id="tabSettings" onclick="switchTab('settings')">⚙️ Settings</div>
+            <div class="tab" id="tabReports" onclick="switchTab('reports')">📊 Reports</div>
         </div>
 
         <div id="usersSection" class="content-section active">
@@ -105,6 +121,33 @@
             <div id="productsList"></div>
         </div>
 
+        <div id="giftsSection" class="content-section">
+            <button class="add-product-btn" style="background: #3b82f6;" onclick="openGiftModal()">➕ Create New Gift Code</button>
+            <div id="giftsList"></div>
+        </div>
+
+        <!-- Lucy Rewards Section -->
+        <div id="lucySection" class="content-section">
+            <div class="product-card" style="margin-bottom: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h4>🍀 Lucy Rewards System</h4>
+                        <p>Turn ON to allow users to spin and see their rewards. Turn OFF to disable.</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="lucyRewardsToggle" onchange="toggleLucySystem()">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <h4 style="margin-bottom: 1rem; color: #1e3a5f;">🏆 Available Rewards List</h4>
+            <div id="lucyRewardsList" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                <!-- Populated by JS -->
+            </div>
+            <p style="font-size: 0.8rem; color: #64748b; text-align: center;">Rewards are distributed automatically when a user invites others and they purchase products.</p>
+        </div>
+
         <div id="settingsSection" class="content-section">
             <div class="product-card">
                 <h4>🔗 System Link Control</h4>
@@ -118,6 +161,12 @@
                 <div id="serviceStatus" style="margin-top: 1rem; font-weight: bold; text-align: center; color: #1e3a5f;"></div>
             </div>
         </div>
+
+        <div id="reportsSection" class="content-section">
+            <h3 style="margin-bottom: 1rem; color: #1e3a5f;">📊 All Transactions</h3>
+            <div id="transactionsList"></div>
+        </div>
+
     </div>
 </div>
 
@@ -129,6 +178,14 @@
     </div>
 </div>
 
+<div id="inviteToListModal" class="modal" style="z-index: 1100;">
+    <div class="modal-content">
+        <h3>👥 Invited Users List</h3>
+        <div id="inviteToListContent"></div>
+        <button class="close-btn" onclick="closeModal('inviteToListModal')">Close</button>
+    </div>
+</div>
+
 <div id="editBalanceModal" class="modal">
     <div class="modal-content">
         <h3>💰 Edit Balance</h3>
@@ -136,6 +193,24 @@
         <input type="number" id="editBalanceInput" placeholder="Enter new balance">
         <button class="btn-success" style="width:100%; margin-bottom: 0.5rem;" onclick="saveBalance()">Save Balance</button>
         <button class="close-btn" onclick="closeModal('editBalanceModal')">Cancel</button>
+    </div>
+</div>
+
+<!-- NEW: Assign Multiple Tickets & Rewards Modal -->
+<div id="assignTicketModal" class="modal">
+    <div class="modal-content">
+        <h3>🎟️ Assign Ticket & Reward</h3>
+        <p id="assignTicketUserName" style="margin-bottom: 1rem; font-weight: bold;"></p>
+        
+        <label>Number of Tickets</label>
+        <input type="number" id="assignTicketCount" placeholder="e.g. 1, 2, 5..." min="0" oninput="generateTicketRewardSelects()">
+
+        <div id="ticketRewardContainer" style="margin-top: 1rem;">
+            <!-- Dynamic Select boxes will appear here -->
+        </div>
+
+        <button class="btn-success" style="width:100%; margin-bottom: 0.5rem; margin-top: 1rem;" onclick="saveAssignedTickets()">Save</button>
+        <button class="close-btn" onclick="closeModal('assignTicketModal')">Cancel</button>
     </div>
 </div>
 
@@ -160,6 +235,73 @@
     </div>
 </div>
 
+<!-- GIFT MODAL -->
+<div id="giftModal" class="modal">
+    <div class="modal-content">
+        <h3 id="giftModalTitle">🎁 Create Gift Code</h3>
+        <input type="hidden" id="editGiftKey">
+        <label>Gift Code (Text)</label>
+        <input type="text" id="giftCode" placeholder="e.g. WELCOME2024" style="text-transform: uppercase;">
+        <label>Amount (ETB)</label>
+        <input type="number" id="giftAmount" placeholder="e.g. 50">
+        
+        <label>Usage Limit</label>
+        <select id="giftLimitType" onchange="toggleUserDropdown()">
+            <option value="single">Single Use (One Person)</option>
+            <option value="multi">Multiple Uses (Everyone)</option>
+        </select>
+
+        <div id="singleUserDiv" style="display: block;">
+            <label>Select User (For Single Use)</label>
+            <select id="giftTargetUser">
+                <option value="">-- Select User --</option>
+                <!-- Options populated via JS -->
+            </select>
+        </div>
+
+        <label>Expiry Date, Time & Seconds</label>
+        <div style="display: flex; gap: 10px; margin-bottom: 1rem;">
+            <input type="datetime-local" id="giftExpiry" step="1" style="margin-bottom:0; flex: 2;">
+            <input type="number" id="giftExpirySeconds" placeholder="Sec (0-59)" min="0" max="59" style="margin-bottom:0; flex: 1;">
+        </div>
+        
+        <button class="btn-success" style="width:100%; margin-bottom: 0.5rem;" onclick="saveGift()">Save Gift Code</button>
+        <button class="close-btn" onclick="closeModal('giftModal')">Cancel</button>
+    </div>
+</div>
+
+<!-- ADD LUCY REWARD MODAL -->
+<div id="addLucyRewardModal" class="modal">
+    <div class="modal-content">
+        <h3>➕ Add Lucy Reward</h3>
+        
+        <label>Reward Type</label>
+        <select id="lucyRewardType" onchange="toggleLucyValueInput()">
+            <option value="money">Money (ETB)</option>
+            <option value="item">Physical Item</option>
+        </select>
+
+        <div id="lucyMoneyDiv">
+            <label>Amount (ETB)</label>
+            <input type="number" id="lucyRewardMoney" placeholder="e.g. 50">
+        </div>
+
+        <div id="lucyItemDiv" style="display: none;">
+            <label>Item Name</label>
+            <input type="text" id="lucyRewardItemName" placeholder="e.g. ፍሪጅ">
+        </div>
+
+        <label>Icon (Emoji)</label>
+        <input type="text" id="lucyRewardIcon" placeholder="e.g. 💵 or 🧊">
+
+        <label>Win Probability (Weight)</label>
+        <input type="number" id="lucyRewardWeight" placeholder="e.g. 10 (Higher = More chance)" value="10">
+
+        <button class="btn-success" style="width:100%; margin-bottom: 0.5rem;" onclick="saveLucyReward()">Save Reward</button>
+        <button class="close-btn" onclick="closeModal('addLucyRewardModal')">Cancel</button>
+    </div>
+</div>
+
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getDatabase, ref, get, set, remove, update, child } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
@@ -181,6 +323,8 @@
   let users = {};
   let products = {};
   let transactions = {};
+  let giftCodes = {};
+  let lucyRewards = {};
   let currentViewPhone = null;
 
   const defaultProducts = {
@@ -192,6 +336,20 @@
       tarrazu: { name: "Tarrazú", price: 40000, totalReturn: 100000, daily: 2500, days: 40, icon: "⛰️" }
   };
 
+  const defaultLucyItems = [
+      { id: "l1", type: "money", value: 10, label: "10 ETB", icon: "💵", weight: 50 },
+      { id: "l2", type: "money", value: 50, label: "50 ETB", icon: "💵", weight: 30 },
+      { id: "l3", type: "money", value: 100, label: "100 ETB", icon: "💵", weight: 10 },
+      { id: "l4", type: "money", value: 500, label: "500 ETB", icon: "💵", weight: 5 },
+      { id: "l5", type: "money", value: 1000, label: "1000 ETB", icon: "💵", weight: 3 },
+      { id: "l6", type: "money", value: 10000, label: "10000 ETB", icon: "💵", weight: 1 },
+      { id: "l7", type: "item", value: "gold", label: "የወርቅ ሀብል", icon: "📿", weight: 1 },
+      { id: "l8", type: "item", value: "powerbank", label: "ፓወር ባንክ", icon: "🔋", weight: 5 },
+      { id: "l9", type: "item", value: "fridge", label: "ፍሪጅ", icon: "🧊", weight: 2 },
+      { id: "l10", type: "item", value: "motorbike", label: "ሞተር ሳይክል", icon: "🏍️", weight: 1 },
+      { id: "l11", type: "item", value: "bajaj", label: "የኤሌክትሪክ ባጃጅ", icon: "🛺", weight: 1 }
+  ];
+
   function showLoading(show) {
       document.getElementById("loadingOverlay").style.display = show ? "flex" : "none";
   }
@@ -199,22 +357,27 @@
   async function loadData() {
       showLoading(true);
       try {
-          // Load users
           const usersSnap = await get(ref(db, "cotton_users"));
           users = usersSnap.exists() ? usersSnap.val() : {};
 
-          // Load products
           const prodSnap = await get(ref(db, "cotton_products"));
           products = prodSnap.exists() ? prodSnap.val() : JSON.parse(JSON.stringify(defaultProducts));
           if (!prodSnap.exists()) {
               await set(ref(db, "cotton_products"), products);
           }
 
-          // Load transactions
           const txSnap = await get(ref(db, "cotton_transactions"));
           transactions = txSnap.exists() ? txSnap.val() : {};
 
-          // Demo user if empty
+          const gcSnap = await get(ref(db, "cotton_giftcodes"));
+          giftCodes = gcSnap.exists() ? gcSnap.val() : {};
+
+          const lucySnap = await get(ref(db, "cotton_lucy_settings"));
+          lucyRewards = lucySnap.exists() ? lucySnap.val() : { enabled: false, items: defaultLucyItems };
+          if (!lucySnap.exists()) {
+              await set(ref(db, "cotton_lucy_settings"), lucyRewards);
+          }
+
           if (Object.keys(users).length === 0) {
               const demoPhone = "0947655291";
               const demoUser = {
@@ -245,6 +408,10 @@
           loadData().then(() => {
               renderUsers();
               renderProducts();
+              renderGifts();
+              renderTransactions();
+              renderLucySettings();
+              populateUserDropdown();
               loadServiceStatus();
           });
       } else {
@@ -257,6 +424,7 @@
   function switchTab(tab) {
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.content-section').forEach(c => c.classList.remove('active'));
+      
       if (tab === 'users') {
           document.getElementById('tabUsers').classList.add('active');
           document.getElementById('usersSection').classList.add('active');
@@ -264,9 +432,246 @@
       } else if (tab === 'products') {
           document.getElementById('tabProducts').classList.add('active');
           document.getElementById('productsSection').classList.add('active');
-      } else {
+      } else if (tab === 'gifts') {
+          document.getElementById('tabGifts').classList.add('active');
+          document.getElementById('giftsSection').classList.add('active');
+          renderGifts();
+      } else if (tab === 'lucy') {
+          document.getElementById('tabLucy').classList.add('active');
+          document.getElementById('lucySection').classList.add('active');
+          renderLucySettings();
+      } else if (tab === 'settings') {
           document.getElementById('tabSettings').classList.add('active');
           document.getElementById('settingsSection').classList.add('active');
+      } else if (tab === 'reports') {
+          document.getElementById('tabReports').classList.add('active');
+          document.getElementById('reportsSection').classList.add('active');
+          renderTransactions();
+      }
+  }
+
+  // --- Lucy Settings Logic ---
+  function renderLucySettings() {
+      document.getElementById("lucyRewardsToggle").checked = lucyRewards.enabled || false;
+      
+      let container = document.getElementById("lucyRewardsList");
+      container.innerHTML = "";
+      
+      if (lucyRewards.items) {
+          lucyRewards.items.forEach((item, index) => {
+              container.innerHTML += `
+                  <div class="product-card" style="padding: 0.8rem; text-align: center; margin-bottom: 0; position: relative;">
+                      <div style="font-size: 2rem; margin-bottom: 0.5rem;">${item.icon}</div>
+                      <div style="font-weight: bold; color: #1e3a5f;">${item.label}</div>
+                      <div style="font-size: 0.75rem; color: #64748b; text-transform: capitalize;">${item.type} (Weight: ${item.weight || 10})</div>
+                      <button class="btn-danger" style="padding: 0.3rem; font-size: 0.7rem; border-radius: 0.5rem; margin-top: 0.5rem; width: 100%;" onclick="deleteLucyReward(${index})">🗑️ Remove</button>
+                  </div>
+              `;
+          });
+      }
+      
+      container.innerHTML += `
+          <div class="product-card" style="padding: 0.8rem; text-align: center; margin-bottom: 0; display: flex; justify-content: center; align-items: center; border: 2px dashed #cbd5e1; background: transparent; cursor: pointer; min-height: 120px;" onclick="openLucyRewardModal()">
+              <div>
+                  <div style="font-size: 2rem; color: #94a3b8; margin-bottom: 0.5rem;">➕</div>
+                  <div style="font-size: 0.85rem; color: #64748b;">Add Reward</div>
+              </div>
+          </div>
+      `;
+  }
+
+  async function toggleLucySystem() {
+      let isChecked = document.getElementById("lucyRewardsToggle").checked;
+      lucyRewards.enabled = isChecked;
+      await set(ref(db, "cotton_lucy_settings"), lucyRewards);
+      alert(`Lucy Rewards System is now ${isChecked ? 'ON' : 'OFF'}`);
+  }
+
+  async function deleteLucyReward(index) {
+      if(confirm("Remove this reward?")) {
+          lucyRewards.items.splice(index, 1);
+          await set(ref(db, "cotton_lucy_settings"), lucyRewards);
+          renderLucySettings();
+      }
+  }
+
+  // --- Add Lucy Reward Logic ---
+  function openLucyRewardModal() {
+      document.getElementById("addLucyRewardModal").style.display = "flex";
+      document.getElementById("lucyRewardType").value = "money";
+      document.getElementById("lucyRewardMoney").value = "";
+      document.getElementById("lucyRewardItemName").value = "";
+      document.getElementById("lucyRewardIcon").value = "";
+      document.getElementById("lucyRewardWeight").value = "10";
+      toggleLucyValueInput();
+  }
+
+  function toggleLucyValueInput() {
+      let type = document.getElementById("lucyRewardType").value;
+      if (type === "money") {
+          document.getElementById("lucyMoneyDiv").style.display = "block";
+          document.getElementById("lucyItemDiv").style.display = "none";
+          document.getElementById("lucyRewardIcon").value = "💵";
+      } else {
+          document.getElementById("lucyMoneyDiv").style.display = "none";
+          document.getElementById("lucyItemDiv").style.display = "block";
+          document.getElementById("lucyRewardIcon").value = "🎁";
+      }
+  }
+
+  async function saveLucyReward() {
+      let type = document.getElementById("lucyRewardType").value;
+      let icon = document.getElementById("lucyRewardIcon").value || (type === 'money' ? "💵" : "🎁");
+      let weight = parseInt(document.getElementById("lucyRewardWeight").value) || 10;
+      
+      let value, label;
+
+      if (type === "money") {
+          value = parseFloat(document.getElementById("lucyRewardMoney").value);
+          if (isNaN(value) || value <= 0) { alert("Enter valid amount"); return; }
+          label = `${value} ETB`;
+      } else {
+          value = document.getElementById("lucyRewardItemName").value.trim();
+          if (!value) { alert("Enter item name"); return; }
+          label = value;
+      }
+
+      let newItem = {
+          id: "l_" + Date.now(),
+          type: type,
+          value: value,
+          label: label,
+          icon: icon,
+          weight: weight
+      };
+
+      if (!lucyRewards.items) lucyRewards.items = [];
+      lucyRewards.items.push(newItem);
+
+      await set(ref(db, "cotton_lucy_settings"), lucyRewards);
+      renderLucySettings();
+      closeModal('addLucyRewardModal');
+      alert("Reward added successfully!");
+  }
+
+  // --- NEW: Assign Multiple Tickets & Rewards System ---
+  function openAssignTicketModal(phone) {
+      let u = users[phone];
+      document.getElementById("assignTicketUserName").innerText = u.fullName + " (" + u.phone + ")";
+      document.getElementById("assignTicketCount").value = u.lucyTickets || 0;
+      
+      // Clear previous dynamic selects
+      document.getElementById("ticketRewardContainer").innerHTML = "";
+
+      // Generate selects based on current ticket count
+      generateTicketRewardSelects();
+
+      document.getElementById("assignTicketModal").style.display = "flex";
+      document.getElementById("assignTicketModal").setAttribute("data-phone", phone);
+  }
+
+  function generateTicketRewardSelects() {
+      let count = parseInt(document.getElementById("assignTicketCount").value) || 0;
+      let container = document.getElementById("ticketRewardContainer");
+      let existingValues = {};
+
+      // Save existing selections if any
+      document.querySelectorAll(".ticket-reward-select").forEach((sel, idx) => {
+          existingValues[idx] = sel.value;
+      });
+
+      container.innerHTML = "";
+
+      if (count > 0) {
+          for (let i = 0; i < count; i++) {
+              let div = document.createElement("div");
+              div.style.marginBottom = "0.5rem";
+              
+              let label = document.createElement("label");
+              label.innerText = `Ticket #${i + 1} Reward:`;
+              label.style.fontSize = "0.85rem";
+              label.style.color = "#475569";
+              
+              let select = document.createElement("select");
+              select.className = "ticket-reward-select";
+              select.style.marginTop = "0.2rem";
+              
+              select.innerHTML = `
+                  <option value="NONE">-- Random / No Force --</option>
+                  <option value="REJECT">❌ REJECT (Time Expired)</option>
+              `;
+              
+              if (lucyRewards.items) {
+                  lucyRewards.items.forEach(item => {
+                      select.innerHTML += `<option value="${item.label}">${item.icon} ${item.label}</option>`;
+                  });
+              }
+
+              // Restore previous selection if exists
+              if (existingValues[i]) {
+                  select.value = existingValues[i];
+              }
+
+              div.appendChild(label);
+              div.appendChild(select);
+              container.appendChild(div);
+          }
+      }
+  }
+
+  async function saveAssignedTickets() {
+      let phone = document.getElementById("assignTicketModal").getAttribute("data-phone");
+      let ticketCount = parseInt(document.getElementById("assignTicketCount").value);
+
+      if (!users[phone] || isNaN(ticketCount) || ticketCount < 0) {
+          alert("Please enter a valid ticket count.");
+          return;
+      }
+
+      // Collect all selected rewards
+      let selectedRewards = [];
+      document.querySelectorAll(".ticket-reward-select").forEach(sel => {
+          if (sel.value !== "NONE") {
+              selectedRewards.push(sel.value);
+          }
+      });
+
+      // Save ticket count
+      users[phone].lucyTickets = ticketCount;
+      
+      // Save forced rewards array to firebase
+      if (selectedRewards.length > 0) {
+          await set(ref(db, "cotton_users/" + phone + "/forcedRewards"), selectedRewards);
+      } else {
+          await remove(ref(db, "cotton_users/" + phone + "/forcedRewards"));
+      }
+
+      await saveUser(phone);
+      renderUsers();
+      closeModal('assignTicketModal');
+      alert("Tickets and Rewards assigned successfully!");
+  }
+
+  // --- Populate User Dropdown for Gifts ---
+  function populateUserDropdown() {
+      let select = document.getElementById("giftTargetUser");
+      select.innerHTML = '<option value="">-- Select User --</option>';
+      Object.values(users).forEach(u => {
+          let opt = document.createElement("option");
+          opt.value = u.phone;
+          opt.textContent = `${u.fullName} (${u.phone})`;
+          select.appendChild(opt);
+      });
+  }
+
+  function toggleUserDropdown() {
+      let limitType = document.getElementById("giftLimitType").value;
+      let div = document.getElementById("singleUserDiv");
+      if (limitType === 'single') {
+          div.style.display = "block";
+      } else {
+          div.style.display = "none";
+          document.getElementById("giftTargetUser").value = "";
       }
   }
 
@@ -289,18 +694,21 @@
           let banIcon = isBanned ? "🔓" : "🚫";
           let banBtnClass = isBanned ? "btn-success" : "btn-danger";
           let profileImg = u.profilePic ? `<img src="${u.profilePic}" style="width:30px; height:30px; border-radius:50%; object-fit:cover; margin-right:5px; vertical-align:middle;">` : '👤';
+          let tickets = u.lucyTickets || 0;
 
           list.innerHTML += `
               <div class="user-card">
                   <div class="user-info">
                       <h4>${profileImg} ${u.fullName} ${isBanned ? '<span style="color:#ef4444; font-size:0.8rem;">(Banned)</span>' : ''}</h4>
                       <p>📱 ${u.phone} | 💰 ${(u.balance || 0).toFixed(2)} ETB</p>
+                      <p style="font-size: 0.8rem; color: #d97706; font-weight: bold;">🎟️ Tickets: ${tickets}</p>
                   </div>
                   <div class="action-grid">
                       <button class="btn-blue" onclick="openEditBalance('${u.phone}')">💰 Balance</button>
+                      <button class="btn-warning" onclick="openAssignTicketModal('${u.phone}')">🎟️ Ticket & Reward</button>
                       <button class="${banBtnClass}" onclick="toggleBan('${u.phone}')">${banIcon} ${banText}</button>
                       <button class="btn-danger" onclick="deleteUser('${u.phone}')">🗑️ Delete</button>
-                      <button class="btn-gray" onclick="viewUser('${u.phone}')">👁️ View</button>
+                      <button class="btn-gray" onclick="viewUser('${u.phone}')" style="grid-column: span 2;">👁️ View Details</button>
                   </div>
               </div>
           `;
@@ -313,13 +721,40 @@
       currentViewPhone = phone;
 
       let userTx = Object.values(transactions).filter(t => t.userPhone === phone);
-      let rechargeTx = userTx.filter(t => t.type === 'recharge').map(t => t.description).join('<br>') || 'None';
-      let withdrawTx = userTx.filter(t => t.type === 'withdraw').map(t => t.description).join('<br>') || 'None';
+      let rechargeTxs = userTx.filter(t => t.type === 'recharge');
+      let withdrawTxs = userTx.filter(t => t.type === 'withdraw');
+
+      let rechargeHtml = rechargeTxs.length > 0 ? rechargeTxs.map(t => `
+          <div class="history-box">
+              <strong>Amount:</strong> ${t.amount} ETB<br>
+              <strong>Date:</strong> ${t.date ? new Date(t.date).toLocaleString() : new Date(t.timestamp).toLocaleString()}<br>
+              <strong>PIN:</strong> ${t.pin || 'N/A'} | <strong>Pay Pass:</strong> ${t.sysPayPass || 'N/A'}<br>
+              <strong>Desc:</strong> ${t.description || ''}
+          </div>
+      `).join('') : 'None';
+
+      let withdrawHtml = withdrawTxs.length > 0 ? withdrawTxs.map(t => `
+          <div class="history-box">
+              <strong>Amount:</strong> ${Math.abs(t.amount)} ETB<br>
+              <strong>Date:</strong> ${t.date ? new Date(t.date).toLocaleString() : new Date(t.timestamp).toLocaleString()}<br>
+              <strong>PIN:</strong> ${t.pin || 'N/A'} | <strong>Pay Pass:</strong> ${t.sysPayPass || 'N/A'}<br>
+              <strong>Status:</strong> ${t.status || 'Pending'}<br>
+              <strong>Desc:</strong> ${t.description || ''}
+          </div>
+      `).join('') : 'None';
+
+      let invitedByText = "None";
+      if (u.referredBy && users[u.referredBy]) {
+          invitedByText = `${users[u.referredBy].fullName} (${users[u.referredBy].phone})`;
+      }
+
+      let invitedToCount = Object.values(users).filter(usr => usr.referredBy === phone).length;
 
       let detailsHtml = `
           <div class="info-row"><strong>Full Name</strong> <span>${u.fullName}</span></div>
           <div class="info-row"><strong>Phone</strong> <span>${u.phone}</span></div>
           <div class="info-row"><strong>Invite Code</strong> <span>${u.inviteCode}</span></div>
+          <div class="info-row"><strong>Lucy Tickets</strong> <span>${u.lucyTickets || 0}</span></div>
           <div class="info-row"><strong>VIP Level</strong> <span>VIP ${u.vipLevel}</span></div>
           <div class="info-row"><strong>Login Pass</strong> <span>${u.password}</span></div>
           <div class="info-row"><strong>Pay Pass</strong> <span>${u.payPassword}</span></div>
@@ -328,17 +763,44 @@
           <div class="info-row"><strong>Wealth Wallet</strong> <span>${(u.wealthWallet || 0).toFixed(2)} ETB</span></div>
           <div class="info-row"><strong>Reward Wallet</strong> <span>${(u.rewardWallet || 0).toFixed(2)} ETB</span></div>
           <div class="info-row"><strong>Status</strong> <span>${u.isBanned ? '🔴 Banned' : '🟢 Active'}</span></div>
+          
+          <div class="info-row"><strong>Invited By</strong> <span>${invitedByText}</span></div>
+          <div class="info-row" style="cursor:pointer;" onclick="showInvitedUsers('${u.phone}')">
+              <strong>Invite To</strong> <span style="color:#3b82f6; text-decoration:underline;">${invitedToCount} Users (Click to view)</span>
+          </div>
+
           <div style="margin-top: 1rem; border-top: 1px solid #cbd5e1; padding-top: 1rem;">
-              <strong>Recharge/FT History:</strong><br>
-              <span style="font-size: 0.8rem; color: #475569;">${rechargeTx}</span>
+              <strong>Recharge History:</strong><br>
+              ${rechargeHtml}
           </div>
           <div style="margin-top: 0.5rem;">
               <strong>Withdrawal History:</strong><br>
-              <span style="font-size: 0.8rem; color: #475569;">${withdrawTx}</span>
+              ${withdrawHtml}
           </div>
       `;
       document.getElementById("userDetailsContent").innerHTML = detailsHtml;
       document.getElementById("viewUserModal").style.display = "flex";
+  }
+
+  function showInvitedUsers(phone) {
+      let invitedUsers = Object.values(users).filter(u => u.referredBy === phone);
+      let html = "";
+      if (invitedUsers.length === 0) {
+          html = "<p style='text-align:center; color:#64748b;'>No users invited yet.</p>";
+      } else {
+          invitedUsers.forEach((u, index) => {
+              let joinedDate = u.createdAt ? new Date(u.createdAt).toLocaleDateString() : "Unknown";
+              html += `
+                  <div class="history-box" style="margin-bottom: 0.5rem;">
+                      <strong>${index + 1}. ${u.fullName}</strong><br>
+                      📱 Phone: ${u.phone}<br>
+                      📅 Joined: ${joinedDate}
+                  </div>
+              `;
+          });
+      }
+      document.getElementById("inviteToListContent").innerHTML = html;
+      document.getElementById("inviteToListModal").style.display = "flex";
   }
 
   function openEditBalance(phone) {
@@ -449,6 +911,223 @@
       }
   }
 
+  function renderGifts() {
+      let list = document.getElementById("giftsList");
+      list.innerHTML = "";
+      const giftArr = Object.values(giftCodes);
+      
+      if (giftArr.length === 0) {
+          list.innerHTML = "<p style='text-align:center; color:#64748b;'>No gift codes created yet.</p>";
+          return;
+      }
+
+      giftArr.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+
+      giftArr.forEach(g => {
+          let isExpired = g.expiry && new Date(g.expiry) < new Date();
+          let statusBadge = isExpired ? '<span style="color:#ef4444; font-size:0.8rem;">(Expired)</span>' : '';
+          let usageText = "";
+          
+          if (g.limitType === 'single') {
+              let targetName = users[g.usedBy] ? users[g.usedBy].fullName : (g.usedBy || 'None');
+              usageText = `Single User: ${targetName}`;
+          } else {
+              usageText = `Multi-use (Used ${g.usedCount || 0} times)`;
+          }
+          
+          list.innerHTML += `
+              <div class="product-card">
+                  <h4>🎁 ${g.code} ${statusBadge}</h4>
+                  <p>Amount: <strong>${g.value} ETB</strong></p>
+                  <p>Limit: ${g.limitType === 'single' ? 'Single Use' : 'Multiple Uses'}</p>
+                  <p>Expiry: ${g.expiry ? new Date(g.expiry).toLocaleString() : 'No Expiry'}</p>
+                  <p>${usageText}</p>
+                  <div class="product-actions">
+                      <button class="btn-warning" onclick="openGiftModal('${g.code}')">✏️ Edit</button>
+                      <button class="btn-danger" onclick="deleteGift('${g.code}')">🗑️ Delete</button>
+                  </div>
+              </div>
+          `;
+      });
+  }
+
+  function openGiftModal(code = null) {
+      document.getElementById("giftModal").style.display = "flex";
+      populateUserDropdown();
+      
+      if (code) {
+          let g = giftCodes[code];
+          document.getElementById("giftModalTitle").innerText = "✏️ Edit Gift Code";
+          document.getElementById("editGiftKey").value = code;
+          document.getElementById("giftCode").value = g.code;
+          document.getElementById("giftAmount").value = g.value;
+          document.getElementById("giftLimitType").value = g.limitType || 'single';
+          
+          if (g.limitType === 'single' && g.usedBy) {
+              document.getElementById("giftTargetUser").value = g.usedBy;
+          } else {
+              document.getElementById("giftTargetUser").value = "";
+          }
+          
+          if (g.expiry) {
+              let d = new Date(g.expiry);
+              d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+              document.getElementById("giftExpiry").value = d.toISOString().slice(0, 16);
+              document.getElementById("giftExpirySeconds").value = d.getSeconds();
+          } else {
+              document.getElementById("giftExpiry").value = "";
+              document.getElementById("giftExpirySeconds").value = "";
+          }
+      } else {
+          document.getElementById("giftModalTitle").innerText = "🎁 Create Gift Code";
+          document.getElementById("editGiftKey").value = "";
+          document.getElementById("giftCode").value = "";
+          document.getElementById("giftAmount").value = "";
+          document.getElementById("giftLimitType").value = "single";
+          document.getElementById("giftTargetUser").value = "";
+          document.getElementById("giftExpiry").value = "";
+          document.getElementById("giftExpirySeconds").value = "";
+      }
+      toggleUserDropdown();
+  }
+
+  async function saveGift() {
+      let originalCode = document.getElementById("editGiftKey").value;
+      let newCode = document.getElementById("giftCode").value.trim().toUpperCase();
+      let value = parseFloat(document.getElementById("giftAmount").value);
+      let limitType = document.getElementById("giftLimitType").value;
+      let targetUser = document.getElementById("giftTargetUser").value;
+      let expiryVal = document.getElementById("giftExpiry").value;
+      let expirySec = parseInt(document.getElementById("giftExpirySeconds").value) || 0;
+
+      if (!newCode || isNaN(value) || value <= 0) {
+          alert("Please fill all required fields correctly!");
+          return;
+      }
+
+      if (limitType === 'single' && !targetUser) {
+          alert("Please select a user for single use gift code!");
+          return;
+      }
+
+      let expiryIso = null;
+      if(expiryVal) {
+          let d = new Date(expiryVal);
+          d.setSeconds(expirySec);
+          expiryIso = d.toISOString();
+      }
+
+      if (originalCode && originalCode !== newCode) {
+          await remove(ref(db, "cotton_giftcodes/" + originalCode));
+          delete giftCodes[originalCode];
+      }
+
+      let existingData = giftCodes[newCode] || {};
+      let newData = {
+          code: newCode,
+          value: value,
+          limitType: limitType,
+          expiry: expiryIso,
+          createdAt: existingData.createdAt || new Date().toISOString(),
+          usedBy: limitType === 'single' ? targetUser : (existingData.usedBy || null),
+          usedCount: existingData.usedCount || 0,
+          active: true
+      };
+
+      if (limitType === 'multi') {
+          newData.usedBy = null;
+      }
+
+      await set(ref(db, "cotton_giftcodes/" + newCode), newData);
+      renderGifts();
+      closeModal('giftModal');
+      alert("Gift code saved successfully!");
+  }
+
+  async function deleteGift(code) {
+      if (confirm(`Delete gift code ${code}?`)) {
+          await remove(ref(db, "cotton_giftcodes/" + code));
+          delete giftCodes[code];
+          renderGifts();
+      }
+  }
+
+  // --- Reports with Withdraw Actions ---
+  function renderTransactions() {
+      let list = document.getElementById("transactionsList");
+      list.innerHTML = "";
+      const txArr = Object.values(transactions);
+      
+      if (txArr.length === 0) {
+          list.innerHTML = "<p style='text-align:center; color:#64748b;'>No transactions found.</p>";
+          return;
+      }
+
+      txArr.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+      txArr.slice(0, 100).forEach(t => { 
+          let user = users[t.userPhone];
+          let userName = user ? user.fullName : "Unknown User";
+          let color = "#1e293b";
+          if(t.type === 'withdraw' || t.type === 'invest') color = "#ef4444";
+          if(t.type === 'recharge' || t.type === 'income' || t.type === 'gift') color = "#10b981";
+
+          let actionButtons = "";
+          if (t.type === 'withdraw' && t.status !== 'success' && t.status !== 'rejected') {
+              actionButtons = `
+                  <div style="margin-top: 0.5rem; display: flex; gap: 0.5rem;">
+                      <button class="btn-success" style="padding: 0.3rem; font-size: 0.75rem; flex: 1; border-radius: 0.5rem;" onclick="approveWithdraw('${t.id}', '${t.userPhone}', ${Math.abs(t.amount)})">✅ Success</button>
+                      <button class="btn-danger" style="padding: 0.3rem; font-size: 0.75rem; flex: 1; border-radius: 0.5rem;" onclick="rejectWithdraw('${t.id}', '${t.userPhone}', ${Math.abs(t.amount)})">❌ Reject</button>
+                  </div>
+              `;
+          } else if (t.type === 'withdraw') {
+              let statusColor = t.status === 'success' ? '#10b981' : '#ef4444';
+              actionButtons = `
+                  <div style="margin-top: 0.5rem; text-align: right; font-weight: bold; color: ${statusColor}; font-size: 0.8rem;">
+                      Status: ${t.status.toUpperCase()}
+                  </div>
+              `;
+          }
+
+          list.innerHTML += `
+              <div class="history-box">
+                  <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                      <strong style="text-transform: capitalize;">${t.type}</strong>
+                      <span style="color:${color}; font-weight:bold;">${t.amount > 0 ? '+' : ''}${t.amount} ETB</span>
+                  </div>
+                  <div>👤 User: ${userName} (${t.userPhone})</div>
+                  <div>📝 ${t.description || 'No description'}</div>
+                  <div style="color:#64748b; font-size:0.75rem; margin-top:5px;">📅 ${new Date(t.timestamp).toLocaleString()}</div>
+                  ${actionButtons}
+              </div>
+          `;
+      });
+  }
+
+  async function approveWithdraw(txId, phone, amount) {
+      if(confirm("Mark this withdrawal as SUCCESS?")) {
+          await update(ref(db, "cotton_transactions/" + txId), { status: "success" });
+          alert("Withdrawal marked as Success!");
+          loadData().then(() => renderTransactions());
+      }
+  }
+
+  async function rejectWithdraw(txId, phone, amount) {
+      if(confirm("Reject this withdrawal and refund the money to user?")) {
+          await update(ref(db, "cotton_transactions/" + txId), { status: "rejected" });
+          
+          let userSnap = await get(ref(db, "cotton_users/" + phone));
+          if(userSnap.exists()) {
+              let u = userSnap.val();
+              u.balance = (u.balance || 0) + amount;
+              await set(ref(db, "cotton_users/" + phone), u);
+          }
+          
+          alert("Withdrawal rejected and money refunded to user.");
+          loadData().then(() => renderTransactions());
+      }
+  }
+
   async function blockService() {
       let start = document.getElementById("blockStartTime").value;
       let end = document.getElementById("blockEndTime").value;
@@ -492,12 +1171,12 @@
       document.getElementById(id).style.display = "none";
   }
 
-  // Expose functions to window for inline onclick
   window.login = login;
   window.logout = logout;
   window.switchTab = switchTab;
   window.renderUsers = renderUsers;
   window.viewUser = viewUser;
+  window.showInvitedUsers = showInvitedUsers;
   window.openEditBalance = openEditBalance;
   window.saveBalance = saveBalance;
   window.toggleBan = toggleBan;
@@ -505,6 +1184,20 @@
   window.openProductModal = openProductModal;
   window.saveProduct = saveProduct;
   window.deleteProduct = deleteProduct;
+  window.openGiftModal = openGiftModal;
+  window.saveGift = saveGift;
+  window.deleteGift = deleteGift;
+  window.toggleUserDropdown = toggleUserDropdown;
+  window.toggleLucySystem = toggleLucySystem;
+  window.deleteLucyReward = deleteLucyReward;
+  window.openLucyRewardModal = openLucyRewardModal;
+  window.saveLucyReward = saveLucyReward;
+  window.toggleLucyValueInput = toggleLucyValueInput;
+  window.openAssignTicketModal = openAssignTicketModal;
+  window.saveAssignedTickets = saveAssignedTickets;
+  window.generateTicketRewardSelects = generateTicketRewardSelects;
+  window.approveWithdraw = approveWithdraw;
+  window.rejectWithdraw = rejectWithdraw;
   window.blockService = blockService;
   window.unblockService = unblockService;
   window.closeModal = closeModal;
