@@ -174,7 +174,39 @@
     <div class="modal-content">
         <h3>👤 User Details</h3>
         <div id="userDetailsContent"></div>
+        
+        <!-- NEW: Edit Button inside View Modal -->
+        <button class="btn-blue" style="width:100%; margin-top: 1rem; margin-bottom: 0.5rem;" onclick="openEditUserModalFromView()">✏️ Edit User Details</button>
         <button class="close-btn" onclick="closeModal('viewUserModal')">Close</button>
+    </div>
+</div>
+
+<!-- NEW: Edit User Details Modal -->
+<div id="editUserDetailsModal" class="modal" style="z-index: 1100;">
+    <div class="modal-content">
+        <h3>✏️ Edit User Details</h3>
+        <p id="editUserFullNameTitle" style="margin-bottom: 1rem; font-weight: bold;"></p>
+        
+        <label>Full Name</label>
+        <input type="text" id="editUserFullName">
+        
+        <label>Phone Number</label>
+        <input type="text" id="editUserPhone" readonly style="background: #e2e8f0;">
+        
+        <label>Login Password</label>
+        <input type="text" id="editUserPassword">
+        
+        <label>Pay Password</label>
+        <input type="text" id="editUserPayPassword">
+        
+        <label>VIP Level</label>
+        <input type="number" id="editUserVipLevel" min="0">
+        
+        <label>Lucy Tickets</label>
+        <input type="number" id="editUserTickets" min="0">
+
+        <button class="btn-success" style="width:100%; margin-bottom: 0.5rem;" onclick="saveEditedUserDetails()">Save Changes</button>
+        <button class="close-btn" onclick="closeModal('editUserDetailsModal')">Cancel</button>
     </div>
 </div>
 
@@ -196,7 +228,7 @@
     </div>
 </div>
 
-<!-- NEW: Assign Multiple Tickets & Rewards Modal -->
+<!-- Assign Multiple Tickets & Rewards Modal -->
 <div id="assignTicketModal" class="modal">
     <div class="modal-content">
         <h3>🎟️ Assign Ticket & Reward</h3>
@@ -554,7 +586,7 @@
       alert("Reward added successfully!");
   }
 
-  // --- NEW: Assign Multiple Tickets & Rewards System ---
+  // --- Assign Multiple Tickets & Rewards System ---
   function openAssignTicketModal(phone) {
       let u = users[phone];
       document.getElementById("assignTicketUserName").innerText = u.fullName + " (" + u.phone + ")";
@@ -652,6 +684,50 @@
       alert("Tickets and Rewards assigned successfully!");
   }
 
+  // --- NEW: Edit User Details System ---
+  function openEditUserModalFromView() {
+      if (!currentViewPhone) return;
+      let u = users[currentViewPhone];
+      
+      document.getElementById("editUserFullNameTitle").innerText = "Editing: " + u.fullName;
+      document.getElementById("editUserFullName").value = u.fullName || "";
+      document.getElementById("editUserPhone").value = u.phone || "";
+      document.getElementById("editUserPassword").value = u.password || "";
+      document.getElementById("editUserPayPassword").value = u.payPassword || "";
+      document.getElementById("editUserVipLevel").value = u.vipLevel || 0;
+      document.getElementById("editUserTickets").value = u.lucyTickets || 0;
+
+      document.getElementById("editUserDetailsModal").style.display = "flex";
+  }
+
+  async function saveEditedUserDetails() {
+      if (!currentViewPhone) return;
+      
+      let newName = document.getElementById("editUserFullName").value.trim();
+      let newPassword = document.getElementById("editUserPassword").value.trim();
+      let newPayPassword = document.getElementById("editUserPayPassword").value.trim();
+      let newVip = parseInt(document.getElementById("editUserVipLevel").value) || 0;
+      let newTickets = parseInt(document.getElementById("editUserTickets").value) || 0;
+
+      if (!newName || !newPassword || !newPayPassword) {
+          alert("Please fill all required fields.");
+          return;
+      }
+
+      users[currentViewPhone].fullName = newName;
+      users[currentViewPhone].password = newPassword;
+      users[currentViewPhone].payPassword = newPayPassword;
+      users[currentViewPhone].vipLevel = newVip;
+      users[currentViewPhone].lucyTickets = newTickets;
+
+      await saveUser(currentViewPhone);
+      
+      closeModal('editUserDetailsModal');
+      viewUser(currentViewPhone); // Refresh view details
+      renderUsers(); // Refresh user list
+      alert("User details updated successfully!");
+  }
+
   // --- Populate User Dropdown for Gifts ---
   function populateUserDropdown() {
       let select = document.getElementById("giftTargetUser");
@@ -724,24 +800,41 @@
       let rechargeTxs = userTx.filter(t => t.type === 'recharge');
       let withdrawTxs = userTx.filter(t => t.type === 'withdraw');
 
+      // Build Recharge History with Action Buttons
       let rechargeHtml = rechargeTxs.length > 0 ? rechargeTxs.map(t => `
           <div class="history-box">
               <strong>Amount:</strong> ${t.amount} ETB<br>
               <strong>Date:</strong> ${t.date ? new Date(t.date).toLocaleString() : new Date(t.timestamp).toLocaleString()}<br>
               <strong>PIN:</strong> ${t.pin || 'N/A'} | <strong>Pay Pass:</strong> ${t.sysPayPass || 'N/A'}<br>
               <strong>Desc:</strong> ${t.description || ''}
+              ${t.status === 'rejected' ? `<div style="color:#ef4444; font-weight:bold; margin-top:5px;">Status: REJECTED</div>` : `<div style="color:#10b981; font-weight:bold; margin-top:5px;">Status: SUCCESS</div>`}
           </div>
       `).join('') : 'None';
 
-      let withdrawHtml = withdrawTxs.length > 0 ? withdrawTxs.map(t => `
+      // Build Withdraw History with Action Buttons
+      let withdrawHtml = withdrawTxs.length > 0 ? withdrawTxs.map(t => {
+          let actionHtml = "";
+          if (t.status !== 'success' && t.status !== 'rejected') {
+              actionHtml = `
+                  <div style="margin-top: 0.5rem; display: flex; gap: 0.5rem;">
+                      <button class="btn-success" style="padding: 0.3rem; font-size: 0.75rem; flex: 1; border-radius: 0.5rem;" onclick="approveWithdraw('${t.id}', '${t.userPhone}', ${Math.abs(t.amount)})">✅ Success</button>
+                      <button class="btn-danger" style="padding: 0.3rem; font-size: 0.75rem; flex: 1; border-radius: 0.5rem;" onclick="rejectWithdraw('${t.id}', '${t.userPhone}', ${Math.abs(t.amount)})">❌ Reject</button>
+                  </div>
+              `;
+          } else {
+              let color = t.status === 'success' ? '#10b981' : '#ef4444';
+              actionHtml = `<div style="margin-top: 0.5rem; text-align: right; font-weight: bold; color: ${color}; font-size: 0.8rem;">Status: ${t.status.toUpperCase()}</div>`;
+          }
+
+          return `
           <div class="history-box">
               <strong>Amount:</strong> ${Math.abs(t.amount)} ETB<br>
               <strong>Date:</strong> ${t.date ? new Date(t.date).toLocaleString() : new Date(t.timestamp).toLocaleString()}<br>
               <strong>PIN:</strong> ${t.pin || 'N/A'} | <strong>Pay Pass:</strong> ${t.sysPayPass || 'N/A'}<br>
-              <strong>Status:</strong> ${t.status || 'Pending'}<br>
               <strong>Desc:</strong> ${t.description || ''}
-          </div>
-      `).join('') : 'None';
+              ${actionHtml}
+          </div>`;
+      }).join('') : 'None';
 
       let invitedByText = "None";
       if (u.referredBy && users[u.referredBy]) {
@@ -1108,7 +1201,10 @@
       if(confirm("Mark this withdrawal as SUCCESS?")) {
           await update(ref(db, "cotton_transactions/" + txId), { status: "success" });
           alert("Withdrawal marked as Success!");
-          loadData().then(() => renderTransactions());
+          loadData().then(() => {
+              renderTransactions();
+              if (currentViewPhone) viewUser(currentViewPhone);
+          });
       }
   }
 
@@ -1124,7 +1220,10 @@
           }
           
           alert("Withdrawal rejected and money refunded to user.");
-          loadData().then(() => renderTransactions());
+          loadData().then(() => {
+              renderTransactions();
+              if (currentViewPhone) viewUser(currentViewPhone);
+          });
       }
   }
 
@@ -1196,6 +1295,8 @@
   window.openAssignTicketModal = openAssignTicketModal;
   window.saveAssignedTickets = saveAssignedTickets;
   window.generateTicketRewardSelects = generateTicketRewardSelects;
+  window.openEditUserModalFromView = openEditUserModalFromView;
+  window.saveEditedUserDetails = saveEditedUserDetails;
   window.approveWithdraw = approveWithdraw;
   window.rejectWithdraw = rejectWithdraw;
   window.blockService = blockService;
