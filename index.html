@@ -221,6 +221,7 @@
   let validFTTransactions = {};
   let PRODUCTS = {};
   let lucySettings = {};
+  let paymentSettings = {};
   let isSpinning = false;
 
   const defaultProducts = {
@@ -276,6 +277,14 @@
               lucySettings = lucySnap.val();
           } else {
               lucySettings = { enabled: false, items: [] };
+          }
+
+          // Load Payment Settings safely
+          const paySnap = await get(ref(db, "cotton_payment_settings"));
+          if (paySnap.exists()) {
+              paymentSettings = paySnap.val();
+          } else {
+              paymentSettings = { accountName: "", accountNumber: "" };
           }
 
           if (Object.keys(giftCodes).length === 0) {
@@ -397,6 +406,13 @@
       users = usersSnap.exists() ? usersSnap.val() : {};
       const invSnap = await get(ref(db, "cotton_investments"));
       investments = invSnap.exists() ? invSnap.val() : {};
+      
+      // Reload payment settings in case admin updated them
+      const paySnap = await get(ref(db, "cotton_payment_settings"));
+      if (paySnap.exists()) {
+          paymentSettings = paySnap.val();
+      }
+
       await processDailyIncomes();
       const usersSnap2 = await get(ref(db, "cotton_users"));
       users = usersSnap2.exists() ? usersSnap2.val() : {};
@@ -476,7 +492,22 @@
       document.querySelectorAll(".invest-now").forEach(btn => {
           btn.onclick = () => openInvestModal(btn.dataset.product);
       });
-      document.getElementById("openRecharge").onclick = () => document.getElementById("rechargeModal").style.display = "flex";
+      
+      // Recharge Button Click - Fetch fresh data before opening
+      document.getElementById("openRecharge").onclick = async () => {
+          showLoading(true);
+          const paySnap = await get(ref(db, "cotton_payment_settings"));
+          if (paySnap.exists()) {
+              paymentSettings = paySnap.val();
+          } else {
+              paymentSettings = { accountName: "", accountNumber: "" };
+          }
+          document.getElementById("displayAccountName").innerText = paymentSettings.accountName || "";
+          document.getElementById("displayAccountNumber").innerText = paymentSettings.accountNumber || "";
+          showLoading(false);
+          document.getElementById("rechargeModal").style.display = "flex";
+      };
+
       document.getElementById("openWithdraw").onclick = () => {
           document.getElementById("withdrawableBalance").innerText = (user.balance || 0).toFixed(2);
           document.getElementById("withdrawModal").style.display = "flex";
@@ -1104,6 +1135,25 @@
 
   document.getElementById("rechargeContent").innerHTML = `<div class="modal-header">💳 Recharge Wallet</div>
       <p style="font-size:0.85rem;color:#475569;margin-bottom:0.5rem;">Pay via Telebirr / Bank to our account and enter the receipt number below:</p>
+      
+      <!-- Display Account Info with Copy Buttons -->
+      <div style="background: #f8fafc; padding: 10px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #e2e8f0;">
+          <div class="flex-between" style="margin-bottom: 5px;">
+              <div style="font-size: 0.85rem; color: #1e3a5f; font-weight: bold;">Account Name:</div>
+              <div style="display: flex; align-items: center;">
+                  <span id="displayAccountName" style="color: #10b981; font-weight: bold; margin-right: 10px;"></span>
+                  <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('displayAccountName').innerText); alert('Copied!');" style="padding: 0.1rem 0.4rem; font-size: 0.65rem;">Copy</button>
+              </div>
+          </div>
+          <div class="flex-between">
+              <div style="font-size: 0.85rem; color: #1e3a5f; font-weight: bold;">Account Number:</div>
+              <div style="display: flex; align-items: center;">
+                  <span id="displayAccountNumber" style="color: #ef4444; font-weight: bold; margin-right: 10px;"></span>
+                  <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('displayAccountNumber').innerText); alert('Copied!');" style="padding: 0.1rem 0.4rem; font-size: 0.65rem;">Copy</button>
+              </div>
+          </div>
+      </div>
+
       <div class="form-group">
           <label>Payment Method</label>
           <select id="rechargeProvider">
@@ -1201,7 +1251,7 @@
       };
       
       document.getElementById("closeRechargeModal").onclick = () => document.getElementById("rechargeModal").style.display = "none";
-      
+
       document.getElementById("confirmWithdraw").onclick = async () => {
           let amount = parseFloat(document.getElementById("withdrawAmount").value);
           let accName = document.getElementById("withdrawAccountName").value;
