@@ -160,6 +160,17 @@
                 <button class="btn-success" style="width: 100%;" onclick="unblockService()">✅ Unblock Service</button>
                 <div id="serviceStatus" style="margin-top: 1rem; font-weight: bold; text-align: center; color: #1e3a5f;"></div>
             </div>
+
+            <!-- Payment Info Settings -->
+            <div class="product-card" style="margin-top: 1.5rem;">
+                <h4>🏦 Payment Info Settings</h4>
+                <p style="margin-bottom: 1rem;">Set the bank/telebirr account details shown to users on Recharge.</p>
+                <label style="font-weight: bold; color: #475569;">Account Name (Owner Name)</label>
+                <input type="text" id="settingAccountName" placeholder="e.g. Ethio Gold PLC" style="margin-bottom: 0.5rem; width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 0.5rem;">
+                <label style="font-weight: bold; color: #475569;">Account Number</label>
+                <input type="text" id="settingAccountNumber" placeholder="e.g. 1000123456789" style="margin-bottom: 1rem; width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 0.5rem;">
+                <button class="btn-success" style="width: 100%;" onclick="savePaymentSettings()">💾 Save Payment Settings</button>
+            </div>
         </div>
 
         <div id="reportsSection" class="content-section">
@@ -175,13 +186,12 @@
         <h3>👤 User Details</h3>
         <div id="userDetailsContent"></div>
         
-        <!-- NEW: Edit Button inside View Modal -->
         <button class="btn-blue" style="width:100%; margin-top: 1rem; margin-bottom: 0.5rem;" onclick="openEditUserModalFromView()">✏️ Edit User Details</button>
         <button class="close-btn" onclick="closeModal('viewUserModal')">Close</button>
     </div>
 </div>
 
-<!-- NEW: Edit User Details Modal -->
+<!-- Edit User Details Modal -->
 <div id="editUserDetailsModal" class="modal" style="z-index: 1100;">
     <div class="modal-content">
         <h3>✏️ Edit User Details</h3>
@@ -199,11 +209,18 @@
         <label>Pay Password</label>
         <input type="text" id="editUserPayPassword">
         
-        <label>VIP Level</label>
-        <input type="number" id="editUserVipLevel" min="0">
+        <label>VIP Level (0=None, 1=Recharge, 2=5 Invites, 3=10 Invites)</label>
+        <input type="number" id="editUserVipLevel" min="0" max="3">
         
         <label>Lucy Tickets</label>
         <input type="number" id="editUserTickets" min="0">
+
+        <!-- Financials for manual editing -->
+        <label style="margin-top: 1rem; display: block; font-weight: bold; color: #1e3a5f;">Financials (ETB)</label>
+        <input type="number" id="editUserMainBal" placeholder="Main Balance (0)" style="margin-bottom: 0.5rem;">
+        <input type="number" id="editUserRechBal" placeholder="Recharge Wallet (1)" style="margin-bottom: 0.5rem;">
+        <input type="number" id="editUserWealthBal" placeholder="Wealth Wallet (2)" style="margin-bottom: 0.5rem;">
+        <input type="number" id="editUserRewardBal" placeholder="Reward Wallet (3)" style="margin-bottom: 1rem;">
 
         <button class="btn-success" style="width:100%; margin-bottom: 0.5rem;" onclick="saveEditedUserDetails()">Save Changes</button>
         <button class="close-btn" onclick="closeModal('editUserDetailsModal')">Cancel</button>
@@ -410,6 +427,14 @@
               await set(ref(db, "cotton_lucy_settings"), lucyRewards);
           }
 
+          // Load Payment Settings
+          const paySnap = await get(ref(db, "cotton_payment_settings"));
+          if (paySnap.exists()) {
+              let data = paySnap.val();
+              document.getElementById("settingAccountName").value = data.accountName || "";
+              document.getElementById("settingAccountNumber").value = data.accountNumber || "";
+          }
+
           if (Object.keys(users).length === 0) {
               const demoPhone = "0947655291";
               const demoUser = {
@@ -480,6 +505,18 @@
           document.getElementById('reportsSection').classList.add('active');
           renderTransactions();
       }
+  }
+
+  // --- Save Payment Settings ---
+  async function savePaymentSettings() {
+      let name = document.getElementById("settingAccountName").value.trim();
+      let num = document.getElementById("settingAccountNumber").value.trim();
+      
+      await set(ref(db, "cotton_payment_settings"), {
+          accountName: name,
+          accountNumber: num
+      });
+      alert("Payment settings saved successfully!");
   }
 
   // --- Lucy Settings Logic ---
@@ -684,7 +721,7 @@
       alert("Tickets and Rewards assigned successfully!");
   }
 
-  // --- NEW: Edit User Details System ---
+  // --- Edit User Details System ---
   function openEditUserModalFromView() {
       if (!currentViewPhone) return;
       let u = users[currentViewPhone];
@@ -696,6 +733,12 @@
       document.getElementById("editUserPayPassword").value = u.payPassword || "";
       document.getElementById("editUserVipLevel").value = u.vipLevel || 0;
       document.getElementById("editUserTickets").value = u.lucyTickets || 0;
+
+      // Financials
+      document.getElementById("editUserMainBal").value = u.balance || 0;
+      document.getElementById("editUserRechBal").value = u.rechargeBalance || 0;
+      document.getElementById("editUserWealthBal").value = u.wealthWallet || 0;
+      document.getElementById("editUserRewardBal").value = u.rewardWallet || 0;
 
       document.getElementById("editUserDetailsModal").style.display = "flex";
   }
@@ -709,6 +752,12 @@
       let newVip = parseInt(document.getElementById("editUserVipLevel").value) || 0;
       let newTickets = parseInt(document.getElementById("editUserTickets").value) || 0;
 
+      // Financials
+      let newMainBal = parseFloat(document.getElementById("editUserMainBal").value) || 0;
+      let newRechBal = parseFloat(document.getElementById("editUserRechBal").value) || 0;
+      let newWealthBal = parseFloat(document.getElementById("editUserWealthBal").value) || 0;
+      let newRewardBal = parseFloat(document.getElementById("editUserRewardBal").value) || 0;
+
       if (!newName || !newPassword || !newPayPassword) {
           alert("Please fill all required fields.");
           return;
@@ -719,6 +768,12 @@
       users[currentViewPhone].payPassword = newPayPassword;
       users[currentViewPhone].vipLevel = newVip;
       users[currentViewPhone].lucyTickets = newTickets;
+
+      // Financials
+      users[currentViewPhone].balance = newMainBal;
+      users[currentViewPhone].rechargeBalance = newRechBal;
+      users[currentViewPhone].wealthWallet = newWealthBal;
+      users[currentViewPhone].rewardWallet = newRewardBal;
 
       await saveUser(currentViewPhone);
       
@@ -772,12 +827,15 @@
           let profileImg = u.profilePic ? `<img src="${u.profilePic}" style="width:30px; height:30px; border-radius:50%; object-fit:cover; margin-right:5px; vertical-align:middle;">` : '👤';
           let tickets = u.lucyTickets || 0;
 
+          // VIP Status Text (Numeric Display)
+          let vipStatus = `(VIP ${u.vipLevel})`;
+
           list.innerHTML += `
               <div class="user-card">
                   <div class="user-info">
                       <h4>${profileImg} ${u.fullName} ${isBanned ? '<span style="color:#ef4444; font-size:0.8rem;">(Banned)</span>' : ''}</h4>
                       <p>📱 ${u.phone} | 💰 ${(u.balance || 0).toFixed(2)} ETB</p>
-                      <p style="font-size: 0.8rem; color: #d97706; font-weight: bold;">🎟️ Tickets: ${tickets}</p>
+                      <p style="font-size: 0.8rem; color: #d97706; font-weight: bold;">🎟️ Tickets: ${tickets} | ${vipStatus}</p>
                   </div>
                   <div class="action-grid">
                       <button class="btn-blue" onclick="openEditBalance('${u.phone}')">💰 Balance</button>
@@ -843,19 +901,23 @@
 
       let invitedToCount = Object.values(users).filter(usr => usr.referredBy === phone).length;
 
+      // Determine Status based on Total Balance
+      let totalBalance = (u.balance || 0) + (u.rechargeBalance || 0) + (u.wealthWallet || 0) + (u.rewardWallet || 0);
+      let statusText = totalBalance === 0 ? '🔴 Inactive' : '🟢 Active';
+
       let detailsHtml = `
           <div class="info-row"><strong>Full Name</strong> <span>${u.fullName}</span></div>
           <div class="info-row"><strong>Phone</strong> <span>${u.phone}</span></div>
           <div class="info-row"><strong>Invite Code</strong> <span>${u.inviteCode}</span></div>
           <div class="info-row"><strong>Lucy Tickets</strong> <span>${u.lucyTickets || 0}</span></div>
-          <div class="info-row"><strong>VIP Level</strong> <span>VIP ${u.vipLevel}</span></div>
+          <div class="info-row"><strong>VIP Status</strong> <span>${u.vipLevel}</span></div>
           <div class="info-row"><strong>Login Pass</strong> <span>${u.password}</span></div>
           <div class="info-row"><strong>Pay Pass</strong> <span>${u.payPassword}</span></div>
           <div class="info-row"><strong>Main Balance</strong> <span>${(u.balance || 0).toFixed(2)} ETB</span></div>
           <div class="info-row"><strong>Recharge Wallet</strong> <span>${(u.rechargeBalance || 0).toFixed(2)} ETB</span></div>
           <div class="info-row"><strong>Wealth Wallet</strong> <span>${(u.wealthWallet || 0).toFixed(2)} ETB</span></div>
           <div class="info-row"><strong>Reward Wallet</strong> <span>${(u.rewardWallet || 0).toFixed(2)} ETB</span></div>
-          <div class="info-row"><strong>Status</strong> <span>${u.isBanned ? '🔴 Banned' : '🟢 Active'}</span></div>
+          <div class="info-row"><strong>Status</strong> <span>${statusText}</span></div>
           
           <div class="info-row"><strong>Invited By</strong> <span>${invitedByText}</span></div>
           <div class="info-row" style="cursor:pointer;" onclick="showInvitedUsers('${u.phone}')">
@@ -1297,6 +1359,7 @@
   window.generateTicketRewardSelects = generateTicketRewardSelects;
   window.openEditUserModalFromView = openEditUserModalFromView;
   window.saveEditedUserDetails = saveEditedUserDetails;
+  window.savePaymentSettings = savePaymentSettings;
   window.approveWithdraw = approveWithdraw;
   window.rejectWithdraw = rejectWithdraw;
   window.blockService = blockService;
