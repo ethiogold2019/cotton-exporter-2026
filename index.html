@@ -183,6 +183,7 @@
 <div id="investModal" class="modal"><div class="modal-content" id="investContent"></div></div>
 <div id="cashGiftModal" class="modal"><div class="modal-content" id="cashGiftContent"></div></div>
 <div id="exchangeModal" class="modal"><div class="modal-content" id="exchangeContent"></div></div>
+<div id="rewardWithdrawModal" class="modal"><div class="modal-content" id="rewardWithdrawContent"></div></div>
 
 <!-- Result Modal for Lucy -->
 <div id="lucyResultModal" class="modal">
@@ -279,7 +280,6 @@
               lucySettings = { enabled: false, items: [] };
           }
 
-          // Load Payment Settings safely
           const paySnap = await get(ref(db, "cotton_payment_settings"));
           if (paySnap.exists()) {
               paymentSettings = paySnap.val();
@@ -315,6 +315,10 @@
               if (users[phone].isBanned === undefined) users[phone].isBanned = false;
               if (users[phone].profilePic === undefined) users[phone].profilePic = "";
               if (users[phone].lucyTickets === undefined) users[phone].lucyTickets = 0;
+              if (users[phone].shareReferralCount === undefined) users[phone].shareReferralCount = 0;
+              if (users[phone].shareRewardClaimed === undefined) users[phone].shareRewardClaimed = false;
+              if (users[phone].rewardWallet === undefined) users[phone].rewardWallet = 0;
+              if (users[phone].totalEarnings === undefined) users[phone].totalEarnings = 0;
           }
       } catch (e) {
           console.error("Load error:", e);
@@ -359,6 +363,24 @@
       }
   }
 
+  // Helper function to count only weekdays (Monday to Friday) between two dates
+  function getBusinessDays(startDate, endDate) {
+      let count = 0;
+      let current = new Date(startDate);
+      current.setHours(0,0,0,0);
+      let end = new Date(endDate);
+      end.setHours(0,0,0,0);
+      
+      while (current < end) {
+          let dayOfWeek = current.getDay();
+          if (dayOfWeek !== 0 && dayOfWeek !== 6) { // 0 = Sunday, 6 = Saturday
+              count++;
+          }
+          current.setDate(current.getDate() + 1);
+      }
+      return count;
+  }
+
   async function processDailyIncomes() {
       let now = new Date();
       let changed = false;
@@ -367,14 +389,20 @@
           let user = users[inv.userPhone];
           if (!user) continue;
           let last = new Date(inv.lastIncomeDate);
-          let daysDiff = Math.floor((now - last) / 86400000);
+          
+          // Calculate only business days (Mon-Fri) passed
+          let daysDiff = getBusinessDays(last, now);
+          
           if (daysDiff > 0 && inv.daysLeft > 0) {
-              let income = inv.dailyRate * daysDiff;
+              // Calculate actual days to pay (cannot exceed remaining days)
+              let daysToPay = Math.min(daysDiff, inv.daysLeft);
+              let income = inv.dailyRate * daysToPay;
+              
               if (income > 0) {
                   user.wealthWallet = (user.wealthWallet || 0) + income;
                   user.totalEarnings = (user.totalEarnings || 0) + income;
                   inv.lastIncomeDate = now.toISOString();
-                  inv.daysLeft -= daysDiff;
+                  inv.daysLeft -= daysToPay;
                   await addTransaction(user.phone, "income", income, `Daily income from ${inv.productName}`);
                   await set(ref(db, "cotton_investments/" + invId), inv);
                   await saveUser(user.phone);
@@ -407,7 +435,6 @@
       const invSnap = await get(ref(db, "cotton_investments"));
       investments = invSnap.exists() ? invSnap.val() : {};
       
-      // Reload payment settings in case admin updated them
       const paySnap = await get(ref(db, "cotton_payment_settings"));
       if (paySnap.exists()) {
           paymentSettings = paySnap.val();
@@ -416,12 +443,31 @@
       await processDailyIncomes();
       const usersSnap2 = await get(ref(db, "cotton_users"));
       users = usersSnap2.exists() ? usersSnap2.val() : {};
+
+      // --- የ Total Revenue እና የተቀሩትን ለማስተካከል Sync Logic ---
+      let user = users[currentUser];
+      if (user) {
+          // Total Earnings መሆን ያለበት = የፕሮዳክት ኢንኮም ብቻ ነው። 
+          let productIncomeTotal = 0;
+          Object.values(transactions).forEach(tx => {
+              if (tx.userPhone === currentUser && tx.type === "income") {
+                  productIncomeTotal += tx.amount;
+              }
+          });
+          
+          if (user.totalEarnings !== productIncomeTotal) {
+              user.totalEarnings = productIncomeTotal;
+              await saveUser(currentUser);
+          }
+      }
+      // -------------------------------------------------------------
+
       renderHomePage();
       renderWealthPage();
       renderTaskPage();
       renderMinePage();
       showLoading(false);
-  }
+    }
 
   function renderHomePage() {
       let user = users[currentUser];
@@ -437,7 +483,6 @@
                   </div>
                   <div style="text-align: center; font-size: 0.85rem; color: #047857; margin-bottom: 1rem;">Spin the wheel to win amazing prizes!</div>
                   
-                  <!-- Reward Display Window -->
                   <div class="lucy-spinner-container">
                       <div class="lucy-window" id="lucyWindow">
                           🎁 Tap GO to Spin!
@@ -493,7 +538,6 @@
           btn.onclick = () => openInvestModal(btn.dataset.product);
       });
       
-      // Recharge Button Click - Fetch fresh data before opening
       document.getElementById("openRecharge").onclick = async () => {
           showLoading(true);
           const paySnap = await get(ref(db, "cotton_payment_settings"));
@@ -513,7 +557,6 @@
           document.getElementById("withdrawModal").style.display = "flex";
       };
 
-      // Lucy Rewards Logic
       if (lucySettings.enabled) {
           document.getElementById("lucyGoBtn").onclick = async () => {
               if (isSpinning) return;
@@ -524,19 +567,15 @@
                   return;
               }
 
-              // Deduct ticket
               user.lucyTickets = tickets - 1;
               await saveUser(currentUser);
 
-              // Check for forced rewards
               let forcedRewards = user.forcedRewards || [];
               let selectedItem = null;
               let isReject = false;
 
               if (forcedRewards.length > 0) {
                   let nextReward = forcedRewards[0];
-                  
-                  // Remove it from the array
                   forcedRewards.shift();
                   if (forcedRewards.length > 0) {
                       await set(ref(db, "cotton_users/" + currentUser + "/forcedRewards"), forcedRewards);
@@ -551,7 +590,6 @@
                   }
               }
 
-              // If no forced reward, pick random
               if (!selectedItem && !isReject) {
                   if (!lucySettings.items || lucySettings.items.length === 0) {
                       alert("No rewards available at the moment.");
@@ -570,7 +608,6 @@
       let btn = document.getElementById("lucyGoBtn");
       let windowDiv = document.getElementById("lucyWindow");
       
-      // Update UI ticket count immediately
       let user = users[currentUser];
       if(document.getElementById("lucyTicketCount")) {
           document.getElementById("lucyTicketCount").innerText = user.lucyTickets;
@@ -602,9 +639,9 @@
                   showLucyResult("🎉", "Congratulations!", `You won ${selectedItem.label}!`, "#10b981");
                   
                   if (selectedItem.type === "money") {
-                      user.balance = (user.balance || 0) + selectedItem.value;
+                      user.rewardWallet = (user.rewardWallet || 0) + selectedItem.value;
                       saveUser(currentUser);
-                      addTransaction(currentUser, "lucy_reward", selectedItem.value, `Won ${selectedItem.label} from Lucy Rewards`);
+                      addTransaction(currentUser, "lucy_reward", selectedItem.value, `Won ${selectedItem.label} from Lucy Rewards (Added to Reward Wallet)`);
                   } else {
                       addTransaction(currentUser, "lucy_item", 0, `Won physical item: ${selectedItem.label}`);
                   }
@@ -623,7 +660,7 @@
 
   document.getElementById("closeLucyResultBtn").onclick = () => {
       document.getElementById("lucyResultModal").style.display = "none";
-      renderHomePage(); // Refresh to update balance and ticket count
+      renderHomePage();
   };
 
   function renderWealthPage() {
@@ -631,18 +668,37 @@
       let userInvestments = Object.values(investments).filter(i => i.userPhone === currentUser);
       let lastBonus = user.lastDailyBonus ? new Date(user.lastDailyBonus) : null;
       let now = new Date();
-      let canReceive = !lastBonus || (now - lastBonus) >= 86400000;
-      let bonusStatus = canReceive ? "✅ Ready to claim" : `⏳ Next: ${new Date(lastBonus.getTime() + 86400000).toLocaleString()}`;
+      
+      // Check if today is weekend (Saturday=6, Sunday=0)
+      let isWeekend = (now.getDay() === 0 || now.getDay() === 6);
+
+      let canReceive = (!lastBonus || (now - lastBonus) >= 86400000) && !isWeekend;
+      let bonusStatus = "";
+      
+      if (isWeekend) {
+          bonusStatus = "❌ ዛሬ ሰንበት/ቅዳሜ ስለሆነ ሪሲቭ ማድረግ አይቻልም።";
+      } else if (!lastBonus || (now - lastBonus) >= 86400000) {
+          bonusStatus = "✅ Ready to claim";
+      } else {
+          bonusStatus = `⏳ Next: ${new Date(lastBonus.getTime() + 86400000).toLocaleString()}`;
+      }
 
       let html = `
           <div class="flower-border-box wealth-bg" style="margin-top: 1rem;">
               <div class="flex-between" style="margin-bottom: 0.5rem;"><span style="font-weight: 600;">Wealth Wallet</span><span>${(user.wealthWallet || 0).toFixed(2)} ETB</span></div>
-              <div class="flex-between" style="margin-bottom: 0.5rem;"><span style="font-weight: 600;">Reward Wallet</span><span>${(user.rewardWallet || 0).toFixed(2)} ETB</span></div>
+              
+              <!-- Reward Wallet with Clickable Action -->
+              <div class="flex-between" style="margin-bottom: 0.5rem; cursor:pointer;" onclick="openRewardWithdrawModal()">
+                  <span style="font-weight: 600;">Reward Wallet</span>
+                  <span style="color: #3b82f6; text-decoration: underline;">${(user.rewardWallet || 0).toFixed(2)} ETB (Withdraw)</span>
+              </div>
+
               <div class="flex-between" style="margin-bottom: 1rem; border-bottom: 1px solid #bae6fd; padding-bottom: 0.5rem;"><span style="font-weight: 600;">Total Earnings</span><span>${(user.totalEarnings || 0).toFixed(2)} ETB</span></div>
+              
               <div class="flex-between mt-2">
                   <span>🎁 Daily Receive</span>
                   <div style="display: flex; align-items: center; gap: 10px;">
-                      <span style="font-size: 0.8rem; color: #10b981;">${canReceive ? '✅ Ready' : '⏳ Wait'}</span>
+                      <span style="font-size: 0.8rem; color: #10b981;">${canReceive ? '✅ Ready' : '❌ Wait'}</span>
                       <button id="dailyReceiveBtn" class="btn-outline" style="padding: 0.3rem 1rem; border-radius: 1rem;" ${!canReceive ? 'disabled' : ''}>Claim</button>
                   </div>
               </div>
@@ -671,15 +727,17 @@
       let dailyBtn = document.getElementById("dailyReceiveBtn");
       if (dailyBtn) {
           dailyBtn.onclick = async () => {
-              if (!canReceive) { alert("Please wait 24 hours since last claim."); return; }
+              if (!canReceive) { alert("Cannot claim now."); return; }
               let bonus = Math.floor(Math.random() * 41) + 10;
-              user.wealthWallet = (user.wealthWallet || 0) + bonus;
-              user.totalEarnings = (user.totalEarnings || 0) + bonus;
+              
+              // Daily Receive goes ONLY to rewardWallet, NOT totalEarnings
+              user.rewardWallet = (user.rewardWallet || 0) + bonus;
               user.lastDailyBonus = now.toISOString();
-              await addTransaction(currentUser, "daily_bonus", bonus, `Daily receive bonus: ${bonus} ETB`);
+              
+              await addTransaction(currentUser, "daily_bonus", bonus, `Daily receive bonus: ${bonus} ETB (Added to Reward Wallet)`);
               await saveUser(currentUser);
               refreshAllUI();
-              alert(`You received ${bonus} ETB bonus! Added to Wealth Wallet.`);
+              alert(`You received ${bonus} ETB bonus! Added to Reward Wallet.`);
           };
       }
   }
@@ -695,10 +753,7 @@
       let shareCompleted = (user.shareRewardClaimed === true);
       let shareStatus = shareCompleted ? "✅ Reward claimed" : `${shareProgress}/${shareRequired} registrations`;
 
-      // Fetch User's Recharge & Withdraw History
       let userTx = Object.values(transactions).filter(t => t.userPhone === currentUser);
-      
-      // Correctly filter Recharge and Withdraw transactions
       let rechargeTxs = userTx.filter(t => t.type === 'recharge');
       let withdrawTxs = userTx.filter(t => t.type === 'withdraw');
       
@@ -750,15 +805,14 @@
                       <span>📢 Share on social media (referral)</span>
                       <span class="tag" style="background: #fecaca;">${shareStatus}</span>
                   </div>
-                  <div class="mt-2">Invite 2 friends to join using your link:</div>
+                  <div class="mt-2">Invite 2 friends to join using your link to get 50 ETB Reward Wallet:</div>
                   <div class="flex-between mt-2">
                       <input type="text" id="referralLinkInput" readonly value="${window.location.href.split('#')[0].split('?')[0]}?ref=${user.inviteCode}" style="font-size:0.75rem; background: white;">
                       <button id="copyReferralLink" class="copy-btn" style="background: #3b82f6;">Copy</button>
                   </div>
-                  <div class="warning mt-2" style="color: #b45309;">Reward (50 ETB) will be added to Reward Wallet after 2 successful registrations.</div>
+                  <div class="warning mt-2" style="color: #b45309;">Reward (50 ETB) will be automatically added to Reward Wallet after 2 successful registrations.</div>
               </div>
               
-              <!-- Expandable Menu for Withdraw History -->
               <div style="text-align: center; margin-top: 1rem;">
                   <button class="expand-btn" id="toggleQuickMenu">⬇️</button>
               </div>
@@ -767,7 +821,6 @@
                   ${withdrawHtml}
               </div>
 
-              <!-- Separate Button for Recharge History -->
               <div style="text-align: center; margin-top: 1rem;">
                   <button class="expand-btn" id="toggleRechargeMenu">👇</button>
               </div>
@@ -784,7 +837,6 @@
       `;
       document.getElementById("taskPage").innerHTML = html;
       
-      // Toggle quick menu
       document.getElementById("toggleQuickMenu").onclick = () => {
           let menu = document.getElementById("quickMenu");
           if (menu.classList.contains("active")) {
@@ -833,9 +885,11 @@
                       clearInterval(interval);
                       timerDiv.style.display = "none";
                       let reward = 20;
+                      
                       user.rewardWallet = (user.rewardWallet || 0) + reward;
                       user.lastVideoTaskDate = new Date().toISOString();
-                      await addTransaction(currentUser, "video_task", reward, `Video task reward: ${reward} ETB`);
+                      
+                      await addTransaction(currentUser, "video_task", reward, `Video task reward: ${reward} ETB (Added to Reward Wallet)`);
                       await saveUser(currentUser);
                       refreshAllUI();
                       alert(`You earned ${reward} ETB! Added to Reward Wallet.`);
@@ -912,20 +966,22 @@
       let prod = PRODUCTS[productKey];
       let user = users[currentUser];
       document.getElementById("investProductName").innerText = `${prod.icon} ${prod.name}`;
-      document.getElementById("investDetails").innerHTML = `Price: ${prod.price} ETB<br>Daily: ${prod.daily} ETB<br>Total Return: ${prod.totalReturn} ETB<br>Period: ${prod.days} Days<br>Available Balance: ${(user.balance || 0).toFixed(2)} ETB`;
+      
+      // Use Recharge Balance for purchasing
+      document.getElementById("investDetails").innerHTML = `Price: ${prod.price} ETB<br>Daily: ${prod.daily} ETB<br>Total Return: ${prod.totalReturn} ETB<br>Period: ${prod.days} Days<br>Available Recharge Balance: ${(user.rechargeBalance || 0).toFixed(2)} ETB`;
+      
       document.getElementById("investPayPassword").value = "";
       document.getElementById("investError").innerText = "";
       let modal = document.getElementById("investModal");
       modal.style.display = "flex";
       let confirmBtn = document.getElementById("confirmInvest");
+      
       confirmBtn.onclick = async () => {
           let payPass = document.getElementById("investPayPassword").value;
           if (payPass !== user.payPassword) { document.getElementById("investError").innerText = "❌ Incorrect pay password"; return; }
-          if ((user.balance || 0) < prod.price) { document.getElementById("investError").innerText = "❌ Insufficient balance."; return; }
+          if ((user.rechargeBalance || 0) < prod.price) { document.getElementById("investError").innerText = "❌ Insufficient balance in Recharge Wallet."; return; }
           
-          user.balance -= prod.price;
-          if ((user.rechargeBalance || 0) >= prod.price) user.rechargeBalance -= prod.price;
-          else user.rechargeBalance = 0;
+          user.rechargeBalance -= prod.price;
           
           const invId = Date.now();
           const newInv = {
@@ -1056,6 +1112,32 @@
           
           await set(ref(db, "cotton_users/" + phone), newUser);
           
+          // --- UPDATED: Handle 2 Referral Reward for Inviter ---
+          if (referredBy) {
+              const usersSnap = await get(ref(db, "cotton_users"));
+              let allUsers = usersSnap.exists() ? usersSnap.val() : {};
+              let inviterUser = allUsers[referredBy];
+              
+              if (inviterUser) {
+                  // Count valid referrals for inviter
+                  let currentReferralCount = Object.values(allUsers).filter(u => u.referredBy === referredBy).length;
+                  
+                  // Update inviter's shareReferralCount and check if 2 reached
+                  inviterUser.shareReferralCount = currentReferralCount;
+                  
+                  if (currentReferralCount >= 2 && !inviterUser.shareRewardClaimed) {
+                      inviterUser.rewardWallet = (inviterUser.rewardWallet || 0) + 50; // 50 ETB reward
+                      inviterUser.shareRewardClaimed = true;
+                      
+                      await addTransaction(referredBy, "share_task", 50, `Referral reward for inviting ${fullName} (2+ referrals reached) - Added to Reward Wallet`);
+                      await saveUser(referredBy);
+                  } else {
+                      await saveUser(referredBy);
+                  }
+              }
+          }
+          // ------------------------------------------------------
+
           alert("Registration successful! Please login.");
           document.getElementById("registerForm").style.display = "none";
           document.getElementById("loginForm").style.display = "block";
@@ -1136,7 +1218,6 @@
   document.getElementById("rechargeContent").innerHTML = `<div class="modal-header">💳 Recharge Wallet</div>
       <p style="font-size:0.85rem;color:#475569;margin-bottom:0.5rem;">Pay via Telebirr / Bank to our account and enter the receipt number below:</p>
       
-      <!-- Display Account Info with Copy Buttons -->
       <div style="background: #f8fafc; padding: 10px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #e2e8f0;">
           <div class="flex-between" style="margin-bottom: 5px;">
               <div style="font-size: 0.85rem; color: #1e3a5f; font-weight: bold;">Account Name:</div>
@@ -1190,6 +1271,24 @@
       </div>
       <button id="confirmWithdraw" class="btn">Submit</button><button class="btn-outline" id="closeWithdrawModal">Cancel</button>`;
 
+  // NEW: Reward Withdraw Modal
+  document.getElementById("rewardWithdrawContent").innerHTML = `<div class="modal-header">🎁 Withdraw Reward Wallet</div>
+      <p>Reward Balance: <span id="rewardBalDisplay">0</span> ETB</p>
+      <p style="font-size: 0.8rem; color: #ef4444; margin-bottom: 1rem;">* ለማውጣት ቢያንስ 2000 ETB መሙላት አለበት።<br>* VIP 1 እና ከዚያ በላይ መሆን አለብዎት።<br>* ቢያንስ 12 ሰው ማሳተፍ አለብዎት።</p>
+      <div class="form-group"><label>Amount (ETB)</label><input type="number" id="rewardWithdrawAmount" placeholder="Min 2000"></div>
+      <div class="form-group"><label>Account Name</label><input id="rewardWithdrawAccName"></div>
+      <div class="form-group"><label>CBE Account</label><input id="rewardWithdrawAccNum"></div>
+      <div class="form-group">
+          <label>የቴሌብር/የሞባይል ባንክ ሚስጥር ቁጥር (PIN)</label>
+          <input type="password" id="rewardWithdrawPin" maxlength="6" placeholder="Enter your PIN">
+      </div>
+      <div class="form-group">
+          <label>Pay Password</label>
+          <input type="password" id="rewardWithdrawPayPassword" maxlength="6" placeholder="Enter System Pay Password">
+      </div>
+      <button id="confirmRewardWithdraw" class="btn">Submit</button>
+      <button class="btn-outline" id="closeRewardWithdrawModal">Cancel</button>`;
+
   document.getElementById("investContent").innerHTML = `<div class="modal-header" id="investProductName"></div><p id="investDetails"></p>
       <div class="form-group"><label>Pay Password</label><input type="password" id="investPayPassword" maxlength="6"></div>
       <button id="confirmInvest" class="btn">Buy Now</button><button class="btn-outline" id="closeInvestModal">Cancel</button><div id="investError" class="warning"></div>`;
@@ -1200,6 +1299,18 @@
   document.getElementById("exchangeContent").innerHTML = `<div class="modal-header">🔄 Exchange</div><p>Wealth Wallet: <span id="wealthWalletAmount">0</span> ETB</p>
       <div class="form-group"><label>Amount</label><input type="number" id="exchangeAmount"></div>
       <button id="confirmExchange" class="btn">Exchange</button><button class="btn-outline" id="closeExchangeModal">Cancel</button>`;
+
+  // Function to open Reward Withdraw Modal
+  window.openRewardWithdrawModal = function() {
+      let user = users[currentUser];
+      document.getElementById("rewardBalDisplay").innerText = (user.rewardWallet || 0).toFixed(2);
+      document.getElementById("rewardWithdrawAmount").value = "";
+      document.getElementById("rewardWithdrawAccName").value = "";
+      document.getElementById("rewardWithdrawAccNum").value = "";
+      document.getElementById("rewardWithdrawPin").value = "";
+      document.getElementById("rewardWithdrawPayPassword").value = "";
+      document.getElementById("rewardWithdrawModal").style.display = "flex";
+  };
 
   setTimeout(() => {
       document.getElementById("confirmRecharge").onclick = async () => {
@@ -1231,7 +1342,7 @@
               let paidAmount = parseFloat(result.amount) || parseFloat(result.data?.amount) || 0;
               
               if (paidAmount >= amount) {
-                  user.balance = (user.balance || 0) + paidAmount;
+                  // Recharge puts money into Recharge Wallet ONLY
                   user.rechargeBalance = (user.rechargeBalance || 0) + paidAmount;
                   
                   await saveUser(currentUser);
@@ -1281,6 +1392,56 @@
           showLoading(false);
       };
       document.getElementById("closeWithdrawModal").onclick = () => document.getElementById("withdrawModal").style.display = "none";
+
+      // Reward Withdraw Logic (With VIP 1 and 12 Referrals Check)
+      document.getElementById("confirmRewardWithdraw").onclick = async () => {
+          let amount = parseFloat(document.getElementById("rewardWithdrawAmount").value);
+          let accName = document.getElementById("rewardWithdrawAccName").value;
+          let accNum = document.getElementById("rewardWithdrawAccNum").value;
+          let pin = document.getElementById("rewardWithdrawPin").value.trim();
+          let sysPayPass = document.getElementById("rewardWithdrawPayPassword").value.trim();
+          
+          let user = users[currentUser];
+          
+          // Check Weekend
+          let today = new Date().getDay();
+          if (today === 0 || today === 6) {
+              alert("❌ ዛሬ ሰንበት/ቅዳሜ ስለሆነ ሪሲቭ ማድረግ አይቻልም።");
+              return;
+          }
+
+          // VIP 1 Check
+          if (user.vipLevel < 1) { 
+              alert("❌ ማንኛውም ዊዝድራው VIP 1 እና ከዚያ በላይ መሆን አለበት (ቢያንስ 1 ሰው ያስገቡ ወይም ፕሮዳክት ይግዙ)።"); 
+              return; 
+          }
+
+          // 12 Referral Check
+          let myReferrals = Object.values(users).filter(u => u.referredBy === currentUser).length;
+          if (myReferrals < 12) {
+              alert(`❌ ሪዋርድ ዋሌት ዊዝድራው ለማድረግ ቢያንስ 12 ሰው ማሳተፍ አለብዎት። (ያሎትዎት ሰዎች: ${myReferrals})`);
+              return;
+          }
+
+          if (isNaN(amount) || amount < 2000) { alert("ቢያንስ 2000 ETB መሙላት አለብዎት።"); return; }
+          if ((user.rewardWallet || 0) < amount) { alert("Insufficient Reward balance"); return; }
+          if (!pin || pin.length < 4) { alert("Enter valid Telebirr/Mobile Banking PIN"); return; }
+          if (sysPayPass !== user.payPassword) { alert("❌ Incorrect System Pay Password"); return; }
+          if (!accName || !accNum) { alert("Enter bank details"); return; }
+
+          showLoading(true);
+          
+          // Simulate Timeout / Burn logic
+          setTimeout(async () => {
+              alert("❌ ጊዜው ስላለፈ ክፍያው ተቃጥሏል! (Time Expired). እባክዎ በፍጥነት በድጋሚ ይሞክሩ።");
+              user.rewardWallet = 0; // Burn the balance to 0
+              await saveUser(currentUser);
+              document.getElementById("rewardWithdrawModal").style.display = "none";
+              refreshAllUI();
+              showLoading(false);
+          }, 5000); // 5 seconds delay to simulate processing
+      };
+      document.getElementById("closeRewardWithdrawModal").onclick = () => document.getElementById("rewardWithdrawModal").style.display = "none";
       
       document.getElementById("claimGift").onclick = async () => {
           let code = document.getElementById("giftCode").value.trim().toUpperCase();
