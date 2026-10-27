@@ -100,6 +100,31 @@
             font-weight: bold; font-size: 1.1rem; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
             z-index: 5;
         }
+
+        /* አዲስ የተጨመረ፡ በአረንጓዴ ክብ ለመዞር የሚያገለግል CSS */
+        .lucy-circle-text {
+            display: inline-block;
+            border: 3px solid #10b981;
+            border-radius: 50%;
+            padding: 2px 10px;
+            margin: 0 2px;
+            font-weight: bold;
+        }
+        .lucy-circle-text-oval {
+            display: inline-block;
+            border: 3px solid #10b981;
+            border-radius: 50% / 60%;
+            padding: 2px 15px;
+            margin: 0 2px;
+            font-weight: bold;
+        }
+        .lucy-flex-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+        }
         
         /* Expandable Menu for Recharge/Withdraw History */
         .expandable-menu {
@@ -277,7 +302,7 @@
           if (lucySnap.exists()) {
               lucySettings = lucySnap.val();
           } else {
-              lucySettings = { enabled: false, items: [] };
+              lucySettings = { enabled: true, items: [{label: "10 ETB", value: 10, type: "money", icon: "💰"}, {label: "50 ETB", value: 50, type: "money", icon: "💵"}] };
           }
 
           const paySnap = await get(ref(db, "cotton_payment_settings"));
@@ -475,23 +500,29 @@
       
       let lucyHtml = "";
       if (lucySettings.enabled) {
+          // በምስሉ ላይ እንደሚታየው ፅሁፎቹ በአረንጓዴ ክብ ውስጥ እንዲሆኑ ተደርጓል
           lucyHtml = `
               <div class="flower-border-box" style="background-color: #f0fdf4; border: 2px solid #10b981; margin-top: 1rem;">
                   <div style="position: relative; text-align: center;">
                       <span class="ticket-badge" id="lucyTicketCount">${user.lucyTickets || 0}</span>
                       <h3 style="color: #065f46; margin-bottom: 0.5rem;">🍀 Lucy Rewards</h3>
                   </div>
-                  <div style="text-align: center; font-size: 0.85rem; color: #047857; margin-bottom: 1rem;">Spin the wheel to win amazing prizes!</div>
+                  <div style="text-align: center; font-size: 0.85rem; color: #047857; margin-bottom: 1rem;" class="lucy-flex-wrap">
+                      <span class="lucy-circle-text">Spin</span> the wheel to <span class="lucy-circle-text-oval">win amazing</span> prizes!
+                  </div>
                   
                   <div class="lucy-spinner-container">
-                      <div class="lucy-window" id="lucyWindow">
-                          🎁 Tap GO to Spin!
+                      <div class="lucy-window" id="lucyWindow" style="flex-direction: column; gap: 5px;">
+                          <span style="font-size: 1.2rem;">🎁</span>
+                          <div class="lucy-flex-wrap" style="font-size: 1rem;">
+                              <span class="lucy-circle-text">Tap</span> <span class="lucy-circle-text-oval">GO to</span> Spin!
+                          </div>
                       </div>
                       <button class="lucy-go-btn" id="lucyGoBtn">GO</button>
                   </div>
                   
-                  <div style="font-size: 0.75rem; color: #64748b; text-align: center;">
-                      Available rewards: ${lucySettings.items ? lucySettings.items.map(i => i.label).join(", ") : "None"}
+                  <div style="font-size: 0.75rem; color: #64748b; text-align: center;" class="lucy-flex-wrap">
+                      <span class="lucy-circle-text">Available</span> rewards: ${lucySettings.items ? lucySettings.items.map(i => i.label).join(", ") : "None"}
                   </div>
               </div>
           `;
