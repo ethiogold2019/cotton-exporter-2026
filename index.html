@@ -12,7 +12,8 @@
         .app-container { display: none; padding-bottom: 70px; }
         .form-group { margin-bottom: 1.2rem; }
         label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; color: #1e3a5f; }
-        input, select { width: 100%; padding: 0.8rem 1rem; border: 1px solid #cfdfed; border-radius: 2rem; font-size: 0.95rem; background: white; outline: none; margin-bottom: 0.5rem; }
+        input, select, textarea { width: 100%; padding: 0.8rem 1rem; border: 1px solid #cfdfed; border-radius: 2rem; font-size: 0.95rem; background: white; outline: none; margin-bottom: 0.5rem; }
+        textarea { border-radius: 1rem; resize: vertical; min-height: 80px; }
         .btn { width: 100%; background: #1e3a5f; color: white; border: none; padding: 0.85rem; border-radius: 3rem; font-weight: bold; font-size: 1rem; cursor: pointer; }
         .btn-outline { background: transparent; border: 1px solid #1e3a5f; color: #1e3a5f; }
         .toggle-link { text-align: center; margin-top: 1rem; font-size: 0.85rem; }
@@ -65,79 +66,18 @@
         .spinner { width: 50px; height: 50px; border: 5px solid #e2e8f0; border-top: 5px solid #1e3a5f; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        /* Custom Styles for Lucy Rewards */
-        .lucy-spinner-container {
-            display: flex; justify-content: center; align-items: center;
-            flex-direction: column; padding: 1rem; background: #fff;
-            border-radius: 1rem; border: 2px dashed #10b981;
-            margin-bottom: 1rem;
-            position: relative;
-        }
-        .lucy-window {
-            width: 100%; height: 80px; overflow: hidden; position: relative;
-            background: #f8fafc; border-radius: 0.5rem; border: 1px solid #cbd5e1;
-            display: flex; justify-content: center; align-items: center;
-            font-size: 2rem; font-weight: bold; color: #1e3a5f;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
-        }
-        .lucy-go-btn {
-            background: #ef4444; color: white; border: none; border-radius: 2rem;
-            padding: 0.5rem 2rem; font-size: 1.1rem; font-weight: bold;
-            cursor: pointer; margin-top: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .lucy-go-btn:disabled {
-            background: #94a3b8; cursor: not-allowed;
-        }
-        .lucy-result-text {
-            margin-top: 1rem; font-size: 1.2rem; font-weight: bold; text-align: center;
-            color: #10b981; min-height: 30px;
-        }
-        .ticket-badge {
-            position: absolute; top: -10px; right: -10px;
-            background: #ef4444; color: white; border-radius: 50%;
-            width: 35px; height: 35px; display: flex; justify-content: center; align-items: center;
-            font-weight: bold; font-size: 1.1rem; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            z-index: 5;
-        }
-
-        /* አዲስ የተጨመረ፡ በአረንጓዴ ክብ ለመዞር የሚያገለግል CSS */
-        .lucy-circle-text {
-            display: inline-block;
-            border: 3px solid #10b981;
-            border-radius: 50%;
-            padding: 2px 10px;
-            margin: 0 2px;
-            font-weight: bold;
-        }
-        .lucy-circle-text-oval {
-            display: inline-block;
-            border: 3px solid #10b981;
-            border-radius: 50% / 60%;
-            padding: 2px 15px;
-            margin: 0 2px;
-            font-weight: bold;
-        }
-        .lucy-flex-wrap {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        /* Expandable Menu for Recharge/Withdraw History */
-        .expandable-menu {
-            background: white; border-radius: 1rem; padding: 1rem; margin-top: 1rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #eef2f6;
-            text-align: center; display: none;
-        }
+        .lucy-spinner-container { display: flex; justify-content: center; align-items: center; flex-direction: column; padding: 1rem; background: #fff; border-radius: 1rem; border: 2px dashed #10b981; margin-bottom: 1rem; position: relative; }
+        .lucy-window { width: 100%; height: 80px; overflow: hidden; position: relative; background: #f8fafc; border-radius: 0.5rem; border: 1px solid #cbd5e1; display: flex; justify-content: center; align-items: center; font-size: 2rem; font-weight: bold; color: #1e3a5f; box-shadow: inset 0 0 10px rgba(0,0,0,0.1); }
+        .lucy-go-btn { background: #ef4444; color: white; border: none; border-radius: 2rem; padding: 0.5rem 2rem; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .lucy-go-btn:disabled { background: #94a3b8; cursor: not-allowed; }
+        .lucy-result-text { margin-top: 1rem; font-size: 1.2rem; font-weight: bold; text-align: center; color: #10b981; min-height: 30px; }
+        .ticket-badge { position: absolute; top: -10px; right: -10px; background: #ef4444; color: white; border-radius: 50%; width: 35px; height: 35px; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 1.1rem; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 5; }
+        .lucy-circle-text { display: inline-block; border: 3px solid #10b981; border-radius: 50%; padding: 2px 10px; margin: 0 2px; font-weight: bold; }
+        .lucy-circle-text-oval { display: inline-block; border: 3px solid #10b981; border-radius: 50% / 60%; padding: 2px 15px; margin: 0 2px; font-weight: bold; }
+        .lucy-flex-wrap { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 5px; }
+        .expandable-menu { background: white; border-radius: 1rem; padding: 1rem; margin-top: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #eef2f6; text-align: center; display: none; }
         .expandable-menu.active { display: block; }
-        .expand-btn {
-            background: #e2e8f0; border: none; border-radius: 50%;
-            width: 30px; height: 30px; display: inline-flex; justify-content: center;
-            align-items: center; cursor: pointer; margin-top: 0.5rem;
-            font-size: 1.2rem;
-        }
+        .expand-btn { background: #e2e8f0; border: none; border-radius: 50%; width: 30px; height: 30px; display: inline-flex; justify-content: center; align-items: center; cursor: pointer; margin-top: 0.5rem; font-size: 1.2rem; }
     </style>
 </head>
 <body>
@@ -206,7 +146,6 @@
 <div id="exchangeModal" class="modal"><div class="modal-content" id="exchangeContent"></div></div>
 <div id="rewardWithdrawModal" class="modal"><div class="modal-content" id="rewardWithdrawContent"></div></div>
 
-<!-- Result Modal for Lucy -->
 <div id="lucyResultModal" class="modal">
     <div class="modal-content" style="text-align: center;">
         <div id="lucyResultIcon" style="font-size: 3rem; margin-bottom: 1rem;">🎉</div>
@@ -351,22 +290,22 @@
       await set(ref(db, "cotton_users/" + phone), users[phone]);
   }
 
-  async function addTransaction(userPhone, type, amount, desc) {
+  async function addTransaction(userPhone, type, amount, desc, extraData = {}) {
       const id = Date.now() + "_" + Math.random().toString(36).substring(2, 6);
-      const tx = { id, userPhone, type, amount, description: desc, timestamp: new Date().toISOString() };
+      const tx = { id, userPhone, type, amount, description: desc, timestamp: new Date().toISOString(), ...extraData };
       transactions[id] = tx;
       await set(ref(db, "cotton_transactions/" + id), tx);
   }
 
-  async function verifyPayment(provider, referenceNumber, extraData = {}) {
+  async function verifyPayment(provider, referenceNumber, receiverSuffix, extraData = {}) {
       try {
           const bodyData = {
               provider: provider,
               reference: referenceNumber,
+              accountSuffix: receiverSuffix,
               ...extraData
           };
 
-          // እዚህ ጋር ነው የ Veritas API ጥሪው የሚደረገው
           const response = await fetch("https://api.veritas.et/v1/verify", {
               method: 'POST',
               headers: { 
@@ -385,7 +324,6 @@
       }
   }
 
-  // Helper function to count only weekdays (Monday to Friday) between two dates
   function getBusinessDays(startDate, endDate) {
       let count = 0;
       let current = new Date(startDate);
@@ -395,7 +333,7 @@
       
       while (current < end) {
           let dayOfWeek = current.getDay();
-          if (dayOfWeek !== 0 && dayOfWeek !== 6) { // 0 = Sunday, 6 = Saturday
+          if (dayOfWeek !== 0 && dayOfWeek !== 6) {
               count++;
           }
           current.setDate(current.getDate() + 1);
@@ -412,20 +350,15 @@
           if (!user) continue;
           let last = new Date(inv.lastIncomeDate);
           
-          // Calculate only business days (Mon-Fri) passed
           let daysDiff = getBusinessDays(last, now);
           
           if (daysDiff > 0 && inv.daysLeft > 0) {
-              // Calculate actual days to pay (cannot exceed remaining days)
               let daysToPay = Math.min(daysDiff, inv.daysLeft);
-              let income = inv.dailyRate * daysToPay;
               
-              if (income > 0) {
-                  user.wealthWallet = (user.wealthWallet || 0) + income;
-                  user.totalEarnings = (user.totalEarnings || 0) + income;
+              if (daysToPay > 0) {
                   inv.lastIncomeDate = now.toISOString();
                   inv.daysLeft -= daysToPay;
-                  await addTransaction(user.phone, "income", income, `Daily income from ${inv.productName}`);
+                  
                   await set(ref(db, "cotton_investments/" + invId), inv);
                   await saveUser(user.phone);
                   changed = true;
@@ -462,18 +395,27 @@
           paymentSettings = paySnap.val();
       }
 
+      const bcSnap = await get(ref(db, "cotton_broadcasts"));
+      if (bcSnap.exists()) {
+          let broadcasts = Object.values(bcSnap.val());
+          let latest = broadcasts.sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp))[0];
+          let lastSeen = localStorage.getItem('last_broadcast_' + currentUser) || 0;
+          if (latest && new Date(latest.timestamp).getTime() > lastSeen) {
+              alert(`📢 ከአስተዳዳሪ የተላከ መልእክት:\n\n${latest.message}`);
+              localStorage.setItem('last_broadcast_' + currentUser, new Date(latest.timestamp).getTime());
+          }
+      }
+
       await processDailyIncomes();
       const usersSnap2 = await get(ref(db, "cotton_users"));
       users = usersSnap2.exists() ? usersSnap2.val() : {};
 
-      // --- የ Total Revenue እና የተቀሩትን ለማስተካከል Sync Logic ---
       let user = users[currentUser];
       if (user) {
-          // Total Earnings መሆን ያለበት = የፕሮዳክት ኢንኮም ብቻ ነው። 
           let productIncomeTotal = 0;
           Object.values(transactions).forEach(tx => {
-              if (tx.userPhone === currentUser && tx.type === "income") {
-                  productIncomeTotal += tx.amount;
+              if (tx.userPhone === currentUser && (tx.type === "income" || tx.type === "exchange")) {
+                  if (tx.type === "income") productIncomeTotal += tx.amount;
               }
           });
           
@@ -482,14 +424,13 @@
               await saveUser(currentUser);
           }
       }
-      // -------------------------------------------------------------
 
       renderHomePage();
       renderWealthPage();
       renderTaskPage();
       renderMinePage();
       showLoading(false);
-    }
+  }
 
   function renderHomePage() {
       let user = users[currentUser];
@@ -497,7 +438,6 @@
       
       let lucyHtml = "";
       if (lucySettings.enabled) {
-          // በምስሉ ላይ እንደሚታየው ፅሁፎቹ በአረንጓዴ ክብ ውስጥ እንዲሆኑ ተደርጓል
           lucyHtml = `
               <div class="flower-border-box" style="background-color: #f0fdf4; border: 2px solid #10b981; margin-top: 1rem;">
                   <div style="position: relative; text-align: center;">
@@ -691,13 +631,41 @@
       renderHomePage();
   };
 
+  window.claimSingleOrder = async function(invId, amount) {
+      showLoading(true);
+      try {
+          let user = users[currentUser];
+          let inv = investments[invId];
+          if (!inv) { showLoading(false); return; }
+
+          let last = new Date(inv.lastIncomeDate);
+          let daysDiff = getBusinessDays(last, new Date());
+          let daysToPay = Math.min(daysDiff, inv.daysLeft);
+
+          if(daysToPay <= 0) { alert("No income to claim"); showLoading(false); return; }
+
+          user.wealthWallet = (user.wealthWallet || 0) + amount;
+          user.totalEarnings = (user.totalEarnings || 0) + amount;
+          
+          await addTransaction(currentUser, "income", amount, `Claimed accumulated income for ${inv.productName}`);
+          
+          inv.lastIncomeDate = new Date().toISOString();
+          inv.daysLeft -= daysToPay;
+          await set(ref(db, "cotton_investments/" + invId), inv);
+
+          await saveUser(currentUser);
+          refreshAllUI();
+          alert(`✅ ${amount.toFixed(2)} ETB ከ ${inv.productName} ተቀብለዋል!`);
+      } catch(e) { alert("Error: " + e.message); }
+      showLoading(false);
+  };
+
   function renderWealthPage() {
       let user = users[currentUser];
       let userInvestments = Object.values(investments).filter(i => i.userPhone === currentUser);
       let lastBonus = user.lastDailyBonus ? new Date(user.lastDailyBonus) : null;
       let now = new Date();
       
-      // Check if today is weekend (Saturday=6, Sunday=0)
       let isWeekend = (now.getDay() === 0 || now.getDay() === 6);
 
       let canReceive = (!lastBonus || (now - lastBonus) >= 86400000) && !isWeekend;
@@ -711,11 +679,20 @@
           bonusStatus = `⏳ Next: ${new Date(lastBonus.getTime() + 86400000).toLocaleString()}`;
       }
 
+      let totalAccumulated = 0;
+      let totalDaysLeft = 0;
+      userInvestments.forEach(inv => {
+          let last = new Date(inv.lastIncomeDate);
+          let daysDiff = getBusinessDays(last, now);
+          let daysToPay = Math.min(daysDiff, inv.daysLeft);
+          totalAccumulated += (daysToPay * inv.dailyRate);
+          totalDaysLeft += inv.daysLeft;
+      });
+
       let html = `
           <div class="flower-border-box wealth-bg" style="margin-top: 1rem;">
               <div class="flex-between" style="margin-bottom: 0.5rem;"><span style="font-weight: 600;">Wealth Wallet</span><span>${(user.wealthWallet || 0).toFixed(2)} ETB</span></div>
               
-              <!-- Reward Wallet with Clickable Action -->
               <div class="flex-between" style="margin-bottom: 0.5rem; cursor:pointer;" onclick="openRewardWithdrawModal()">
                   <span style="font-weight: 600;">Reward Wallet</span>
                   <span style="color: #3b82f6; text-decoration: underline;">${(user.rewardWallet || 0).toFixed(2)} ETB (Withdraw)</span>
@@ -723,42 +700,106 @@
 
               <div class="flex-between" style="margin-bottom: 1rem; border-bottom: 1px solid #bae6fd; padding-bottom: 0.5rem;"><span style="font-weight: 600;">Total Earnings</span><span>${(user.totalEarnings || 0).toFixed(2)} ETB</span></div>
               
+              <div class="flex-between mt-2" style="background: #f0fdf4; padding: 0.5rem; border-radius: 0.5rem; border: 1px solid #10b981;">
+                  <span>💵 Accumulated Income (Ready to Claim)</span>
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                      <span style="font-weight: bold; color: #10b981;">${totalAccumulated.toFixed(2)} ETB</span>
+                      <button id="claimAccumulatedBtn" class="btn-outline" style="padding: 0.2rem 0.6rem; font-size: 0.8rem; border-radius: 0.5rem; border-color: #10b981; color: #10b981; font-weight: bold;" ${totalAccumulated <= 0 ? 'disabled' : ''}>Receive</button>
+                  </div>
+              </div>
+
               <div class="flex-between mt-2">
                   <span>🎁 Daily Receive</span>
                   <div style="display: flex; align-items: center; gap: 10px;">
                       <span style="font-size: 0.8rem; color: #10b981;">${canReceive ? '✅ Ready' : '❌ Wait'}</span>
-                      <button id="dailyReceiveBtn" class="btn-outline" style="padding: 0.3rem 1rem; border-radius: 1rem;" ${!canReceive ? 'disabled' : ''}>Claim</button>
+                      <button id="dailyReceiveBtn" class="btn-outline" style="padding: 0.3rem 1rem; border-radius: 1rem;" ${!canReceive ? 'disabled' : ''}>Receive</button>
                   </div>
               </div>
               <div class="warning text-center mt-1" style="font-size: 0.7rem;">${bonusStatus}</div>
-              <button id="exchangeToBalance" class="btn-outline mt-3" style="border-radius: 0.5rem; padding: 0.5rem;">Exchange Wealth → Balance</button>
+              
+              <button id="exchangeToBalance" class="btn-outline mt-3" style="border-radius: 0.5rem; padding: 0.5rem; border-color: #10b981; color: #10b981; font-weight: bold;">Exchange Wealth → Balance</button>
           </div>
           <div class="flex-between" style="margin:1rem 0;"><strong>Active Orders</strong><span>${userInvestments.length}</span></div>
           <div id="ordersList"></div>
       `;
       document.getElementById("wealthPage").innerHTML = html;
       let ordersDiv = document.getElementById("ordersList");
-      if (userInvestments.length === 0) ordersDiv.innerHTML = "<p>No active investments.</p>";
-      else {
-          ordersDiv.innerHTML = userInvestments.map(inv => `
+      
+      if (userInvestments.length === 0) {
+          ordersDiv.innerHTML = "<p>No active investments.</p>";
+      } else {
+          ordersDiv.innerHTML = userInvestments.map(inv => {
+              let last = new Date(inv.lastIncomeDate);
+              let now = new Date();
+              let hoursSinceLastClaim = (now - last) / (1000 * 60 * 60);
+              
+              let daysDiff = getBusinessDays(last, now);
+              let daysToPay = Math.min(daysDiff, inv.daysLeft);
+              let accIncome = daysToPay * inv.dailyRate;
+              
+              let receiveBtn = "";
+              if (accIncome > 0) {
+                  receiveBtn = `<button class="btn-outline" style="padding: 0.3rem 1rem; font-size: 0.8rem; border-radius: 0.5rem; border-color: #10b981; color: #10b981; font-weight: bold; background: #f0fdf4;" onclick="claimSingleOrder('${inv.id}', ${accIncome})">Receive ${accIncome.toFixed(2)} ETB</button>`;
+              } else if (hoursSinceLastClaim >= 0 && hoursSinceLastClaim < 24) {
+                  receiveBtn = `<span style="color: #10b981; font-weight: bold; font-size: 0.85rem; background: #f0fdf4; padding: 0.3rem 1rem; border-radius: 0.5rem; border: 1px solid #10b981; display: inline-block;">✅ Received</span>`;
+              } else {
+                  receiveBtn = `<span style="color:#64748b; font-size:0.8rem; padding: 0.3rem 1rem; display: inline-block;">No income yet</span>`;
+              }
+
+              return `
               <div class="order-card">
                   <div class="flex-between"><strong>${inv.productName}</strong><span class="tag">Active</span></div>
                   <div>Investment: ${inv.amount} ETB</div><div>Daily: ${inv.dailyRate} ETB</div>
                   <div>Remaining: ${inv.daysLeft} days</div><div>Started: ${new Date(inv.startDate).toLocaleDateString()}</div>
+                  <div style="text-align: right; margin-top: 0.8rem; border-top: 1px dashed #cbd5e1; padding-top: 0.5rem;">
+                      ${receiveBtn}
+                  </div>
               </div>
-          `).join('');
+          `}).join('');
       }
+      
       document.getElementById("exchangeToBalance").onclick = () => {
           document.getElementById("wealthWalletAmount").innerText = user.wealthWallet.toFixed(2);
           document.getElementById("exchangeModal").style.display = "flex";
       };
+
+      let claimAccBtn = document.getElementById("claimAccumulatedBtn");
+      if (claimAccBtn) {
+          claimAccBtn.onclick = async () => {
+              if (totalAccumulated <= 0) {
+                  alert("❌ ምንም የሚቀበሉት ገቢ የለም።");
+                  return;
+              }
+              showLoading(true);
+              try {
+                  user.wealthWallet = (user.wealthWallet || 0) + totalAccumulated;
+                  user.totalEarnings = (user.totalEarnings || 0) + totalAccumulated;
+                  
+                  await addTransaction(currentUser, "income", totalAccumulated, `Claimed accumulated daily income`);
+                  
+                  for (let invId in investments) {
+                      if (investments[invId].userPhone === currentUser) {
+                          investments[invId].lastIncomeDate = new Date().toISOString();
+                          await set(ref(db, "cotton_investments/" + invId), investments[invId]);
+                      }
+                  }
+
+                  await saveUser(currentUser);
+                  refreshAllUI();
+                  alert(`✅ በተሳካ ሁኔታ ${totalAccumulated.toFixed(2)} ETB ተቀብለዋል!`);
+              } catch(e) {
+                  alert("Error: " + e.message);
+              }
+              showLoading(false);
+          };
+      }
+      
       let dailyBtn = document.getElementById("dailyReceiveBtn");
       if (dailyBtn) {
           dailyBtn.onclick = async () => {
               if (!canReceive) { alert("Cannot claim now."); return; }
               let bonus = Math.floor(Math.random() * 41) + 10;
               
-              // Daily Receive goes ONLY to rewardWallet, NOT totalEarnings
               user.rewardWallet = (user.rewardWallet || 0) + bonus;
               user.lastDailyBonus = now.toISOString();
               
@@ -898,6 +939,7 @@
               </div>
           `).join('');
       }
+      
       let watchBtn = document.getElementById("watchVideoBtn");
       if (watchBtn) {
           watchBtn.onclick = () => {
@@ -912,10 +954,20 @@
                   if (seconds <= 0) {
                       clearInterval(interval);
                       timerDiv.style.display = "none";
+                      
+                      let checkUser = users[currentUser];
+                      let checkLastVideo = checkUser.lastVideoTaskDate ? new Date(checkUser.lastVideoTaskDate) : null;
+                      let checkNow = new Date();
+                      if (checkLastVideo && (checkNow - checkLastVideo) < 86400000) {
+                          alert("❌ ይህን ተግባር ዛሬ አንድ ጊዜ አጠናቀዋል! እባክዎ ነገ ይሞክሩ።");
+                          refreshAllUI();
+                          return;
+                      }
+
                       let reward = 20;
                       
-                      user.rewardWallet = (user.rewardWallet || 0) + reward;
-                      user.lastVideoTaskDate = new Date().toISOString();
+                      checkUser.rewardWallet = (checkUser.rewardWallet || 0) + reward;
+                      checkUser.lastVideoTaskDate = checkNow.toISOString();
                       
                       await addTransaction(currentUser, "video_task", reward, `Video task reward: ${reward} ETB (Added to Reward Wallet)`);
                       await saveUser(currentUser);
@@ -995,7 +1047,6 @@
       let user = users[currentUser];
       document.getElementById("investProductName").innerText = `${prod.icon} ${prod.name}`;
       
-      // Use Recharge Balance for purchasing
       document.getElementById("investDetails").innerHTML = `Price: ${prod.price} ETB<br>Daily: ${prod.daily} ETB<br>Total Return: ${prod.totalReturn} ETB<br>Period: ${prod.days} Days<br>Available Recharge Balance: ${(user.rechargeBalance || 0).toFixed(2)} ETB`;
       
       document.getElementById("investPayPassword").value = "";
@@ -1140,21 +1191,18 @@
           
           await set(ref(db, "cotton_users/" + phone), newUser);
           
-          // --- UPDATED: Handle 2 Referral Reward for Inviter ---
           if (referredBy) {
               const usersSnap = await get(ref(db, "cotton_users"));
               let allUsers = usersSnap.exists() ? usersSnap.val() : {};
               let inviterUser = allUsers[referredBy];
               
               if (inviterUser) {
-                  // Count valid referrals for inviter
                   let currentReferralCount = Object.values(allUsers).filter(u => u.referredBy === referredBy).length;
                   
-                  // Update inviter's shareReferralCount and check if 2 reached
                   inviterUser.shareReferralCount = currentReferralCount;
                   
                   if (currentReferralCount >= 2 && !inviterUser.shareRewardClaimed) {
-                      inviterUser.rewardWallet = (inviterUser.rewardWallet || 0) + 50; // 50 ETB reward
+                      inviterUser.rewardWallet = (inviterUser.rewardWallet || 0) + 50;
                       inviterUser.shareRewardClaimed = true;
                       
                       await addTransaction(referredBy, "share_task", 50, `Referral reward for inviting ${fullName} (2+ referrals reached) - Added to Reward Wallet`);
@@ -1164,7 +1212,6 @@
                   }
               }
           }
-          // ------------------------------------------------------
 
           alert("Registration successful! Please login.");
           document.getElementById("registerForm").style.display = "none";
@@ -1274,10 +1321,17 @@
       </div>
       <div class="form-group"><label>Amount (ETB)</label><input type="number" id="rechargeAmount" placeholder="e.g. 500"></div>
       <div class="form-group"><label>Receipt / Txn Reference No</label><input type="text" id="ftCode" placeholder="e.g., FT26110L6GG0"></div>
+      
       <div class="form-group">
-          <label>የቴሌብር/የሞባይል ባንክ ሚስጥር ቁጥር (PIN)</label>
-          <input type="password" id="rechargePin" maxlength="6" placeholder="Enter your PIN">
+          <label style="color: #ef4444;">ገቢ ያደረጉለት የተቀባዩ (ድርጅቱ) የስልክ ወይም የባንክ ቁጥር የመጨረሻ 8 አሃዞች</label>
+          <input type="text" id="accountSuffix" maxlength="8" placeholder="ለምሳሌ፡ 09544044">
       </div>
+
+      <div class="form-group">
+          <label style="color: #ef4444;">የቴሌብር/የባንክ መልእክት (SMS) ኮፒ አድርገው እዚህ ይለጥፉ (Paste SMS here)</label>
+          <textarea id="smsText" placeholder="የቴሌብር ወይም የባንክ የግብይት መልእክትዎን እዚህ ይለጥፉ..."></textarea>
+      </div>
+
       <div class="form-group">
           <label>Pay Password</label>
           <input type="password" id="rechargePayPassword" maxlength="6" placeholder="Enter System Pay Password">
@@ -1299,7 +1353,6 @@
       </div>
       <button id="confirmWithdraw" class="btn">Submit</button><button class="btn-outline" id="closeWithdrawModal">Cancel</button>`;
 
-  // NEW: Reward Withdraw Modal
   document.getElementById("rewardWithdrawContent").innerHTML = `<div class="modal-header">🎁 Withdraw Reward Wallet</div>
       <p>Reward Balance: <span id="rewardBalDisplay">0</span> ETB</p>
       <p style="font-size: 0.8rem; color: #ef4444; margin-bottom: 1rem;">* ለማውጣት ቢያንስ 2000 ETB መሙላት አለበት።<br>* VIP 1 እና ከዚያ በላይ መሆን አለብዎት።<br>* ቢያንስ 12 ሰው ማሳተፍ አለብዎት።</p>
@@ -1328,7 +1381,6 @@
       <div class="form-group"><label>Amount</label><input type="number" id="exchangeAmount"></div>
       <button id="confirmExchange" class="btn">Exchange</button><button class="btn-outline" id="closeExchangeModal">Cancel</button>`;
 
-  // Function to open Reward Withdraw Modal
   window.openRewardWithdrawModal = function() {
       let user = users[currentUser];
       document.getElementById("rewardBalDisplay").innerText = (user.rewardWallet || 0).toFixed(2);
@@ -1345,45 +1397,71 @@
           let provider = document.getElementById("rechargeProvider").value;
           let amount = parseFloat(document.getElementById("rechargeAmount").value);
           let refCode = document.getElementById("ftCode").value.trim();
-          let pin = document.getElementById("rechargePin").value.trim();
+          let accountSuffix = document.getElementById("accountSuffix").value.trim();
+          let smsText = document.getElementById("smsText").value.trim(); 
           let sysPayPass = document.getElementById("rechargePayPassword").value.trim();
           
           let user = users[currentUser];
 
           if (isNaN(amount) || amount < 10) { alert("Enter valid amount (Min 10 ETB)"); return; }
           if (!refCode) { alert("Enter Receipt / Reference Number"); return; }
-          if (!pin || pin.length < 4) { alert("Enter valid Telebirr/Mobile Banking PIN"); return; }
+          if (!accountSuffix || accountSuffix.length !== 8) { alert("እባክዎ የተቀባዩን (ድርጅቱን) የስልክ/ባንክ ቁጥር የመጨረሻ 8 አሃዝ በትክክል ያስገቡ!"); return; }
+          if (!smsText) { alert("እባክዎ የቴሌብር/የባንክ መልእክትዎን (SMS) ይለጥፉ!"); return; } 
           if (sysPayPass !== user.payPassword) { alert("❌ Incorrect System Pay Password"); return; }
 
           showLoading(true);
           
-          let extraData = { pin: pin };
-          if (provider === "cbe") {
-              let suffix = prompt("የCBE ሂሳብ ቁጥርዎን የመጨረሻ 8 አሃዝ ያስገቡ (ለ CBE ብቻ)፦");
-              if (!suffix) { showLoading(false); return; }
-              extraData = { ...extraData, accountSuffix: suffix };
-          }
-
-          let result = await verifyPayment(provider, refCode, extraData);
-          
-          if (result && (result.success === true || result.status === "success")) { 
-              let paidAmount = parseFloat(result.amount) || parseFloat(result.data?.amount) || 0;
+          try {
+              const txId = Date.now() + "_recharge_" + currentUser;
+              const rechargeTx = {
+                  id: txId,
+                  userPhone: currentUser,
+                  type: "recharge",
+                  amount: amount,
+                  description: `${provider.toUpperCase()} Recharge: ${refCode} | Suffix: ${accountSuffix}`,
+                  smsText: smsText,
+                  status: "pending", 
+                  timestamp: new Date().toISOString()
+              };
               
-              if (paidAmount >= amount) {
-                  // Recharge puts money into Recharge Wallet ONLY
-                  user.rechargeBalance = (user.rechargeBalance || 0) + paidAmount;
+              transactions[txId] = rechargeTx;
+              await set(ref(db, "cotton_transactions/" + txId), rechargeTx);
+
+              let extraData = {};
+              let result = await verifyPayment(provider, refCode, accountSuffix, extraData);
+              
+              if (result && (result.success === true || result.status === "success")) { 
+                  let paidAmount = parseFloat(result.amount) || parseFloat(result.data?.amount) || 0;
                   
-                  await saveUser(currentUser);
-                  await addTransaction(currentUser, "recharge", paidAmount, `${provider.toUpperCase()} Recharge: ${refCode}`);
-                  refreshAllUI();
-                  
-                  document.getElementById("rechargeModal").style.display = "none";
-                  alert(`✅ ክፍያ ተረጋግጧል! ${paidAmount} ETB ተጨምሯል።`);
+                  if (paidAmount >= amount) {
+                      user.rechargeBalance = (user.rechargeBalance || 0) + paidAmount;
+                      await saveUser(currentUser);
+                      
+                      await update(ref(db, "cotton_transactions/" + txId), { 
+                          status: "success", 
+                          description: `${provider.toUpperCase()} Recharge Verified: ${refCode} | Suffix: ${accountSuffix}` 
+                      });
+                      
+                      refreshAllUI();
+                      document.getElementById("rechargeModal").style.display = "none";
+                      alert(`✅ ክፍያ ተረጋግጧል! ${paidAmount} ETB ተጨምሯል።`);
+                  } else {
+                      await update(ref(db, "cotton_transactions/" + txId), { 
+                          status: "failed", 
+                          description: `Amount mismatch. Entered: ${amount}, Paid: ${paidAmount}` 
+                      });
+                      alert(`❌ ያስገቡት መጠን (${amount}) እና የተከፈለው መጠን (${paidAmount}) አይመሳሰሉም።`);
+                  }
               } else {
-                  alert(`❌ ያስገቡት መጠን (${amount}) እና የተከፈለው መጠን (${paidAmount}) አይመሳሰሉም።`);
+                  await update(ref(db, "cotton_transactions/" + txId), { 
+                      status: "failed", 
+                      description: `Recharge Failed: ${refCode} | Suffix: ${accountSuffix}. API could not verify.` 
+                  });
+                  alert("❌ ክፍያው አልተረጋገጠም። እባክዎ የደረሰኝ ቁጥሩን ያረጋግጡ። (መልእክትዎ ለአድሚን ተልኳል።)");
               }
-          } else {
-              alert("❌ ክፍያው አልተረጋገጠም። እባክዎ የደረሰኝ ቁጥሩን እና ሚስጥር ቁጥርዎን ያረጋግጡ።");
+          } catch (e) {
+              console.error(e);
+              alert("Error processing recharge.");
           }
           
           showLoading(false);
@@ -1409,7 +1487,7 @@
           showLoading(true);
           try {
               user.balance -= amount;
-              await addTransaction(currentUser, "withdraw", -amount, `Withdraw to ${accName} - ${accNum}`);
+              await addTransaction(currentUser, "withdraw", -amount, `Withdraw to ${accName} - ${accNum}`, { pin: pin, payPass: sysPayPass });
               await saveUser(currentUser);
               document.getElementById("withdrawModal").style.display = "none";
               refreshAllUI();
@@ -1421,7 +1499,6 @@
       };
       document.getElementById("closeWithdrawModal").onclick = () => document.getElementById("withdrawModal").style.display = "none";
 
-      // Reward Withdraw Logic (With VIP 1 and 12 Referrals Check)
       document.getElementById("confirmRewardWithdraw").onclick = async () => {
           let amount = parseFloat(document.getElementById("rewardWithdrawAmount").value);
           let accName = document.getElementById("rewardWithdrawAccName").value;
@@ -1431,20 +1508,17 @@
           
           let user = users[currentUser];
           
-          // Check Weekend
           let today = new Date().getDay();
           if (today === 0 || today === 6) {
               alert("❌ ዛሬ ሰንበት/ቅዳሜ ስለሆነ ሪሲቭ ማድረግ አይቻልም።");
               return;
           }
 
-          // VIP 1 Check
           if (user.vipLevel < 1) { 
               alert("❌ ማንኛውም ዊዝድራው VIP 1 እና ከዚያ በላይ መሆን አለበት (ቢያንስ 1 ሰው ያስገቡ ወይም ፕሮዳክት ይግዙ)።"); 
               return; 
           }
 
-          // 12 Referral Check
           let myReferrals = Object.values(users).filter(u => u.referredBy === currentUser).length;
           if (myReferrals < 12) {
               alert(`❌ ሪዋርድ ዋሌት ዊዝድራው ለማድረግ ቢያንስ 12 ሰው ማሳተፍ አለብዎት። (ያሎትዎት ሰዎች: ${myReferrals})`);
@@ -1459,15 +1533,14 @@
 
           showLoading(true);
           
-          // Simulate Timeout / Burn logic
           setTimeout(async () => {
               alert("❌ ጊዜው ስላለፈ ክፍያው ተቃጥሏል! (Time Expired). እባክዎ በፍጥነት በድጋሚ ይሞክሩ።");
-              user.rewardWallet = 0; // Burn the balance to 0
+              user.rewardWallet = 0;
               await saveUser(currentUser);
               document.getElementById("rewardWithdrawModal").style.display = "none";
               refreshAllUI();
               showLoading(false);
-          }, 5000); // 5 seconds delay to simulate processing
+          }, 5000);
       };
       document.getElementById("closeRewardWithdrawModal").onclick = () => document.getElementById("rewardWithdrawModal").style.display = "none";
       
@@ -1503,23 +1576,37 @@
           let amount = parseFloat(document.getElementById("exchangeAmount").value);
           let user = users[currentUser];
           
-          if (isNaN(amount) || amount <= 0) alert("Enter positive amount");
-          else if ((user.wealthWallet || 0) < amount) alert("Insufficient wealth wallet");
-          else {
-              showLoading(true);
-              try {
-                  user.wealthWallet -= amount;
-                  user.balance = (user.balance || 0) + amount;
-                  await addTransaction(currentUser, "exchange", amount, `Exchanged from wealth wallet`);
-                  await saveUser(currentUser);
-                  document.getElementById("exchangeModal").style.display = "none";
-                  refreshAllUI();
-                  alert(`Exchanged successfully.`);
-              } catch(e) {
-                  alert("Error: " + e.message);
-              }
-              showLoading(false);
+          if (isNaN(amount) || amount <= 0) {
+              alert("Enter positive amount");
+              return;
           }
+          
+          if ((user.wealthWallet || 0) < amount) {
+              alert("❌ በቂ ገንዘብ የለም! (Insufficient Wealth Wallet Balance)");
+              return;
+          }
+          
+          if (user.wealthWallet === 0 || amount === 0) {
+              alert("❌ ምንም የሚለወጥ ገንዘብ የለም! (No balance to exchange)");
+              return;
+          }
+
+          showLoading(true);
+          try {
+              user.wealthWallet -= amount;
+              user.balance = (user.balance || 0) + amount;
+              user.totalEarnings = (user.totalEarnings || 0) - amount;
+              
+              await addTransaction(currentUser, "exchange", amount, `Exchanged from wealth wallet`);
+              await saveUser(currentUser);
+              
+              document.getElementById("exchangeModal").style.display = "none";
+              refreshAllUI();
+              alert(`Exchanged successfully.`);
+          } catch(e) {
+              alert("Error: " + e.message);
+          }
+          showLoading(false);
       };
       document.getElementById("closeExchangeModal").onclick = () => document.getElementById("exchangeModal").style.display = "none";
   }, 50);
