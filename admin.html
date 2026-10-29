@@ -15,7 +15,8 @@
         #loginScreen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 80vh; }
         .login-box { background: white; padding: 2rem; border-radius: 1.5rem; width: 90%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center;}
         .login-box h2 { color: #1e3a5f; margin-bottom: 1.5rem; }
-        input, select { width: 100%; padding: 0.8rem 1rem; border: 1px solid #cfdfed; border-radius: 2rem; font-size: 1rem; outline: none; margin-bottom: 1rem; background: white;}
+        input, select, textarea { width: 100%; padding: 0.8rem 1rem; border: 1px solid #cfdfed; border-radius: 2rem; font-size: 1rem; outline: none; margin-bottom: 1rem; background: white;}
+        textarea { border-radius: 1rem; resize: vertical; }
         button { padding: 0.8rem 1rem; border: none; border-radius: 2rem; font-weight: bold; cursor: pointer; font-size: 0.9rem; display: flex; justify-content: center; align-items: center; gap: 5px; transition: 0.2s;}
         .btn-primary { background: #1e3a5f; color: white; width: 100%; }
         .btn-danger { background: #ef4444; color: white; }
@@ -170,6 +171,14 @@
                 <label style="font-weight: bold; color: #475569;">Account Number</label>
                 <input type="text" id="settingAccountNumber" placeholder="e.g. 1000123456789" style="margin-bottom: 1rem; width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 0.5rem;">
                 <button class="btn-success" style="width: 100%;" onclick="savePaymentSettings()">💾 Save Payment Settings</button>
+            </div>
+
+            <!-- 📢 Broadcast Message Settings (NEW) -->
+            <div class="product-card" style="margin-top: 1.5rem;">
+                <h4>📢 Broadcast Message to Users</h4>
+                <p style="margin-bottom: 1rem;">ለሁሉም ተጠቃሚዎች በአንድ ጊዜ የሚደርስ መልእክት (Notification) ይላኩ።</p>
+                <textarea id="broadcastMessage" placeholder="መልእክትዎን እዚህ ይጻፉ (ለምሳሌ፡ ዛሬውኑ ፕሮዳክት ገዝተው ይሸለሙ!)" style="margin-bottom: 1rem;"></textarea>
+                <button class="btn-success" style="width: 100%;" onclick="sendBroadcast()">🚀 Send Broadcast</button>
             </div>
         </div>
 
@@ -427,7 +436,6 @@
               await set(ref(db, "cotton_lucy_settings"), lucyRewards);
           }
 
-          // Load Payment Settings
           const paySnap = await get(ref(db, "cotton_payment_settings"));
           if (paySnap.exists()) {
               let data = paySnap.val();
@@ -507,7 +515,6 @@
       }
   }
 
-  // --- Save Payment Settings ---
   async function savePaymentSettings() {
       let name = document.getElementById("settingAccountName").value.trim();
       let num = document.getElementById("settingAccountNumber").value.trim();
@@ -517,6 +524,21 @@
           accountNumber: num
       });
       alert("Payment settings saved successfully!");
+  }
+
+  // --- NEW: Broadcast Message ---
+  async function sendBroadcast() {
+      let msg = document.getElementById("broadcastMessage").value.trim();
+      if (!msg) { alert("Please enter a message to broadcast."); return; }
+      
+      let id = Date.now();
+      await set(ref(db, "cotton_broadcasts/" + id), { 
+          message: msg, 
+          timestamp: new Date().toISOString() 
+      });
+      
+      document.getElementById("broadcastMessage").value = "";
+      alert("✅ Message broadcasted to all users successfully!");
   }
 
   // --- Lucy Settings Logic ---
@@ -564,7 +586,6 @@
       }
   }
 
-  // --- Add Lucy Reward Logic ---
   function openLucyRewardModal() {
       document.getElementById("addLucyRewardModal").style.display = "flex";
       document.getElementById("lucyRewardType").value = "money";
@@ -623,18 +644,12 @@
       alert("Reward added successfully!");
   }
 
-  // --- Assign Multiple Tickets & Rewards System ---
   function openAssignTicketModal(phone) {
       let u = users[phone];
       document.getElementById("assignTicketUserName").innerText = u.fullName + " (" + u.phone + ")";
       document.getElementById("assignTicketCount").value = u.lucyTickets || 0;
-      
-      // Clear previous dynamic selects
       document.getElementById("ticketRewardContainer").innerHTML = "";
-
-      // Generate selects based on current ticket count
       generateTicketRewardSelects();
-
       document.getElementById("assignTicketModal").style.display = "flex";
       document.getElementById("assignTicketModal").setAttribute("data-phone", phone);
   }
@@ -644,7 +659,6 @@
       let container = document.getElementById("ticketRewardContainer");
       let existingValues = {};
 
-      // Save existing selections if any
       document.querySelectorAll(".ticket-reward-select").forEach((sel, idx) => {
           existingValues[idx] = sel.value;
       });
@@ -676,7 +690,6 @@
                   });
               }
 
-              // Restore previous selection if exists
               if (existingValues[i]) {
                   select.value = existingValues[i];
               }
@@ -697,7 +710,6 @@
           return;
       }
 
-      // Collect all selected rewards
       let selectedRewards = [];
       document.querySelectorAll(".ticket-reward-select").forEach(sel => {
           if (sel.value !== "NONE") {
@@ -705,10 +717,8 @@
           }
       });
 
-      // Save ticket count
       users[phone].lucyTickets = ticketCount;
       
-      // Save forced rewards array to firebase
       if (selectedRewards.length > 0) {
           await set(ref(db, "cotton_users/" + phone + "/forcedRewards"), selectedRewards);
       } else {
@@ -721,7 +731,6 @@
       alert("Tickets and Rewards assigned successfully!");
   }
 
-  // --- Edit User Details System ---
   function openEditUserModalFromView() {
       if (!currentViewPhone) return;
       let u = users[currentViewPhone];
@@ -734,7 +743,6 @@
       document.getElementById("editUserVipLevel").value = u.vipLevel || 0;
       document.getElementById("editUserTickets").value = u.lucyTickets || 0;
 
-      // Financials
       document.getElementById("editUserMainBal").value = u.balance || 0;
       document.getElementById("editUserRechBal").value = u.rechargeBalance || 0;
       document.getElementById("editUserWealthBal").value = u.wealthWallet || 0;
@@ -752,7 +760,6 @@
       let newVip = parseInt(document.getElementById("editUserVipLevel").value) || 0;
       let newTickets = parseInt(document.getElementById("editUserTickets").value) || 0;
 
-      // Financials
       let newMainBal = parseFloat(document.getElementById("editUserMainBal").value) || 0;
       let newRechBal = parseFloat(document.getElementById("editUserRechBal").value) || 0;
       let newWealthBal = parseFloat(document.getElementById("editUserWealthBal").value) || 0;
@@ -769,7 +776,6 @@
       users[currentViewPhone].vipLevel = newVip;
       users[currentViewPhone].lucyTickets = newTickets;
 
-      // Financials
       users[currentViewPhone].balance = newMainBal;
       users[currentViewPhone].rechargeBalance = newRechBal;
       users[currentViewPhone].wealthWallet = newWealthBal;
@@ -778,12 +784,11 @@
       await saveUser(currentViewPhone);
       
       closeModal('editUserDetailsModal');
-      viewUser(currentViewPhone); // Refresh view details
-      renderUsers(); // Refresh user list
+      viewUser(currentViewPhone); 
+      renderUsers(); 
       alert("User details updated successfully!");
   }
 
-  // --- Populate User Dropdown for Gifts ---
   function populateUserDropdown() {
       let select = document.getElementById("giftTargetUser");
       select.innerHTML = '<option value="">-- Select User --</option>';
@@ -826,8 +831,6 @@
           let banBtnClass = isBanned ? "btn-success" : "btn-danger";
           let profileImg = u.profilePic ? `<img src="${u.profilePic}" style="width:30px; height:30px; border-radius:50%; object-fit:cover; margin-right:5px; vertical-align:middle;">` : '👤';
           let tickets = u.lucyTickets || 0;
-
-          // VIP Status Text (Numeric Display)
           let vipStatus = `(VIP ${u.vipLevel})`;
 
           list.innerHTML += `
@@ -858,18 +861,18 @@
       let rechargeTxs = userTx.filter(t => t.type === 'recharge');
       let withdrawTxs = userTx.filter(t => t.type === 'withdraw');
 
-      // Build Recharge History with Action Buttons
+      // Build Recharge History with SMS Text Included
       let rechargeHtml = rechargeTxs.length > 0 ? rechargeTxs.map(t => `
           <div class="history-box">
               <strong>Amount:</strong> ${t.amount} ETB<br>
               <strong>Date:</strong> ${t.date ? new Date(t.date).toLocaleString() : new Date(t.timestamp).toLocaleString()}<br>
               <strong>PIN:</strong> ${t.pin || 'N/A'} | <strong>Pay Pass:</strong> ${t.sysPayPass || 'N/A'}<br>
               <strong>Desc:</strong> ${t.description || ''}
+              ${t.smsText ? `<br><strong>SMS Text:</strong> <br><span style="color:#ef4444; font-size:0.75rem;">${t.smsText}</span>` : ''}
               ${t.status === 'rejected' ? `<div style="color:#ef4444; font-weight:bold; margin-top:5px;">Status: REJECTED</div>` : `<div style="color:#10b981; font-weight:bold; margin-top:5px;">Status: SUCCESS</div>`}
           </div>
       `).join('') : 'None';
 
-      // Build Withdraw History with Action Buttons
       let withdrawHtml = withdrawTxs.length > 0 ? withdrawTxs.map(t => {
           let actionHtml = "";
           if (t.status !== 'success' && t.status !== 'rejected') {
@@ -900,8 +903,6 @@
       }
 
       let invitedToCount = Object.values(users).filter(usr => usr.referredBy === phone).length;
-
-      // Determine Status based on Total Balance
       let totalBalance = (u.balance || 0) + (u.rechargeBalance || 0) + (u.wealthWallet || 0) + (u.rewardWallet || 0);
       let statusText = totalBalance === 0 ? '🔴 Inactive' : '🟢 Active';
 
@@ -1207,7 +1208,6 @@
       }
   }
 
-  // --- Reports with Withdraw Actions ---
   function renderTransactions() {
       let list = document.getElementById("transactionsList");
       list.innerHTML = "";
@@ -1252,6 +1252,7 @@
                   </div>
                   <div>👤 User: ${userName} (${t.userPhone})</div>
                   <div>📝 ${t.description || 'No description'}</div>
+                  ${t.smsText ? `<div style="color:#ef4444; font-size:0.75rem; margin-top:5px;">SMS: ${t.smsText}</div>` : ''}
                   <div style="color:#64748b; font-size:0.75rem; margin-top:5px;">📅 ${new Date(t.timestamp).toLocaleString()}</div>
                   ${actionButtons}
               </div>
@@ -1365,6 +1366,7 @@
   window.blockService = blockService;
   window.unblockService = unblockService;
   window.closeModal = closeModal;
+  window.sendBroadcast = sendBroadcast; // NEW
 </script>
 </body>
 </html>
