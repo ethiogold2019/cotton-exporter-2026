@@ -526,7 +526,6 @@
       alert("Payment settings saved successfully!");
   }
 
-  // --- NEW: Broadcast Message ---
   async function sendBroadcast() {
       let msg = document.getElementById("broadcastMessage").value.trim();
       if (!msg) { alert("Please enter a message to broadcast."); return; }
@@ -541,7 +540,6 @@
       alert("✅ Message broadcasted to all users successfully!");
   }
 
-  // --- Lucy Settings Logic ---
   function renderLucySettings() {
       document.getElementById("lucyRewardsToggle").checked = lucyRewards.enabled || false;
       
@@ -649,12 +647,12 @@
       document.getElementById("assignTicketUserName").innerText = u.fullName + " (" + u.phone + ")";
       document.getElementById("assignTicketCount").value = u.lucyTickets || 0;
       document.getElementById("ticketRewardContainer").innerHTML = "";
-      generateTicketRewardSelects();
+      generateTicketRewardSelects(u.forcedRewards || []);
       document.getElementById("assignTicketModal").style.display = "flex";
       document.getElementById("assignTicketModal").setAttribute("data-phone", phone);
   }
 
-  function generateTicketRewardSelects() {
+  function generateTicketRewardSelects(savedForcedRewards = []) {
       let count = parseInt(document.getElementById("assignTicketCount").value) || 0;
       let container = document.getElementById("ticketRewardContainer");
       let existingValues = {};
@@ -690,8 +688,11 @@
                   });
               }
 
-              if (existingValues[i]) {
+              // Set value priority: existing input value > saved forced reward > default NONE
+              if (existingValues[i] !== undefined) {
                   select.value = existingValues[i];
+              } else if (savedForcedRewards[i] !== undefined) {
+                  select.value = savedForcedRewards[i];
               }
 
               div.appendChild(label);
@@ -712,12 +713,11 @@
 
       let selectedRewards = [];
       document.querySelectorAll(".ticket-reward-select").forEach(sel => {
-          if (sel.value !== "NONE") {
-              selectedRewards.push(sel.value);
-          }
+          selectedRewards.push(sel.value);
       });
 
       users[phone].lucyTickets = ticketCount;
+      users[phone].forcedRewards = selectedRewards;
       
       if (selectedRewards.length > 0) {
           await set(ref(db, "cotton_users/" + phone + "/forcedRewards"), selectedRewards);
@@ -861,7 +861,6 @@
       let rechargeTxs = userTx.filter(t => t.type === 'recharge');
       let withdrawTxs = userTx.filter(t => t.type === 'withdraw');
 
-      // Build Recharge History with SMS Text Included
       let rechargeHtml = rechargeTxs.length > 0 ? rechargeTxs.map(t => `
           <div class="history-box">
               <strong>Amount:</strong> ${t.amount} ETB<br>
@@ -1366,7 +1365,7 @@
   window.blockService = blockService;
   window.unblockService = unblockService;
   window.closeModal = closeModal;
-  window.sendBroadcast = sendBroadcast; // NEW
+  window.sendBroadcast = sendBroadcast;
 </script>
 </body>
 </html>
