@@ -67,7 +67,7 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
         .lucy-spinner-container { display: flex; justify-content: center; align-items: center; flex-direction: column; padding: 1rem; background: #fff; border-radius: 1rem; border: 2px dashed #10b981; margin-bottom: 1rem; position: relative; }
-        .lucy-window { width: 100%; height: 80px; overflow: hidden; position: relative; background: #f8fafc; border-radius: 0.5rem; border: 1px solid #cbd5e1; display: flex; justify-content: center; align-items: center; font-size: 2rem; font-weight: bold; color: #1e3a5f; box-shadow: inset 0 0 10px rgba(0,0,0,0.1); }
+        .lucy-window { width: 100%; height: 90px; overflow: hidden; position: relative; background: #f8fafc; border-radius: 0.5rem; border: 1px solid #cbd5e1; display: flex; justify-content: center; align-items: center; font-size: 1.8rem; font-weight: bold; color: #1e3a5f; box-shadow: inset 0 0 10px rgba(0,0,0,0.1); padding: 5px; text-align: center; }
         .lucy-go-btn { background: #ef4444; color: white; border: none; border-radius: 2rem; padding: 0.5rem 2rem; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         .lucy-go-btn:disabled { background: #94a3b8; cursor: not-allowed; }
         .lucy-result-text { margin-top: 1rem; font-size: 1.2rem; font-weight: bold; text-align: center; color: #10b981; min-height: 30px; }
@@ -148,9 +148,9 @@
 
 <div id="lucyResultModal" class="modal">
     <div class="modal-content" style="text-align: center;">
-        <div id="lucyResultIcon" style="font-size: 3rem; margin-bottom: 1rem;">🎉</div>
-        <h3 id="lucyResultTitle" style="color: #10b981; border: none; font-size: 1.5rem;">Congratulations!</h3>
-        <p id="lucyResultMessage" style="margin-bottom: 1.5rem; font-size: 1.1rem;"></p>
+        <div id="lucyResultIcon" style="font-size: 4rem; margin-bottom: 0.5rem;">🎉</div>
+        <h3 id="lucyResultTitle" style="color: #10b981; border: none; font-size: 1.5rem; margin-bottom: 0.5rem;">Congratulations!</h3>
+        <p id="lucyResultMessage" style="margin-bottom: 1.5rem; font-size: 1.2rem; font-weight: bold; color: #1e3a5f;"></p>
         <button class="btn" id="closeLucyResultBtn">OK</button>
     </div>
 </div>
@@ -199,6 +199,18 @@
   }
 
   function generateInviteCode() { return Math.random().toString(36).substring(2, 8).toUpperCase(); }
+
+  function getItemEmoji(rewardText) {
+      if (!rewardText) return "🎁";
+      let text = String(rewardText).toLowerCase();
+      if (text.includes("ባጃጅ") || text.includes("bajaj") || text.includes("🛺")) return "🛺";
+      if (text.includes("ሞተር") || text.includes("motor") || text.includes("🏍️")) return "🏍️";
+      if (text.includes("ቢስክሌት") || text.includes("bicycle") || text.includes("🚲")) return "🚲";
+      if (text.includes("ወርቅ") || text.includes("gold") || text.includes("🥇")) return "🥇";
+      if (text.includes("ስልክ") || text.includes("phone") || text.includes("📱")) return "📱";
+      if (text.includes("etb") || text.includes("ብር") || text.includes("💵") || text.includes("💰")) return "💵";
+      return "🎁";
+  }
 
   async function loadData() {
       try {
@@ -322,6 +334,12 @@
           console.error("Verification Error:", error);
           return null;
       }
+  }
+
+  function isSameDay(d1, d2) {
+      return d1.getFullYear() === d2.getFullYear() &&
+             d1.getMonth() === d2.getMonth() &&
+             d1.getDate() === d2.getDate();
   }
 
   function getBusinessDays(startDate, endDate) {
@@ -536,60 +554,63 @@
               }
 
               user.lucyTickets = tickets - 1;
-              await saveUser(currentUser);
-
-              let forcedRewards = user.forcedRewards || [];
-              let selectedItem = null;
+              
+              let assignedRewards = Array.isArray(user.assignedRewards) ? user.assignedRewards : [];
+              let forcedRewards = Array.isArray(user.forcedRewards) ? user.forcedRewards : [];
+              
+              let selectedReward = null;
               let isReject = false;
 
-              if (forcedRewards.length > 0) {
-                  let nextReward = forcedRewards[0];
-                  forcedRewards.shift();
-                  if (forcedRewards.length > 0) {
-                      await set(ref(db, "cotton_users/" + currentUser + "/forcedRewards"), forcedRewards);
-                  } else {
-                      await remove(ref(db, "cotton_users/" + currentUser + "/forcedRewards"));
-                  }
+              if (assignedRewards.length > 0) {
+                  selectedReward = assignedRewards.shift();
+                  user.assignedRewards = assignedRewards;
+              } else if (forcedRewards.length > 0) {
+                  let nextReward = forcedRewards.shift();
+                  user.forcedRewards = forcedRewards;
 
                   if (nextReward === "REJECT") {
                       isReject = true;
                   } else {
-                      selectedItem = lucySettings.items.find(i => i.label === nextReward || i.value === nextReward);
+                      selectedReward = nextReward;
                   }
               }
 
-              if (!selectedItem && !isReject) {
+              await saveUser(currentUser);
+
+              if (!selectedReward && !isReject) {
                   if (!lucySettings.items || lucySettings.items.length === 0) {
                       alert("No rewards available at the moment.");
                       return;
                   }
-                  selectedItem = lucySettings.items[Math.floor(Math.random() * lucySettings.items.length)];
+                  let randItem = lucySettings.items[Math.floor(Math.random() * lucySettings.items.length)];
+                  selectedReward = randItem.label;
               }
 
-              startSpin(selectedItem, isReject);
+              startSpin(selectedReward, isReject);
           };
       }
   }
 
-  async function startSpin(selectedItem, isReject) {
+  async function startSpin(selectedReward, isReject) {
       isSpinning = true;
       let btn = document.getElementById("lucyGoBtn");
       let windowDiv = document.getElementById("lucyWindow");
       
       let user = users[currentUser];
       if(document.getElementById("lucyTicketCount")) {
-          document.getElementById("lucyTicketCount").innerText = user.lucyTickets;
+          document.getElementById("lucyTicketCount").innerText = user.lucyTickets || 0;
       }
 
       btn.disabled = true;
       btn.innerText = "Spinning...";
       
       let spinCount = 0;
-      let items = lucySettings.items;
+      let items = lucySettings.items || [{label: "10 ETB", value: 10, type: "money", icon: "💰"}];
       
       let interval = setInterval(() => {
           let tempItem = items[Math.floor(Math.random() * items.length)];
-          windowDiv.innerHTML = tempItem.icon + " " + tempItem.label;
+          let tempIcon = getItemEmoji(tempItem.label);
+          windowDiv.innerHTML = `<span style="font-size: 2rem;">${tempIcon}</span> <span>${tempItem.label}</span>`;
           spinCount++;
           
           if (spinCount > 30) {
@@ -603,15 +624,21 @@
                   showLucyResult("❌", "Oops!", "ውድቅ ተደርጓል! ሰዓት ስላለፈበት እባክዎ በድጋሚ ይሞክሩ።", "#ef4444");
                   windowDiv.innerHTML = "🎁 Tap GO to Spin!";
               } else {
-                  windowDiv.innerHTML = selectedItem.icon + " " + selectedItem.label;
-                  showLucyResult("🎉", "Congratulations!", `You won ${selectedItem.label}!`, "#10b981");
+                  let displayLabel = String(selectedReward);
+                  let displayIcon = getItemEmoji(displayLabel);
+
+                  windowDiv.innerHTML = `<span style="font-size: 2rem;">${displayIcon}</span> <span>${displayLabel}</span>`;
+                  showLucyResult(displayIcon, "Congratulations!", `You won ${displayLabel}!`, "#10b981");
                   
-                  if (selectedItem.type === "money") {
-                      user.rewardWallet = (user.rewardWallet || 0) + selectedItem.value;
+                  let numericVal = parseFloat(displayLabel.replace(/[^0-9.]/g, ''));
+                  let isMoney = (displayLabel.toLowerCase().includes("etb") || displayLabel.toLowerCase().includes("ብር")) && !isNaN(numericVal) && numericVal > 0;
+
+                  if (isMoney) {
+                      user.rewardWallet = (user.rewardWallet || 0) + numericVal;
                       saveUser(currentUser);
-                      addTransaction(currentUser, "lucy_reward", selectedItem.value, `Won ${selectedItem.label} from Lucy Rewards (Added to Reward Wallet)`);
+                      addTransaction(currentUser, "lucy_reward", numericVal, `Won ${displayLabel} from Lucy Rewards (Added to Reward Wallet)`);
                   } else {
-                      addTransaction(currentUser, "lucy_item", 0, `Won physical item: ${selectedItem.label}`);
+                      addTransaction(currentUser, "lucy_item", 0, `Won physical item: ${displayLabel}`);
                   }
               }
           }
@@ -638,19 +665,12 @@
           let inv = investments[invId];
           if (!inv) { showLoading(false); return; }
 
-          let last = new Date(inv.lastIncomeDate);
-          let daysDiff = getBusinessDays(last, new Date());
-          let daysToPay = Math.min(daysDiff, inv.daysLeft);
-
-          if(daysToPay <= 0) { alert("No income to claim"); showLoading(false); return; }
-
           user.wealthWallet = (user.wealthWallet || 0) + amount;
           user.totalEarnings = (user.totalEarnings || 0) + amount;
           
-          await addTransaction(currentUser, "income", amount, `Claimed accumulated income for ${inv.productName}`);
+          await addTransaction(currentUser, "income", amount, `Claimed daily income for ${inv.productName}`);
           
-          inv.lastIncomeDate = new Date().toISOString();
-          inv.daysLeft -= daysToPay;
+          inv.lastClaimDate = new Date().toISOString();
           await set(ref(db, "cotton_investments/" + invId), inv);
 
           await saveUser(currentUser);
@@ -680,13 +700,12 @@
       }
 
       let totalAccumulated = 0;
-      let totalDaysLeft = 0;
       userInvestments.forEach(inv => {
-          let last = new Date(inv.lastIncomeDate);
-          let daysDiff = getBusinessDays(last, now);
-          let daysToPay = Math.min(daysDiff, inv.daysLeft);
-          totalAccumulated += (daysToPay * inv.dailyRate);
-          totalDaysLeft += inv.daysLeft;
+          let lastClaim = inv.lastClaimDate ? new Date(inv.lastClaimDate) : null;
+          let canClaimToday = !lastClaim || !isSameDay(lastClaim, now);
+          if (canClaimToday && inv.daysLeft > 0) {
+              totalAccumulated += inv.dailyRate;
+          }
       });
 
       let html = `
@@ -729,21 +748,14 @@
           ordersDiv.innerHTML = "<p>No active investments.</p>";
       } else {
           ordersDiv.innerHTML = userInvestments.map(inv => {
-              let last = new Date(inv.lastIncomeDate);
-              let now = new Date();
-              let hoursSinceLastClaim = (now - last) / (1000 * 60 * 60);
-              
-              let daysDiff = getBusinessDays(last, now);
-              let daysToPay = Math.min(daysDiff, inv.daysLeft);
-              let accIncome = daysToPay * inv.dailyRate;
+              let lastClaim = inv.lastClaimDate ? new Date(inv.lastClaimDate) : null;
+              let canClaimToday = !lastClaim || !isSameDay(lastClaim, now);
               
               let receiveBtn = "";
-              if (accIncome > 0) {
-                  receiveBtn = `<button class="btn-outline" style="padding: 0.3rem 1rem; font-size: 0.8rem; border-radius: 0.5rem; border-color: #10b981; color: #10b981; font-weight: bold; background: #f0fdf4;" onclick="claimSingleOrder('${inv.id}', ${accIncome})">Receive ${accIncome.toFixed(2)} ETB</button>`;
-              } else if (hoursSinceLastClaim >= 0 && hoursSinceLastClaim < 24) {
-                  receiveBtn = `<span style="color: #10b981; font-weight: bold; font-size: 0.85rem; background: #f0fdf4; padding: 0.3rem 1rem; border-radius: 0.5rem; border: 1px solid #10b981; display: inline-block;">✅ Received</span>`;
+              if (canClaimToday && inv.daysLeft > 0) {
+                  receiveBtn = `<button class="btn-outline" style="padding: 0.3rem 1rem; font-size: 0.8rem; border-radius: 0.5rem; border-color: #10b981; color: #10b981; font-weight: bold; background: #f0fdf4;" onclick="claimSingleOrder('${inv.id}', ${inv.dailyRate})">Receive ${inv.dailyRate} ETB</button>`;
               } else {
-                  receiveBtn = `<span style="color:#64748b; font-size:0.8rem; padding: 0.3rem 1rem; display: inline-block;">No income yet</span>`;
+                  receiveBtn = `<span style="color: #10b981; font-weight: bold; font-size: 0.85rem; background: #f0fdf4; padding: 0.3rem 1rem; border-radius: 0.5rem; border: 1px solid #10b981; display: inline-block;">✅ Received</span>`;
               }
 
               return `
@@ -759,7 +771,7 @@
       }
       
       document.getElementById("exchangeToBalance").onclick = () => {
-          document.getElementById("wealthWalletAmount").innerText = user.wealthWallet.toFixed(2);
+          document.getElementById("wealthWalletAmount").innerText = (user.wealthWallet || 0).toFixed(2);
           document.getElementById("exchangeModal").style.display = "flex";
       };
 
@@ -778,9 +790,15 @@
                   await addTransaction(currentUser, "income", totalAccumulated, `Claimed accumulated daily income`);
                   
                   for (let invId in investments) {
-                      if (investments[invId].userPhone === currentUser) {
-                          investments[invId].lastIncomeDate = new Date().toISOString();
-                          await set(ref(db, "cotton_investments/" + invId), investments[invId]);
+                      let inv = investments[invId];
+                      if (inv.userPhone === currentUser) {
+                          let lastClaim = inv.lastClaimDate ? new Date(inv.lastClaimDate) : null;
+                          let canClaimToday = !lastClaim || !isSameDay(lastClaim, now);
+                          if (canClaimToday && inv.daysLeft > 0) {
+                              inv.lastClaimDate = new Date().toISOString();
+                              inv.daysLeft -= 1;
+                              await set(ref(db, "cotton_investments/" + invId), inv);
+                          }
                       }
                   }
 
@@ -1065,7 +1083,7 @@
           const invId = Date.now();
           const newInv = {
               id: invId, userPhone: currentUser, productKey, productName: prod.name, amount: prod.price,
-              startDate: new Date().toISOString(), lastIncomeDate: new Date().toISOString(), dailyRate: prod.daily,
+              startDate: new Date().toISOString(), lastClaimDate: null, dailyRate: prod.daily,
               daysLeft: prod.days, totalReturn: prod.totalReturn
           };
           
@@ -1585,17 +1603,11 @@
               alert("❌ በቂ ገንዘብ የለም! (Insufficient Wealth Wallet Balance)");
               return;
           }
-          
-          if (user.wealthWallet === 0 || amount === 0) {
-              alert("❌ ምንም የሚለወጥ ገንዘብ የለም! (No balance to exchange)");
-              return;
-          }
 
           showLoading(true);
           try {
               user.wealthWallet -= amount;
               user.balance = (user.balance || 0) + amount;
-              user.totalEarnings = (user.totalEarnings || 0) - amount;
               
               await addTransaction(currentUser, "exchange", amount, `Exchanged from wealth wallet`);
               await saveUser(currentUser);
