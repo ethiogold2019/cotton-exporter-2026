@@ -18,25 +18,85 @@
         .btn-outline { background: transparent; border: 1px solid #1e3a5f; color: #1e3a5f; }
         .toggle-link { text-align: center; margin-top: 1rem; font-size: 0.85rem; }
         .toggle-link a { color: #2c7da0; text-decoration: none; font-weight: 600; }
-        .header { padding: 1.2rem 1rem; background: #1e293b; color: white; position: sticky; top: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center; }
+        
+        /* Dynamic Header */
+        .header { padding: 1.2rem 1rem; color: white; position: sticky; top: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center; }
         .header-text h1 { font-size: 1.5rem; font-weight: 700; color: white; }
         .header-text p { font-size: 0.75rem; color: #94a3b8; }
+
         .balance-card { background: #1e3a5f; color: white; border-radius: 1.5rem; padding: 1.5rem 1.2rem; margin: 1rem; text-align: center; position: relative; overflow: hidden; }
         .balance-amount { font-size: 2.5rem; font-weight: bold; margin: 0.5rem 0; color: #10b981; }
         .recharge-wallet { color: #ef4444; }
         .action-btn-recharge { background: #ef4444; color: white; padding: 0.5rem 1rem; border-radius: 1rem; border: none; margin: 0.2rem; font-weight:bold; cursor:pointer;}
         .action-btn-withdraw { background: #f59e0b; color: white; padding: 0.5rem 1rem; border-radius: 1rem; border: none; margin: 0.2rem; font-weight:bold; cursor:pointer;}
+        
         .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 1rem; padding: 1rem; }
-        .product-card-container { position: relative; padding: 10px; margin-bottom: 1rem; border-radius: 1.2rem; background-color: #fbbf24; background-image: repeating-linear-gradient(90deg, transparent, transparent 18px, rgba(16, 185, 129, 0.8) 18px, rgba(16, 185, 129, 0.8) 20px), repeating-linear-gradient(0deg, transparent, transparent 18px, rgba(16, 185, 129, 0.8) 18px, rgba(16, 185, 129, 0.8) 20px); background-size: 20px 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
-        .product-card-inner { background: #fef08a; border-radius: 1rem; padding: 1.2rem 1rem; text-align: center; border: 2px solid #10b981; }
-        .product-card-inner h4 { font-size: 1.2rem; font-weight: 700; color: #1e3a5f; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 5px;}
-        .product-price-pill { background: white; color: #10b981; padding: 0.4rem 1.5rem; border-radius: 2rem; font-size: 1.3rem; font-weight: 800; margin: 0.8rem auto; display: inline-block; border: 2px solid #e2e8f0; }
-        .product-detail { font-size: 0.8rem; color: #4b5563; display: flex; justify-content: space-between; margin-top: 0.3rem; border-bottom: 1px dashed #d1d5db; padding-bottom: 0.2rem;}
+        
+        /* Updated Product Card Styling */
+        .product-card-container { 
+            position: relative; 
+            padding: 15px; 
+            margin-bottom: 1rem; 
+            border-radius: 1.2rem; 
+            background-color: #fbbf24; 
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15); 
+            border: 5px solid #10b981; 
+        }
+        .product-card-inner { 
+            border-radius: 0.8rem; 
+            padding: 1.2rem 1rem; 
+            text-align: center; 
+            background: transparent; 
+            border: none;
+            box-shadow: none;
+        }
+        .product-card-inner h4 { 
+            font-size: 1.2rem; 
+            font-weight: 700; 
+            color: #ffffff; 
+            margin-bottom: 0.5rem; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 5px; 
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.9);
+        }
+        .product-detail { 
+            font-size: 0.85rem; 
+            color: #ffffff; 
+            font-weight: 700;
+            display: flex; 
+            justify-content: space-between; 
+            margin-top: 0.3rem; 
+            border-bottom: 1px dashed rgba(255,255,255,0.4); 
+            padding-bottom: 0.2rem; 
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.9); 
+        }
         .invest-now { margin-top: 1rem; width: 100%; background: #1e3a5f; color: white; border: none; padding: 0.6rem; border-radius: 2rem; font-weight: 600; cursor: pointer; }
-        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; max-width: 550px; margin: 0 auto; background: white; display: flex; justify-content: space-around; padding: 0.6rem 0.5rem; border-top: 1px solid #eef2f6; z-index: 20; }
+        
+        /* Price Pill moved to bottom */
+        .product-price-bottom {
+            background: white; 
+            color: #10b981; 
+            padding: 0.4rem 1.5rem; 
+            border-radius: 2rem; 
+            font-size: 1.3rem; 
+            font-weight: 800; 
+            margin: 0.8rem auto 0 auto; 
+            display: block; 
+            width: fit-content;
+            border: 2px solid #e2e8f0; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        /* Dynamic Footer */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; max-width: 550px; margin: 0 auto; display: flex; justify-content: space-around; padding: 0.6rem 0.5rem; z-index: 20; }
         .nav-item { text-align: center; flex: 1; cursor: pointer; font-size: 0.7rem; color: #8a9bb0; }
         .nav-item.active { color: #1e3a5f; font-weight: bold; }
         .nav-icon { font-size: 1.4rem; display: block; }
+        
         .page { display: none; padding: 0.5rem 1rem 1rem; }
         .page.active { display: block; }
         .order-card, .transaction-item { background: #f9fbfd; border-radius: 1rem; padding: 0.8rem; margin-bottom: 0.8rem; border: 1px solid #eef2f6; }
@@ -51,9 +111,19 @@
         .text-center { text-align: center; }
         .mt-2 { margin-top: 0.5rem; }
         .mt-3 { margin-top: 1rem; }
-        .flower-border-box { position: relative; padding: 1.5rem 1.2rem; margin: 1.5rem 0; border: none !important; border-radius: 1rem; background-color: #fff; z-index: 1; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .flower-border-box::before { content: ""; position: absolute; top: -12px; left: -12px; right: -12px; bottom: -12px; border-radius: 1.2rem; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">🌺</text></svg>'), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">💛</text></svg>'), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">🌼</text></svg>'), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">💚</text></svg>'); background-position: top left, top right, bottom left, bottom right; background-repeat: repeat-x, repeat-x, repeat-x, repeat-x; background-size: 24px 24px; z-index: -1; }
-        .flower-border-box::after { content: ""; position: absolute; top: 0; left: -12px; right: -12px; bottom: 0; border-radius: 1.2rem; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">🌺</text></svg>'), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">💛</text></svg>'), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">🌼</text></svg>'), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text x="0" y="18" font-size="18">💚</text></svg>'); background-position: top left, top right, bottom left, bottom right; background-repeat: repeat-y, repeat-y, repeat-y, repeat-y; background-size: 24px 24px; z-index: -1; }
+        
+        /* Dynamic Card Base Class */
+        .dynamic-card-box {
+            position: relative;
+            padding: 1.5rem 1.2rem;
+            margin: 1.5rem 0;
+            border-radius: 1rem;
+            z-index: 1;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            background-size: cover;
+            background-position: center;
+        }
+        
         .wealth-bg { background-color: #e0f2fe !important; }
         .task-bg-black { background-color: #f3f4f6 !important; }
         .task-bg-red { background-color: #fef2f2 !important; }
@@ -66,15 +136,54 @@
         .spinner { width: 50px; height: 50px; border: 5px solid #e2e8f0; border-top: 5px solid #1e3a5f; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        .lucy-spinner-container { display: flex; justify-content: center; align-items: center; flex-direction: column; padding: 1rem; background: #fff; border-radius: 1rem; border: 2px dashed #10b981; margin-bottom: 1rem; position: relative; }
-        .lucy-window { width: 100%; height: 90px; overflow: hidden; position: relative; background: #f8fafc; border-radius: 0.5rem; border: 1px solid #cbd5e1; display: flex; justify-content: center; align-items: center; font-size: 1.8rem; font-weight: bold; color: #1e3a5f; box-shadow: inset 0 0 10px rgba(0,0,0,0.1); padding: 5px; text-align: center; }
-        .lucy-go-btn { background: #ef4444; color: white; border: none; border-radius: 2rem; padding: 0.5rem 2rem; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        /* Lucy Rewards Styling - White Box Removed */
+        .lucy-spinner-container { 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            flex-direction: column; 
+            padding: 1rem; 
+            background: transparent; /* ነጩ ቀለም ተወግዷል */
+            border-radius: 1rem; 
+            border: 2px dashed #10b981; 
+            margin-bottom: 1rem; 
+            position: relative; 
+        }
+        .lucy-window { 
+            width: 100%; 
+            height: 90px; 
+            overflow: hidden; 
+            position: relative; 
+            background: transparent; /* ነጩ ቀለም ተወግዷል */
+            border-radius: 0.5rem; 
+            border: none; /* ድንበሩ ተወግዷል */
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            font-size: 1.8rem; 
+            font-weight: bold; 
+            color: #ffffff; /* ጽሑፉ ነጭ ሆኗል */
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.9); /* ጽሑፉ ላይ ጥላ */
+            padding: 5px; 
+            text-align: center; 
+        }
+        .lucy-go-btn { 
+            background: #10b981; /* አረንጓዴ ቀለም */
+            color: white; 
+            border: none; 
+            border-radius: 2rem; 
+            padding: 0.5rem 2rem; 
+            font-size: 1.1rem; 
+            font-weight: bold; 
+            cursor: pointer; 
+            margin-top: 1rem; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+        }
         .lucy-go-btn:disabled { background: #94a3b8; cursor: not-allowed; }
-        .lucy-result-text { margin-top: 1rem; font-size: 1.2rem; font-weight: bold; text-align: center; color: #10b981; min-height: 30px; }
         .ticket-badge { position: absolute; top: -10px; right: -10px; background: #ef4444; color: white; border-radius: 50%; width: 35px; height: 35px; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 1.1rem; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 5; }
         .lucy-circle-text { display: inline-block; border: 3px solid #10b981; border-radius: 50%; padding: 2px 10px; margin: 0 2px; font-weight: bold; }
         .lucy-circle-text-oval { display: inline-block; border: 3px solid #10b981; border-radius: 50% / 60%; padding: 2px 15px; margin: 0 2px; font-weight: bold; }
-        .lucy-flex-wrap { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 5px; }
+        .lucy-flex-wrap { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 5px; color: #ffffff; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
         .expandable-menu { background: white; border-radius: 1rem; padding: 1rem; margin-top: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #eef2f6; text-align: center; display: none; }
         .expandable-menu.active { display: block; }
         .expand-btn { background: #e2e8f0; border: none; border-radius: 50%; width: 30px; height: 30px; display: inline-flex; justify-content: center; align-items: center; cursor: pointer; margin-top: 0.5rem; font-size: 1.2rem; }
@@ -121,7 +230,7 @@
 </div>
 
 <div id="appContainer" class="app-container">
-    <div class="header">
+    <div class="header" id="dynamicHeader">
         <div class="header-text">
             <h1>Ethio gold🥇⛳</h1>
             <p>ጥቅምት 15 2019 እድገትና እንቅስቃሴ!!!</p>
@@ -131,7 +240,7 @@
     <div id="wealthPage" class="page"></div>
     <div id="taskPage" class="page"></div>
     <div id="minePage" class="page"></div>
-    <div class="bottom-nav">
+    <div class="bottom-nav" id="dynamicFooter">
         <div class="nav-item" data-page="home"><span class="nav-icon">🏠</span><br>Home</div>
         <div class="nav-item" data-page="wealth"><span class="nav-icon">💰</span><br>Wealth</div>
         <div class="nav-item" data-page="task"><span class="nav-icon">📋</span><br>Task</div>
@@ -179,10 +288,10 @@
   let investments = {};
   let transactions = {};
   let giftCodes = {};
-  let validFTTransactions = {};
   let PRODUCTS = {};
   let lucySettings = {};
   let paymentSettings = {};
+  let uiSettings = {};
   let isSpinning = false;
 
   const defaultProducts = {
@@ -212,6 +321,55 @@
       return "🎁";
   }
 
+  function applyCustomStyle(element, settings, defaultBgColor, defaultBorderColor) {
+      if (!settings) return;
+      
+      if (settings.bgImage) {
+          element.style.backgroundImage = `url('${settings.bgImage}')`;
+          element.style.backgroundSize = settings.bgSize || 'cover';
+          element.style.backgroundPosition = 'center';
+      } else {
+          element.style.backgroundImage = 'none';
+          element.style.backgroundColor = settings.bgColor || defaultBgColor;
+      }
+
+      if (settings.borderImage) {
+          element.style.borderImageSource = `url('${settings.borderImage}')`;
+          element.style.borderImageSlice = settings.borderImgSize || '30';
+          element.style.borderWidth = settings.borderSize || '5px';
+          element.style.borderStyle = 'solid';
+      } else {
+          if (settings.borderEmoji) {
+              element.style.borderWidth = settings.borderSize || '2px';
+              element.style.borderStyle = settings.borderStyle || 'solid';
+              element.style.borderColor = settings.borderColor || defaultBorderColor;
+          } else {
+              element.style.border = `${settings.borderSize || '2px'} ${settings.borderStyle || 'solid'} ${settings.borderColor || defaultBorderColor}`;
+          }
+      }
+  }
+
+  function applyUISettings() {
+      let u = uiSettings;
+      
+      if (u.headerSettings) {
+          let h = document.getElementById("dynamicHeader");
+          if (h) {
+              applyCustomStyle(h, u.headerSettings, "#1e293b", "#1e293b");
+              let textColor = u.headerSettings.textColor || "#ffffff";
+              h.querySelector("h1").style.color = textColor;
+              h.querySelector("p").style.color = u.headerSettings.subTextColor || "#94a3b8";
+          }
+      }
+
+      if (u.footerSettings) {
+          let f = document.getElementById("dynamicFooter");
+          if (f) {
+              applyCustomStyle(f, u.footerSettings, "#ffffff", "#eef2f6");
+          }
+      }
+  }
+
   async function loadData() {
       try {
           const usersSnap = await get(ref(db, "cotton_users"));
@@ -225,17 +383,6 @@
 
           const gcSnap = await get(ref(db, "cotton_giftcodes"));
           giftCodes = gcSnap.exists() ? gcSnap.val() : {};
-
-          const ftSnap = await get(ref(db, "cotton_ft_transactions"));
-          if (ftSnap.exists()) {
-              validFTTransactions = ftSnap.val();
-          } else {
-              validFTTransactions = {
-                  "FT26110L6GG0": { code: "FT26110L6GG0", amount: 500, usedBy: null },
-                  "FT98765ABCD": { code: "FT98765ABCD", amount: 1000, usedBy: null }
-              };
-              await set(ref(db, "cotton_ft_transactions"), validFTTransactions);
-          }
 
           const prodSnap = await get(ref(db, "cotton_products"));
           if (prodSnap.exists()) {
@@ -259,14 +406,18 @@
               paymentSettings = { accountName: "", accountNumber: "" };
           }
 
-          if (Object.keys(giftCodes).length === 0) {
-              giftCodes = { "YXMTQX": { code: "YXMTQX", value: 50, usedBy: null, active: true } };
-              await set(ref(db, "cotton_giftcodes"), giftCodes);
+          const uiSnap = await get(ref(db, "cotton_ui_settings"));
+          if (uiSnap.exists()) {
+              uiSettings = uiSnap.val();
           } else {
-              for (let k in giftCodes) {
-                  if (giftCodes[k].active === undefined) giftCodes[k].active = true;
-              }
+              uiSettings = {
+                  globalCardSettings: { bgColor: "#fefce8", bgImage: "", bgSize: "cover", borderEmoji: "🌺,💛,🌼,💚", borderSize: "2px", borderColor: "#10b981", borderStyle: "solid", borderImage: "" },
+                  lucySettings: { bgColor: "#f0fdf4", bgImage: "", bgSize: "cover", borderColor: "#10b981", borderSize: "2px", borderImage: "", borderImgSize: "30px" },
+                  headerSettings: { bgColor: "#1e293b", bgImage: "", bgSize: "cover", textColor: "#ffffff", subTextColor: "#94a3b8" },
+                  footerSettings: { bgColor: "#ffffff", bgImage: "", bgSize: "cover", borderColor: "#eef2f6" }
+              };
           }
+          applyUISettings();
 
           if (Object.keys(users).length === 0) {
               const demoPhone = "0947655291";
@@ -328,10 +479,8 @@
           });
           
           const data = await response.json();
-          console.log(`Veritas Response (${provider}):`, data);
           return data;
       } catch (error) {
-          console.error("Verification Error:", error);
           return null;
       }
   }
@@ -413,6 +562,12 @@
           paymentSettings = paySnap.val();
       }
 
+      const uiSnap = await get(ref(db, "cotton_ui_settings"));
+      if (uiSnap.exists()) {
+          uiSettings = uiSnap.val();
+          applyUISettings();
+      }
+
       const bcSnap = await get(ref(db, "cotton_broadcasts"));
       if (bcSnap.exists()) {
           let broadcasts = Object.values(bcSnap.val());
@@ -456,8 +611,22 @@
       
       let lucyHtml = "";
       if (lucySettings.enabled) {
+          // Apply Custom Lucy Settings from Admin
+          let lStyle = "";
+          let ls = uiSettings.lucySettings || {};
+          if (ls.bgImage) {
+              lStyle += `background-image: url('${ls.bgImage}'); background-size: ${ls.bgSize || 'cover'}; background-position: center;`;
+          } else {
+              lStyle += `background-color: ${ls.bgColor || '#f0fdf4'};`;
+          }
+          if (ls.borderImage) {
+              lStyle += `border-image-source: url('${ls.borderImage}'); border-image-slice: ${ls.borderImgSize || '30'}; border-width: ${ls.borderSize || '5px'}; border-style: solid;`;
+          } else {
+              lStyle += `border: ${ls.borderSize || '2px'} solid ${ls.borderColor || '#10b981'};`;
+          }
+
           lucyHtml = `
-              <div class="flower-border-box" style="background-color: #f0fdf4; border: 2px solid #10b981; margin-top: 1rem;">
+              <div class="dynamic-card-box" style="${lStyle} margin-top: 1rem;">
                   <div style="position: relative; text-align: center;">
                       <span class="ticket-badge" id="lucyTicketCount">${user.lucyTickets || 0}</span>
                       <h3 style="color: #065f46; margin-bottom: 0.5rem;">🍀 Lucy Rewards</h3>
@@ -483,8 +652,21 @@
           `;
       }
 
+      let homeCardStyle = "";
+      let hc = uiSettings.homeCardSettings || {};
+      if (hc.bgImage) {
+          homeCardStyle += `background-image: url('${hc.bgImage}'); background-size: ${hc.bgSize || 'cover'}; background-position: center;`;
+      } else {
+          homeCardStyle += `background-color: ${hc.bgColor || '#fefce8'};`;
+      }
+      if (hc.borderImage) {
+          homeCardStyle += `border-image-source: url('${hc.borderImage}'); border-image-slice: 30; border-width: ${hc.borderSize || '5px'}; border-style: solid;`;
+      } else {
+          homeCardStyle += `border: ${hc.borderSize || '2px'} ${hc.borderStyle || 'solid'} ${hc.borderColor || '#10b981'};`;
+      }
+
       let html = `
-          <div class="flower-border-box" style="background-color: #fefce8; margin-top: 1rem;">
+          <div class="dynamic-card-box" style="margin-top: 1rem; ${homeCardStyle}">
               <div style="text-align: center;">
                   <div style="font-size: 1.1rem; color: #1e3a5f; margin-bottom: 0.5rem;">Ethio gold🥇⛳ - The first checkpoint of quality control</div>
                   <div style="font-size: 3rem; font-weight: bold; color: #10b981;">${(user.balance || 0).toFixed(2)} ETB</div>
@@ -508,18 +690,42 @@
       for (let [key, prod] of Object.entries(PRODUCTS)) {
           let card = document.createElement("div");
           card.className = "product-card-container";
+          
+          // Apply Custom Product Styling (Outer Card)
+          let pStyle = "";
+          if (prod.bgImage) {
+              pStyle += `background-image: url('${prod.bgImage}'); background-size: ${prod.bgSize || 'cover'}; background-position: center;`;
+          } else if (prod.bgColor) {
+              pStyle += `background-color: ${prod.bgColor}; background-image: none;`;
+          } else {
+              pStyle += `background-color: #fbbf24;`; 
+          }
+
+          if (prod.borderImage) {
+              pStyle += `border-image-source: url('${prod.borderImage}'); border-image-slice: ${prod.borderImgSize || '30'}; border-width: ${prod.borderSize || '5px'}; border-style: solid; border-color: transparent;`;
+          } else {
+              pStyle += `border: ${prod.borderSize || '5px'} ${prod.borderStyle || 'solid'} ${prod.borderColor || '#10b981'};`;
+          }
+
+          // Inner card is completely transparent
+          let innerStyle = `background: transparent; border: none; box-shadow: none;`;
+
+          card.style.cssText += pStyle;
           card.innerHTML = `
-              <div class="product-card-inner">
+              <div class="product-card-inner" style="${innerStyle}">
                   <h4>${prod.icon} ${prod.name}</h4>
-                  <div class="product-price-pill">${prod.price.toLocaleString()} ETB</div>
                   <div class="product-detail"><span>Total:</span><span>${prod.totalReturn.toLocaleString()} ETB</span></div>
                   <div class="product-detail"><span>Daily:</span><span>${prod.daily} ETB</span></div>
-                  <div class="product-detail" style="border:none;"><span>${prod.days} Days</span></div>
+                  <div class="product-detail" style="border:none; margin-bottom: 10px;"><span>${prod.days} Days</span></div>
+                  
                   <button class="invest-now" data-product="${key}">Invest Now</button>
+                  <!-- Price moved below Invest Now -->
+                  <div class="product-price-bottom">${prod.price.toLocaleString()} ETB</div>
               </div>
           `;
           grid.appendChild(card);
       }
+      
       document.querySelectorAll(".invest-now").forEach(btn => {
           btn.onclick = () => openInvestModal(btn.dataset.product);
       });
@@ -709,7 +915,7 @@
       });
 
       let html = `
-          <div class="flower-border-box wealth-bg" style="margin-top: 1rem;">
+          <div class="dynamic-card-box wealth-bg" style="margin-top: 1rem;">
               <div class="flex-between" style="margin-bottom: 0.5rem;"><span style="font-weight: 600;">Wealth Wallet</span><span>${(user.wealthWallet || 0).toFixed(2)} ETB</span></div>
               
               <div class="flex-between" style="margin-bottom: 0.5rem; cursor:pointer;" onclick="openRewardWithdrawModal()">
@@ -879,7 +1085,7 @@
       let html = `
           <div style="padding: 0 1rem;">
               <h3 style="margin-top: 1rem;">📋 Daily Tasks</h3>
-              <div class="flower-border-box task-bg-black" style="margin-top: 1.5rem;">
+              <div class="dynamic-card-box task-bg-black" style="margin-top: 1.5rem;">
                   <div class="flex-between">
                       <span>🎬 Watch video advertisement (60 sec)</span>
                       <span class="tag" style="background: #e5e7eb;">${videoStatus}</span>
@@ -887,7 +1093,7 @@
                   <button id="watchVideoBtn" class="btn-outline mt-2" style="border-radius: 0.5rem; padding: 0.4rem 1rem;" ${!canWatch ? 'disabled' : ''}>Watch Video</button>
                   <div id="videoTimer" class="video-timer" style="display:none;"></div>
               </div>
-              <div class="flower-border-box task-bg-red" style="margin-top: 1.5rem;">
+              <div class="dynamic-card-box task-bg-red" style="margin-top: 1.5rem;">
                   <div class="flex-between">
                       <span>📢 Share on social media (referral)</span>
                       <span class="tag" style="background: #fecaca;">${shareStatus}</span>
@@ -916,7 +1122,7 @@
                   ${rechargeHtml}
               </div>
 
-              <div class="flower-border-box task-bg-yellow" style="margin-top: 1.5rem; margin-bottom: 2rem;">
+              <div class="dynamic-card-box task-bg-yellow" style="margin-top: 1.5rem; margin-bottom: 2rem;">
                   <h3 class="mt-2">📜 Task Transaction History</h3>
                   <div id="taskTransactionsList"></div>
               </div>
@@ -1009,13 +1215,13 @@
 
       document.getElementById("minePage").innerHTML = `
           <div style="padding: 0 1rem;">
-              <div class="flower-border-box mine-bg-blue" style="margin-top: 1rem; text-align:center;">
+              <div class="dynamic-card-box mine-bg-blue" style="margin-top: 1rem; text-align:center;">
                   <div style="width:60px; height:60px; border-radius:50%; background:#cbd5e1; margin:0 auto 0.5rem auto; display:flex; justify-content:center; align-items:center; font-size:1.5rem; color:white;">👤</div>
                   <div style="font-size: 1.1rem; font-weight: 600; margin-bottom: 0.3rem;">${user.fullName}</div>
                   <div style="margin-bottom: 0.3rem;">VIP ${user.vipLevel}</div>
                   <div>📱 ${user.phone}</div>
               </div>
-              <div class="flower-border-box mine-bg-green" style="margin-top: 1.5rem;">
+              <div class="dynamic-card-box mine-bg-green" style="margin-top: 1.5rem;">
                   <div class="flex-between" style="margin-bottom: 0.5rem;"><span>Total Revenue</span><span>${(user.totalEarnings || 0).toFixed(2)} ETB</span></div>
                   <div class="flex-between"><span>Reward Wallet</span><span>${(user.rewardWallet || 0).toFixed(2)} ETB</span></div>
               </div>
