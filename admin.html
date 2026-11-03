@@ -48,14 +48,13 @@
         .product-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
         .product-actions button { flex: 1; border-radius: 0.8rem; }
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 1000; padding: 1rem; }
-        .modal-content { background: white; width: 100%; max-width: 450px; border-radius: 1.5rem; padding: 1.5rem; max-height: 90vh; overflow-y: auto; }
+        .modal-content { background: white; width: 100%; max-width: 500px; border-radius: 1.5rem; padding: 1.5rem; max-height: 90vh; overflow-y: auto; }
         .modal-content h3 { color: #1e3a5f; margin-bottom: 1rem; border-bottom: 1px solid #eef2f6; padding-bottom: 0.5rem; }
         .info-row { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px dashed #e2e8f0; font-size: 0.9rem; }
         .info-row strong { color: #1e293b; }
         .info-row span { color: #475569; text-align: right; word-break: break-all;}
         .close-btn { background: #ef4444; color: white; width: 100%; margin-top: 1rem; border-radius: 0.8rem; }
         
-        /* Styling for History Lists */
         .history-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.5rem; padding: 0.8rem; margin-bottom: 0.5rem; font-size: 0.8rem; line-height: 1.4; }
         .history-box strong { color: #1e3a5f; }
         
@@ -63,13 +62,18 @@
         .spinner { width: 50px; height: 50px; border: 5px solid #e2e8f0; border-top: 5px solid #1e3a5f; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        /* Toggle Switch */
         .switch { position: relative; display: inline-block; width: 60px; height: 34px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
         .slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
         input:checked + .slider { background-color: #10b981; }
         input:checked + .slider:before { transform: translateX(26px); }
+
+        .style-section { border: 1px solid #cbd5e1; border-radius: 0.5rem; padding: 1rem; margin-bottom: 1rem; background: #f8fafc; }
+        .style-section h5 { color: #1e3a5f; margin-bottom: 0.5rem; font-size: 1rem; border-bottom: 1px dashed #cbd5e1; padding-bottom: 0.3rem; }
+        .style-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+        .style-grid .form-group { margin-bottom: 0.5rem; }
+        .preview-box { width: 100%; height: 80px; border-radius: 0.5rem; margin-top: 0.5rem; border: 1px dashed #94a3b8; background-size: cover; background-position: center; display: flex; justify-content: center; align-items: center; color: #64748b; font-size: 0.8rem; overflow: hidden;}
     </style>
 </head>
 <body>
@@ -105,6 +109,7 @@
             <div class="tab" id="tabProducts" onclick="switchTab('products')">📦 Products</div>
             <div class="tab" id="tabGifts" onclick="switchTab('gifts')">🎁 Gift Codes</div>
             <div class="tab" id="tabLucy" onclick="switchTab('lucy')">🍀 Lucy Rewards</div>
+            <div class="tab" id="tabUISettings" onclick="switchTab('uiSettings')">🎨 UI Settings</div>
             <div class="tab" id="tabSettings" onclick="switchTab('settings')">⚙️ Settings</div>
             <div class="tab" id="tabReports" onclick="switchTab('reports')">📊 Reports</div>
         </div>
@@ -127,7 +132,6 @@
             <div id="giftsList"></div>
         </div>
 
-        <!-- Lucy Rewards Section -->
         <div id="lucySection" class="content-section">
             <div class="product-card" style="margin-bottom: 1.5rem;">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -146,13 +150,78 @@
             <div id="lucyRewardsList" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
                 <!-- Populated by JS -->
             </div>
-            <p style="font-size: 0.8rem; color: #64748b; text-align: center;">Rewards are distributed automatically when a user invites others and they purchase products.</p>
+        </div>
+
+        <!-- UI SETTINGS SECTION -->
+        <div id="uiSettingsSection" class="content-section">
+            <div class="product-card">
+                <h4>🎨 UI Customization</h4>
+                <p style="margin-bottom: 1rem;">Customize the look of different parts of the app.</p>
+                
+                <!-- Home Page Card Settings -->
+                <div class="style-section">
+                    <h5>💳 Home Page Wallet Card</h5>
+                    <div class="style-grid">
+                        <div class="form-group"><label style="font-size:0.8rem;">Bg Color</label><input type="color" id="homeCardBgColor" style="height: 35px; padding: 0;"></div>
+                        <div class="form-group"><label style="font-size:0.8rem;">Border Color</label><input type="color" id="homeCardBorderColor" style="height: 35px; padding: 0;"></div>
+                    </div>
+                    <div class="form-group"><label style="font-size:0.8rem;">Border Size (e.g. 2px)</label><input type="text" id="homeCardBorderSize" placeholder="2px"></div>
+                    <div class="form-group"><label style="font-size:0.8rem;">Border Style</label><select id="homeCardBorderStyle"><option value="solid">Solid</option><option value="dashed">Dashed</option><option value="dotted">Dotted</option><option value="double">Double</option></select></div>
+                    <div class="form-group"><label style="font-size:0.8rem;">Bg Image</label><input type="file" id="homeCardBgImageFile" accept="image/*" onchange="previewImage(this, 'homeCardBgPreview', 'homeCardBgImageBase64')"></div>
+                    <div class="form-group"><label style="font-size:0.8rem;">Bg Image Size</label><input type="text" id="homeCardBgSize" placeholder="e.g. cover, contain, 100% 100%"></div>
+                    <div id="homeCardBgPreview" class="preview-box">No Image</div>
+                    <input type="hidden" id="homeCardBgImageBase64">
+                </div>
+
+                <!-- LUCY REWARDS SETTINGS -->
+                <div class="style-section">
+                    <h5>🍀 Lucy Rewards Design</h5>
+                    <div class="style-grid">
+                        <div class="form-group"><label style="font-size:0.8rem;">Bg Color</label><input type="color" id="lucyBgColor" style="height: 35px; padding: 0;"></div>
+                        <div class="form-group"><label style="font-size:0.8rem;">Border Color</label><input type="color" id="lucyBorderColor" style="height: 35px; padding: 0;"></div>
+                    </div>
+                    <div class="form-group"><label style="font-size:0.8rem;">Border Size (e.g. 2px)</label><input type="text" id="lucyBorderSize" placeholder="2px"></div>
+                    <div class="form-group"><label style="font-size:0.8rem;">Bg Image</label><input type="file" id="lucyBgImageFile" accept="image/*" onchange="previewImage(this, 'lucyBgPreview', 'lucyBgImageBase64')"></div>
+                    <div class="form-group"><label style="font-size:0.8rem;">Bg Image Size</label><input type="text" id="lucyBgSize" placeholder="e.g. cover, contain, 100% 100%"></div>
+                    <div id="lucyBgPreview" class="preview-box">No Image</div>
+                    <input type="hidden" id="lucyBgImageBase64">
+                    
+                    <div class="form-group" style="margin-top: 0.5rem;"><label style="font-size:0.8rem;">Border Image</label><input type="file" id="lucyBorderImageFile" accept="image/*" onchange="previewImage(this, 'lucyBorderPreview', 'lucyBorderImageBase64')"></div>
+                    <div class="form-group"><label style="font-size:0.8rem;">Border Image Size</label><input type="text" id="lucyBorderImgSize" placeholder="e.g. 30px, 40px"></div>
+                    <div id="lucyBorderPreview" class="preview-box">No Image</div>
+                    <input type="hidden" id="lucyBorderImageBase64">
+                </div>
+
+                <!-- Header Settings -->
+                <div class="style-section">
+                    <h5>📌 Edit Heading (Top Header)</h5>
+                    <div class="form-group"><label style="font-size:0.8rem;">Bg Color</label><input type="color" id="headerBgColor" style="height: 35px; padding: 0;"></div>
+                    <div class="form-group"><label style="font-size:0.8rem;">Text Color</label><input type="color" id="headerTextColor" style="height: 35px; padding: 0;"></div>
+                    <div class="form-group"><label style="font-size:0.8rem;">Subtext Color</label><input type="color" id="headerSubTextColor" style="height: 35px; padding: 0;"></div>
+                    <div class="form-group"><label style="font-size:0.8rem;">Bg Image</label><input type="file" id="headerBgImageFile" accept="image/*" onchange="previewImage(this, 'headerBgPreview', 'headerBgImageBase64')"></div>
+                    <div class="form-group"><label style="font-size:0.8rem;">Bg Image Size</label><input type="text" id="headerBgSize" placeholder="e.g. cover, contain"></div>
+                    <div id="headerBgPreview" class="preview-box">No Image</div>
+                    <input type="hidden" id="headerBgImageBase64">
+                </div>
+
+                <!-- Footer Settings -->
+                <div class="style-section">
+                    <h5>🧭 Footer Editing (Bottom Nav)</h5>
+                    <div class="form-group"><label style="font-size:0.8rem;">Bg Color</label><input type="color" id="footerBgColor" style="height: 35px; padding: 0;"></div>
+                    <div class="form-group"><label style="font-size:0.8rem;">Bg Image</label><input type="file" id="footerBgImageFile" accept="image/*" onchange="previewImage(this, 'footerBgPreview', 'footerBgImageBase64')"></div>
+                    <div class="form-group"><label style="font-size:0.8rem;">Bg Image Size</label><input type="text" id="footerBgSize" placeholder="e.g. cover, contain"></div>
+                    <div id="footerBgPreview" class="preview-box">No Image</div>
+                    <input type="hidden" id="footerBgImageBase64">
+                </div>
+
+                <button class="btn-success" style="width: 100%; margin-top: 1rem;" onclick="saveUISettings()">💾 Save UI Settings</button>
+            </div>
         </div>
 
         <div id="settingsSection" class="content-section">
             <div class="product-card">
                 <h4>🔗 System Link Control</h4>
-                <p style="margin-bottom: 1rem;">ለሁሉም ተጠቃሚዎች የሚሆን የአገልግሎት ማቆሚያ (Maintenance Mode)። ማገድ ሲፈልጉ የሚፈልጉትን ሰዓት ያስገቡ።</p>
+                <p style="margin-bottom: 1rem;">ለሁሉም ተጠቃሚዎች የሚሆን የአገልግሎት ማቆሚያ (Maintenance Mode)።</p>
                 <label style="font-weight: bold; color: #475569;">Start Time (From)</label>
                 <input type="datetime-local" id="blockStartTime" style="margin-bottom: 0.5rem; width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 0.5rem;">
                 <label style="font-weight: bold; color: #475569;">End Time (To)</label>
@@ -162,7 +231,6 @@
                 <div id="serviceStatus" style="margin-top: 1rem; font-weight: bold; text-align: center; color: #1e3a5f;"></div>
             </div>
 
-            <!-- Payment Info Settings -->
             <div class="product-card" style="margin-top: 1.5rem;">
                 <h4>🏦 Payment Info Settings</h4>
                 <p style="margin-bottom: 1rem;">Set the bank/telebirr account details shown to users on Recharge.</p>
@@ -173,11 +241,10 @@
                 <button class="btn-success" style="width: 100%;" onclick="savePaymentSettings()">💾 Save Payment Settings</button>
             </div>
 
-            <!-- 📢 Broadcast Message Settings (NEW) -->
             <div class="product-card" style="margin-top: 1.5rem;">
                 <h4>📢 Broadcast Message to Users</h4>
                 <p style="margin-bottom: 1rem;">ለሁሉም ተጠቃሚዎች በአንድ ጊዜ የሚደርስ መልእክት (Notification) ይላኩ።</p>
-                <textarea id="broadcastMessage" placeholder="መልእክትዎን እዚህ ይጻፉ (ለምሳሌ፡ ዛሬውኑ ፕሮዳክት ገዝተው ይሸለሙ!)" style="margin-bottom: 1rem;"></textarea>
+                <textarea id="broadcastMessage" placeholder="መልእክትዎን እዚህ ይጻፉ..." style="margin-bottom: 1rem;"></textarea>
                 <button class="btn-success" style="width: 100%;" onclick="sendBroadcast()">🚀 Send Broadcast</button>
             </div>
         </div>
@@ -190,47 +257,37 @@
     </div>
 </div>
 
+<!-- User Modals -->
 <div id="viewUserModal" class="modal">
     <div class="modal-content">
         <h3>👤 User Details</h3>
         <div id="userDetailsContent"></div>
-        
         <button class="btn-blue" style="width:100%; margin-top: 1rem; margin-bottom: 0.5rem;" onclick="openEditUserModalFromView()">✏️ Edit User Details</button>
         <button class="close-btn" onclick="closeModal('viewUserModal')">Close</button>
     </div>
 </div>
 
-<!-- Edit User Details Modal -->
 <div id="editUserDetailsModal" class="modal" style="z-index: 1100;">
     <div class="modal-content">
         <h3>✏️ Edit User Details</h3>
         <p id="editUserFullNameTitle" style="margin-bottom: 1rem; font-weight: bold;"></p>
-        
         <label>Full Name</label>
         <input type="text" id="editUserFullName">
-        
         <label>Phone Number</label>
         <input type="text" id="editUserPhone" readonly style="background: #e2e8f0;">
-        
         <label>Login Password</label>
         <input type="text" id="editUserPassword">
-        
         <label>Pay Password</label>
         <input type="text" id="editUserPayPassword">
-        
-        <label>VIP Level (0=None, 1=Recharge, 2=5 Invites, 3=10 Invites)</label>
+        <label>VIP Level</label>
         <input type="number" id="editUserVipLevel" min="0" max="3">
-        
         <label>Lucy Tickets</label>
         <input type="number" id="editUserTickets" min="0">
-
-        <!-- Financials for manual editing -->
         <label style="margin-top: 1rem; display: block; font-weight: bold; color: #1e3a5f;">Financials (ETB)</label>
-        <input type="number" id="editUserMainBal" placeholder="Main Balance (0)" style="margin-bottom: 0.5rem;">
-        <input type="number" id="editUserRechBal" placeholder="Recharge Wallet (1)" style="margin-bottom: 0.5rem;">
-        <input type="number" id="editUserWealthBal" placeholder="Wealth Wallet (2)" style="margin-bottom: 0.5rem;">
-        <input type="number" id="editUserRewardBal" placeholder="Reward Wallet (3)" style="margin-bottom: 1rem;">
-
+        <input type="number" id="editUserMainBal" placeholder="Main Balance" style="margin-bottom: 0.5rem;">
+        <input type="number" id="editUserRechBal" placeholder="Recharge Wallet" style="margin-bottom: 0.5rem;">
+        <input type="number" id="editUserWealthBal" placeholder="Wealth Wallet" style="margin-bottom: 0.5rem;">
+        <input type="number" id="editUserRewardBal" placeholder="Reward Wallet" style="margin-bottom: 1rem;">
         <button class="btn-success" style="width:100%; margin-bottom: 0.5rem;" onclick="saveEditedUserDetails()">Save Changes</button>
         <button class="close-btn" onclick="closeModal('editUserDetailsModal')">Cancel</button>
     </div>
@@ -254,28 +311,24 @@
     </div>
 </div>
 
-<!-- Assign Multiple Tickets & Rewards Modal -->
 <div id="assignTicketModal" class="modal">
     <div class="modal-content">
         <h3>🎟️ Assign Ticket & Reward</h3>
         <p id="assignTicketUserName" style="margin-bottom: 1rem; font-weight: bold;"></p>
-        
         <label>Number of Tickets</label>
         <input type="number" id="assignTicketCount" placeholder="e.g. 1, 2, 5..." min="0" oninput="generateTicketRewardSelects()">
-
-        <div id="ticketRewardContainer" style="margin-top: 1rem;">
-            <!-- Dynamic Select boxes will appear here -->
-        </div>
-
+        <div id="ticketRewardContainer" style="margin-top: 1rem;"></div>
         <button class="btn-success" style="width:100%; margin-bottom: 0.5rem; margin-top: 1rem;" onclick="saveAssignedTickets()">Save</button>
         <button class="close-btn" onclick="closeModal('assignTicketModal')">Cancel</button>
     </div>
 </div>
 
+<!-- PRODUCT MODAL WITH CUSTOM STYLING OPTIONS -->
 <div id="productModal" class="modal">
     <div class="modal-content">
         <h3 id="productModalTitle">📦 Add Product</h3>
         <input type="hidden" id="editProductKey">
+        
         <label>Product Name</label>
         <input type="text" id="prodName" placeholder="e.g. Young">
         <label>Icon (Emoji)</label>
@@ -288,12 +341,38 @@
         <input type="number" id="prodDaily">
         <label>Days</label>
         <input type="number" id="prodDays">
-        <button class="btn-success" style="width:100%; margin-bottom: 0.5rem;" onclick="saveProduct()">Save Product</button>
+
+        <h4 style="margin-top: 1rem; color: #1e3a5f; border-bottom: 1px solid #eef2f6; padding-bottom: 0.5rem;">🎨 Product Design</h4>
+        
+        <div class="style-grid">
+            <div class="form-group"><label style="font-size:0.8rem;">Bg Color</label><input type="color" id="prodBgColor" style="height: 35px; padding: 0;" value="#fef08a"></div>
+            <div class="form-group"><label style="font-size:0.8rem;">Border Color</label><input type="color" id="prodBorderColor" style="height: 35px; padding: 0;" value="#10b981"></div>
+        </div>
+        <div class="form-group"><label style="font-size:0.8rem;">Border Size (e.g. 2px)</label><input type="text" id="prodBorderSize" placeholder="2px" value="2px"></div>
+        <div class="form-group"><label style="font-size:0.8rem;">Border Style</label>
+            <select id="prodBorderStyle">
+                <option value="solid">Solid</option>
+                <option value="dashed">Dashed</option>
+                <option value="dotted">Dotted</option>
+                <option value="double">Double</option>
+            </select>
+        </div>
+        
+        <div class="form-group"><label style="font-size:0.8rem;">Background Image</label><input type="file" id="prodBgImageFile" accept="image/*" onchange="previewImage(this, 'prodBgPreview', 'prodBgImageBase64')"></div>
+        <div class="form-group"><label style="font-size:0.8rem;">Bg Image Size</label><input type="text" id="prodBgSize" placeholder="e.g. cover, contain"></div>
+        <div id="prodBgPreview" class="preview-box">No Image</div>
+        <input type="hidden" id="prodBgImageBase64">
+
+        <div class="form-group" style="margin-top:0.5rem;"><label style="font-size:0.8rem;">Border Image</label><input type="file" id="prodBorderImageFile" accept="image/*" onchange="previewImage(this, 'prodBorderPreview', 'prodBorderImageBase64')"></div>
+        <div class="form-group"><label style="font-size:0.8rem;">Border Image Size</label><input type="text" id="prodBorderImgSize" placeholder="e.g. 30px, 40px"></div>
+        <div id="prodBorderPreview" class="preview-box">No Image</div>
+        <input type="hidden" id="prodBorderImageBase64">
+
+        <button class="btn-success" style="width:100%; margin-bottom: 0.5rem; margin-top: 1rem;" onclick="saveProduct()">Save Product</button>
         <button class="close-btn" onclick="closeModal('productModal')">Cancel</button>
     </div>
 </div>
 
-<!-- GIFT MODAL -->
 <div id="giftModal" class="modal">
     <div class="modal-content">
         <h3 id="giftModalTitle">🎁 Create Gift Code</h3>
@@ -302,59 +381,39 @@
         <input type="text" id="giftCode" placeholder="e.g. WELCOME2024" style="text-transform: uppercase;">
         <label>Amount (ETB)</label>
         <input type="number" id="giftAmount" placeholder="e.g. 50">
-        
         <label>Usage Limit</label>
         <select id="giftLimitType" onchange="toggleUserDropdown()">
             <option value="single">Single Use (One Person)</option>
             <option value="multi">Multiple Uses (Everyone)</option>
         </select>
-
         <div id="singleUserDiv" style="display: block;">
             <label>Select User (For Single Use)</label>
-            <select id="giftTargetUser">
-                <option value="">-- Select User --</option>
-                <!-- Options populated via JS -->
-            </select>
+            <select id="giftTargetUser"><option value="">-- Select User --</option></select>
         </div>
-
         <label>Expiry Date, Time & Seconds</label>
         <div style="display: flex; gap: 10px; margin-bottom: 1rem;">
             <input type="datetime-local" id="giftExpiry" step="1" style="margin-bottom:0; flex: 2;">
             <input type="number" id="giftExpirySeconds" placeholder="Sec (0-59)" min="0" max="59" style="margin-bottom:0; flex: 1;">
         </div>
-        
         <button class="btn-success" style="width:100%; margin-bottom: 0.5rem;" onclick="saveGift()">Save Gift Code</button>
         <button class="close-btn" onclick="closeModal('giftModal')">Cancel</button>
     </div>
 </div>
 
-<!-- ADD LUCY REWARD MODAL -->
 <div id="addLucyRewardModal" class="modal">
     <div class="modal-content">
         <h3>➕ Add Lucy Reward</h3>
-        
         <label>Reward Type</label>
         <select id="lucyRewardType" onchange="toggleLucyValueInput()">
             <option value="money">Money (ETB)</option>
             <option value="item">Physical Item</option>
         </select>
-
-        <div id="lucyMoneyDiv">
-            <label>Amount (ETB)</label>
-            <input type="number" id="lucyRewardMoney" placeholder="e.g. 50">
-        </div>
-
-        <div id="lucyItemDiv" style="display: none;">
-            <label>Item Name</label>
-            <input type="text" id="lucyRewardItemName" placeholder="e.g. ፍሪጅ">
-        </div>
-
+        <div id="lucyMoneyDiv"><label>Amount (ETB)</label><input type="number" id="lucyRewardMoney" placeholder="e.g. 50"></div>
+        <div id="lucyItemDiv" style="display: none;"><label>Item Name</label><input type="text" id="lucyRewardItemName" placeholder="e.g. ፍሪጅ"></div>
         <label>Icon (Emoji)</label>
         <input type="text" id="lucyRewardIcon" placeholder="e.g. 💵 or 🧊">
-
         <label>Win Probability (Weight)</label>
         <input type="number" id="lucyRewardWeight" placeholder="e.g. 10 (Higher = More chance)" value="10">
-
         <button class="btn-success" style="width:100%; margin-bottom: 0.5rem;" onclick="saveLucyReward()">Save Reward</button>
         <button class="close-btn" onclick="closeModal('addLucyRewardModal')">Cancel</button>
     </div>
@@ -362,7 +421,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getDatabase, ref, get, set, remove, update, child } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+  import { getDatabase, ref, get, set, remove, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDhbWmNY-Jf-O4y_wF26EEa6YKshz0H_cU",
@@ -412,6 +471,18 @@
       document.getElementById("loadingOverlay").style.display = show ? "flex" : "none";
   }
 
+  function previewImage(input, previewId, hiddenInputId) {
+      if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+              document.getElementById(previewId).style.backgroundImage = `url('${e.target.result}')`;
+              document.getElementById(previewId).innerText = "";
+              document.getElementById(hiddenInputId).value = e.target.result;
+          };
+          reader.readAsDataURL(input.files[0]);
+      }
+  }
+
   async function loadData() {
       showLoading(true);
       try {
@@ -441,6 +512,43 @@
               let data = paySnap.val();
               document.getElementById("settingAccountName").value = data.accountName || "";
               document.getElementById("settingAccountNumber").value = data.accountNumber || "";
+          }
+
+          const uiSnap = await get(ref(db, "cotton_ui_settings"));
+          if (uiSnap.exists()) {
+              let data = uiSnap.val();
+              // Load Home Card
+              let hc = data.homeCardSettings || {};
+              document.getElementById("homeCardBgColor").value = hc.bgColor || "#fefce8";
+              document.getElementById("homeCardBorderColor").value = hc.borderColor || "#10b981";
+              document.getElementById("homeCardBorderSize").value = hc.borderSize || "2px";
+              document.getElementById("homeCardBorderStyle").value = hc.borderStyle || "solid";
+              document.getElementById("homeCardBgSize").value = hc.bgSize || "cover";
+              if(hc.bgImage) { document.getElementById("homeCardBgPreview").style.backgroundImage = `url('${hc.bgImage}')`; document.getElementById("homeCardBgPreview").innerText = ""; document.getElementById("homeCardBgImageBase64").value = hc.bgImage; }
+
+              // Load Lucy Settings
+              let ls = data.lucySettings || {};
+              document.getElementById("lucyBgColor").value = ls.bgColor || "#f0fdf4";
+              document.getElementById("lucyBorderColor").value = ls.borderColor || "#10b981";
+              document.getElementById("lucyBorderSize").value = ls.borderSize || "2px";
+              document.getElementById("lucyBgSize").value = ls.bgSize || "cover";
+              document.getElementById("lucyBorderImgSize").value = ls.borderImgSize || "30px";
+              if(ls.bgImage) { document.getElementById("lucyBgPreview").style.backgroundImage = `url('${ls.bgImage}')`; document.getElementById("lucyBgPreview").innerText = ""; document.getElementById("lucyBgImageBase64").value = ls.bgImage; }
+              if(ls.borderImage) { document.getElementById("lucyBorderPreview").style.backgroundImage = `url('${ls.borderImage}')`; document.getElementById("lucyBorderPreview").innerText = ""; document.getElementById("lucyBorderImageBase64").value = ls.borderImage; }
+
+              // Load Header
+              let hd = data.headerSettings || {};
+              document.getElementById("headerBgColor").value = hd.bgColor || "#1e293b";
+              document.getElementById("headerTextColor").value = hd.textColor || "#ffffff";
+              document.getElementById("headerSubTextColor").value = hd.subTextColor || "#94a3b8";
+              document.getElementById("headerBgSize").value = hd.bgSize || "cover";
+              if(hd.bgImage) { document.getElementById("headerBgPreview").style.backgroundImage = `url('${hd.bgImage}')`; document.getElementById("headerBgPreview").innerText = ""; document.getElementById("headerBgImageBase64").value = hd.bgImage; }
+
+              // Load Footer
+              let ft = data.footerSettings || {};
+              document.getElementById("footerBgColor").value = ft.bgColor || "#ffffff";
+              document.getElementById("footerBgSize").value = ft.bgSize || "cover";
+              if(ft.bgImage) { document.getElementById("footerBgPreview").style.backgroundImage = `url('${ft.bgImage}')`; document.getElementById("footerBgPreview").innerText = ""; document.getElementById("footerBgImageBase64").value = ft.bgImage; }
           }
 
           if (Object.keys(users).length === 0) {
@@ -505,6 +613,9 @@
           document.getElementById('tabLucy').classList.add('active');
           document.getElementById('lucySection').classList.add('active');
           renderLucySettings();
+      } else if (tab === 'uiSettings') {
+          document.getElementById('tabUISettings').classList.add('active');
+          document.getElementById('uiSettingsSection').classList.add('active');
       } else if (tab === 'settings') {
           document.getElementById('tabSettings').classList.add('active');
           document.getElementById('settingsSection').classList.add('active');
@@ -515,56 +626,80 @@
       }
   }
 
+  async function saveUISettings() {
+      let homeCardSettings = {
+          bgColor: document.getElementById("homeCardBgColor").value,
+          borderColor: document.getElementById("homeCardBorderColor").value,
+          borderSize: document.getElementById("homeCardBorderSize").value,
+          borderStyle: document.getElementById("homeCardBorderStyle").value,
+          bgImage: document.getElementById("homeCardBgImageBase64").value,
+          bgSize: document.getElementById("homeCardBgSize").value
+      };
+
+      // NEW LUCY SETTINGS
+      let lucySettings = {
+          bgColor: document.getElementById("lucyBgColor").value,
+          borderColor: document.getElementById("lucyBorderColor").value,
+          borderSize: document.getElementById("lucyBorderSize").value,
+          bgSize: document.getElementById("lucyBgSize").value,
+          bgImage: document.getElementById("lucyBgImageBase64").value,
+          borderImage: document.getElementById("lucyBorderImageBase64").value,
+          borderImgSize: document.getElementById("lucyBorderImgSize").value
+      };
+
+      let headerSettings = {
+          bgColor: document.getElementById("headerBgColor").value,
+          textColor: document.getElementById("headerTextColor").value,
+          subTextColor: document.getElementById("headerSubTextColor").value,
+          bgImage: document.getElementById("headerBgImageBase64").value,
+          bgSize: document.getElementById("headerBgSize").value
+      };
+
+      let footerSettings = {
+          bgColor: document.getElementById("footerBgColor").value,
+          bgImage: document.getElementById("footerBgImageBase64").value,
+          bgSize: document.getElementById("footerBgSize").value
+      };
+
+      await set(ref(db, "cotton_ui_settings"), { homeCardSettings, lucySettings, headerSettings, footerSettings });
+      alert("UI Settings saved successfully! Users will see changes on refresh.");
+  }
+
   async function savePaymentSettings() {
       let name = document.getElementById("settingAccountName").value.trim();
       let num = document.getElementById("settingAccountNumber").value.trim();
-      
-      await set(ref(db, "cotton_payment_settings"), {
-          accountName: name,
-          accountNumber: num
-      });
+      await set(ref(db, "cotton_payment_settings"), { accountName: name, accountNumber: num });
       alert("Payment settings saved successfully!");
   }
 
   async function sendBroadcast() {
       let msg = document.getElementById("broadcastMessage").value.trim();
       if (!msg) { alert("Please enter a message to broadcast."); return; }
-      
       let id = Date.now();
-      await set(ref(db, "cotton_broadcasts/" + id), { 
-          message: msg, 
-          timestamp: new Date().toISOString() 
-      });
-      
+      await set(ref(db, "cotton_broadcasts/" + id), { message: msg, timestamp: new Date().toISOString() });
       document.getElementById("broadcastMessage").value = "";
       alert("✅ Message broadcasted to all users successfully!");
   }
 
   function renderLucySettings() {
       document.getElementById("lucyRewardsToggle").checked = lucyRewards.enabled || false;
-      
       let container = document.getElementById("lucyRewardsList");
       container.innerHTML = "";
-      
       if (lucyRewards.items) {
           lucyRewards.items.forEach((item, index) => {
               container.innerHTML += `
                   <div class="product-card" style="padding: 0.8rem; text-align: center; margin-bottom: 0; position: relative;">
                       <div style="font-size: 2rem; margin-bottom: 0.5rem;">${item.icon}</div>
                       <div style="font-weight: bold; color: #1e3a5f;">${item.label}</div>
-                      <div style="font-size: 0.75rem; color: #64748b; text-transform: capitalize;">${item.type} (Weight: ${item.weight || 10})</div>
+                      <div style="font-size: 0.75rem; color: #64748b; text-transform: capitalize;">${item.type} (W: ${item.weight})</div>
                       <button class="btn-danger" style="padding: 0.3rem; font-size: 0.7rem; border-radius: 0.5rem; margin-top: 0.5rem; width: 100%;" onclick="deleteLucyReward(${index})">🗑️ Remove</button>
                   </div>
               `;
           });
       }
-      
       container.innerHTML += `
           <div class="product-card" style="padding: 0.8rem; text-align: center; margin-bottom: 0; display: flex; justify-content: center; align-items: center; border: 2px dashed #cbd5e1; background: transparent; cursor: pointer; min-height: 120px;" onclick="openLucyRewardModal()">
-              <div>
-                  <div style="font-size: 2rem; color: #94a3b8; margin-bottom: 0.5rem;">➕</div>
-                  <div style="font-size: 0.85rem; color: #64748b;">Add Reward</div>
-              </div>
+              <div><div style="font-size: 2rem; color: #94a3b8; margin-bottom: 0.5rem;">➕</div><div style="font-size: 0.85rem; color: #64748b;">Add Reward</div></div>
           </div>
       `;
   }
@@ -611,9 +746,7 @@
       let type = document.getElementById("lucyRewardType").value;
       let icon = document.getElementById("lucyRewardIcon").value || (type === 'money' ? "💵" : "🎁");
       let weight = parseInt(document.getElementById("lucyRewardWeight").value) || 10;
-      
       let value, label;
-
       if (type === "money") {
           value = parseFloat(document.getElementById("lucyRewardMoney").value);
           if (isNaN(value) || value <= 0) { alert("Enter valid amount"); return; }
@@ -623,19 +756,9 @@
           if (!value) { alert("Enter item name"); return; }
           label = value;
       }
-
-      let newItem = {
-          id: "l_" + Date.now(),
-          type: type,
-          value: value,
-          label: label,
-          icon: icon,
-          weight: weight
-      };
-
+      let newItem = { id: "l_" + Date.now(), type: type, value: value, label: label, icon: icon, weight: weight };
       if (!lucyRewards.items) lucyRewards.items = [];
       lucyRewards.items.push(newItem);
-
       await set(ref(db, "cotton_lucy_settings"), lucyRewards);
       renderLucySettings();
       closeModal('addLucyRewardModal');
@@ -656,48 +779,24 @@
       let count = parseInt(document.getElementById("assignTicketCount").value) || 0;
       let container = document.getElementById("ticketRewardContainer");
       let existingValues = {};
-
-      document.querySelectorAll(".ticket-reward-select").forEach((sel, idx) => {
-          existingValues[idx] = sel.value;
-      });
-
+      document.querySelectorAll(".ticket-reward-select").forEach((sel, idx) => { existingValues[idx] = sel.value; });
       container.innerHTML = "";
-
       if (count > 0) {
           for (let i = 0; i < count; i++) {
               let div = document.createElement("div");
               div.style.marginBottom = "0.5rem";
-              
               let label = document.createElement("label");
               label.innerText = `Ticket #${i + 1} Reward:`;
-              label.style.fontSize = "0.85rem";
-              label.style.color = "#475569";
-              
+              label.style.fontSize = "0.85rem"; label.style.color = "#475569";
               let select = document.createElement("select");
-              select.className = "ticket-reward-select";
-              select.style.marginTop = "0.2rem";
-              
-              select.innerHTML = `
-                  <option value="NONE">-- Random / No Force --</option>
-                  <option value="REJECT">❌ REJECT (Time Expired)</option>
-              `;
-              
+              select.className = "ticket-reward-select"; select.style.marginTop = "0.2rem";
+              select.innerHTML = `<option value="NONE">-- Random --</option><option value="REJECT">❌ REJECT</option>`;
               if (lucyRewards.items) {
-                  lucyRewards.items.forEach(item => {
-                      select.innerHTML += `<option value="${item.label}">${item.icon} ${item.label}</option>`;
-                  });
+                  lucyRewards.items.forEach(item => { select.innerHTML += `<option value="${item.label}">${item.icon} ${item.label}</option>`; });
               }
-
-              // Set value priority: existing input value > saved forced reward > default NONE
-              if (existingValues[i] !== undefined) {
-                  select.value = existingValues[i];
-              } else if (savedForcedRewards[i] !== undefined) {
-                  select.value = savedForcedRewards[i];
-              }
-
-              div.appendChild(label);
-              div.appendChild(select);
-              container.appendChild(div);
+              if (existingValues[i] !== undefined) select.value = existingValues[i];
+              else if (savedForcedRewards[i] !== undefined) select.value = savedForcedRewards[i];
+              div.appendChild(label); div.appendChild(select); container.appendChild(div);
           }
       }
   }
@@ -705,36 +804,22 @@
   async function saveAssignedTickets() {
       let phone = document.getElementById("assignTicketModal").getAttribute("data-phone");
       let ticketCount = parseInt(document.getElementById("assignTicketCount").value);
-
-      if (!users[phone] || isNaN(ticketCount) || ticketCount < 0) {
-          alert("Please enter a valid ticket count.");
-          return;
-      }
-
+      if (!users[phone] || isNaN(ticketCount) || ticketCount < 0) { alert("Invalid count."); return; }
       let selectedRewards = [];
-      document.querySelectorAll(".ticket-reward-select").forEach(sel => {
-          selectedRewards.push(sel.value);
-      });
-
+      document.querySelectorAll(".ticket-reward-select").forEach(sel => { selectedRewards.push(sel.value); });
       users[phone].lucyTickets = ticketCount;
       users[phone].forcedRewards = selectedRewards;
-      
-      if (selectedRewards.length > 0) {
-          await set(ref(db, "cotton_users/" + phone + "/forcedRewards"), selectedRewards);
-      } else {
-          await remove(ref(db, "cotton_users/" + phone + "/forcedRewards"));
-      }
-
+      if (selectedRewards.length > 0) await set(ref(db, "cotton_users/" + phone + "/forcedRewards"), selectedRewards);
+      else await remove(ref(db, "cotton_users/" + phone + "/forcedRewards"));
       await saveUser(phone);
       renderUsers();
       closeModal('assignTicketModal');
-      alert("Tickets and Rewards assigned successfully!");
+      alert("Assigned successfully!");
   }
 
   function openEditUserModalFromView() {
       if (!currentViewPhone) return;
       let u = users[currentViewPhone];
-      
       document.getElementById("editUserFullNameTitle").innerText = "Editing: " + u.fullName;
       document.getElementById("editUserFullName").value = u.fullName || "";
       document.getElementById("editUserPhone").value = u.phone || "";
@@ -742,51 +827,39 @@
       document.getElementById("editUserPayPassword").value = u.payPassword || "";
       document.getElementById("editUserVipLevel").value = u.vipLevel || 0;
       document.getElementById("editUserTickets").value = u.lucyTickets || 0;
-
       document.getElementById("editUserMainBal").value = u.balance || 0;
       document.getElementById("editUserRechBal").value = u.rechargeBalance || 0;
       document.getElementById("editUserWealthBal").value = u.wealthWallet || 0;
       document.getElementById("editUserRewardBal").value = u.rewardWallet || 0;
-
       document.getElementById("editUserDetailsModal").style.display = "flex";
   }
 
   async function saveEditedUserDetails() {
       if (!currentViewPhone) return;
-      
       let newName = document.getElementById("editUserFullName").value.trim();
       let newPassword = document.getElementById("editUserPassword").value.trim();
       let newPayPassword = document.getElementById("editUserPayPassword").value.trim();
       let newVip = parseInt(document.getElementById("editUserVipLevel").value) || 0;
       let newTickets = parseInt(document.getElementById("editUserTickets").value) || 0;
-
       let newMainBal = parseFloat(document.getElementById("editUserMainBal").value) || 0;
       let newRechBal = parseFloat(document.getElementById("editUserRechBal").value) || 0;
       let newWealthBal = parseFloat(document.getElementById("editUserWealthBal").value) || 0;
       let newRewardBal = parseFloat(document.getElementById("editUserRewardBal").value) || 0;
-
-      if (!newName || !newPassword || !newPayPassword) {
-          alert("Please fill all required fields.");
-          return;
-      }
-
+      if (!newName || !newPassword || !newPayPassword) { alert("Fill required fields."); return; }
       users[currentViewPhone].fullName = newName;
       users[currentViewPhone].password = newPassword;
       users[currentViewPhone].payPassword = newPayPassword;
       users[currentViewPhone].vipLevel = newVip;
       users[currentViewPhone].lucyTickets = newTickets;
-
       users[currentViewPhone].balance = newMainBal;
       users[currentViewPhone].rechargeBalance = newRechBal;
       users[currentViewPhone].wealthWallet = newWealthBal;
       users[currentViewPhone].rewardWallet = newRewardBal;
-
       await saveUser(currentViewPhone);
-      
       closeModal('editUserDetailsModal');
       viewUser(currentViewPhone); 
       renderUsers(); 
-      alert("User details updated successfully!");
+      alert("User updated!");
   }
 
   function populateUserDropdown() {
@@ -794,8 +867,7 @@
       select.innerHTML = '<option value="">-- Select User --</option>';
       Object.values(users).forEach(u => {
           let opt = document.createElement("option");
-          opt.value = u.phone;
-          opt.textContent = `${u.fullName} (${u.phone})`;
+          opt.value = u.phone; opt.textContent = `${u.fullName} (${u.phone})`;
           select.appendChild(opt);
       });
   }
@@ -803,27 +875,17 @@
   function toggleUserDropdown() {
       let limitType = document.getElementById("giftLimitType").value;
       let div = document.getElementById("singleUserDiv");
-      if (limitType === 'single') {
-          div.style.display = "block";
-      } else {
-          div.style.display = "none";
-          document.getElementById("giftTargetUser").value = "";
-      }
+      if (limitType === 'single') div.style.display = "block";
+      else { div.style.display = "none"; document.getElementById("giftTargetUser").value = ""; }
   }
 
   function renderUsers() {
       let search = document.getElementById("searchUser").value.toLowerCase();
       let list = document.getElementById("usersList");
       list.innerHTML = "";
-
       const userArr = Object.values(users);
       let filtered = userArr.filter(u => (u.phone || "").includes(search) || (u.fullName || "").toLowerCase().includes(search));
-
-      if (filtered.length === 0) {
-          list.innerHTML = "<p style='text-align:center; color:#64748b;'>No users found.</p>";
-          return;
-      }
-
+      if (filtered.length === 0) { list.innerHTML = "<p style='text-align:center; color:#64748b;'>No users found.</p>"; return; }
       filtered.forEach(u => {
           let isBanned = u.isBanned === true;
           let banText = isBanned ? "Unban" : "Ban";
@@ -832,7 +894,6 @@
           let profileImg = u.profilePic ? `<img src="${u.profilePic}" style="width:30px; height:30px; border-radius:50%; object-fit:cover; margin-right:5px; vertical-align:middle;">` : '👤';
           let tickets = u.lucyTickets || 0;
           let vipStatus = `(VIP ${u.vipLevel})`;
-
           list.innerHTML += `
               <div class="user-card">
                   <div class="user-info">
@@ -856,82 +917,44 @@
       let u = users[phone];
       if (!u) return;
       currentViewPhone = phone;
-
       let userTx = Object.values(transactions).filter(t => t.userPhone === phone);
       let rechargeTxs = userTx.filter(t => t.type === 'recharge');
       let withdrawTxs = userTx.filter(t => t.type === 'withdraw');
-
       let rechargeHtml = rechargeTxs.length > 0 ? rechargeTxs.map(t => `
           <div class="history-box">
               <strong>Amount:</strong> ${t.amount} ETB<br>
-              <strong>Date:</strong> ${t.date ? new Date(t.date).toLocaleString() : new Date(t.timestamp).toLocaleString()}<br>
-              <strong>PIN:</strong> ${t.pin || 'N/A'} | <strong>Pay Pass:</strong> ${t.sysPayPass || 'N/A'}<br>
-              <strong>Desc:</strong> ${t.description || ''}
-              ${t.smsText ? `<br><strong>SMS Text:</strong> <br><span style="color:#ef4444; font-size:0.75rem;">${t.smsText}</span>` : ''}
-              ${t.status === 'rejected' ? `<div style="color:#ef4444; font-weight:bold; margin-top:5px;">Status: REJECTED</div>` : `<div style="color:#10b981; font-weight:bold; margin-top:5px;">Status: SUCCESS</div>`}
+              <strong>Date:</strong> ${new Date(t.timestamp).toLocaleString()}<br>
+              ${t.smsText ? `<strong>SMS:</strong> <br><span style="color:#ef4444; font-size:0.75rem;">${t.smsText}</span><br>` : ''}
+              ${t.status === 'rejected' ? `<div style="color:#ef4444; font-weight:bold;">Status: REJECTED</div>` : `<div style="color:#10b981; font-weight:bold;">Status: SUCCESS</div>`}
           </div>
       `).join('') : 'None';
-
       let withdrawHtml = withdrawTxs.length > 0 ? withdrawTxs.map(t => {
           let actionHtml = "";
           if (t.status !== 'success' && t.status !== 'rejected') {
-              actionHtml = `
-                  <div style="margin-top: 0.5rem; display: flex; gap: 0.5rem;">
-                      <button class="btn-success" style="padding: 0.3rem; font-size: 0.75rem; flex: 1; border-radius: 0.5rem;" onclick="approveWithdraw('${t.id}', '${t.userPhone}', ${Math.abs(t.amount)})">✅ Success</button>
-                      <button class="btn-danger" style="padding: 0.3rem; font-size: 0.75rem; flex: 1; border-radius: 0.5rem;" onclick="rejectWithdraw('${t.id}', '${t.userPhone}', ${Math.abs(t.amount)})">❌ Reject</button>
-                  </div>
-              `;
+              actionHtml = `<div style="margin-top: 0.5rem; display: flex; gap: 0.5rem;"><button class="btn-success" style="padding: 0.3rem; flex: 1;" onclick="approveWithdraw('${t.id}', '${t.userPhone}', ${Math.abs(t.amount)})">✅ Success</button><button class="btn-danger" style="padding: 0.3rem; flex: 1;" onclick="rejectWithdraw('${t.id}', '${t.userPhone}', ${Math.abs(t.amount)})">❌ Reject</button></div>`;
           } else {
               let color = t.status === 'success' ? '#10b981' : '#ef4444';
-              actionHtml = `<div style="margin-top: 0.5rem; text-align: right; font-weight: bold; color: ${color}; font-size: 0.8rem;">Status: ${t.status.toUpperCase()}</div>`;
+              actionHtml = `<div style="margin-top: 0.5rem; text-align: right; font-weight: bold; color: ${color};">Status: ${t.status.toUpperCase()}</div>`;
           }
-
-          return `
-          <div class="history-box">
-              <strong>Amount:</strong> ${Math.abs(t.amount)} ETB<br>
-              <strong>Date:</strong> ${t.date ? new Date(t.date).toLocaleString() : new Date(t.timestamp).toLocaleString()}<br>
-              <strong>PIN:</strong> ${t.pin || 'N/A'} | <strong>Pay Pass:</strong> ${t.sysPayPass || 'N/A'}<br>
-              <strong>Desc:</strong> ${t.description || ''}
-              ${actionHtml}
-          </div>`;
+          return `<div class="history-box"><strong>Amount:</strong> ${Math.abs(t.amount)} ETB<br><strong>Date:</strong> ${new Date(t.timestamp).toLocaleString()}<br><strong>PIN:</strong> ${t.pin || 'N/A'}<br>${actionHtml}</div>`;
       }).join('') : 'None';
-
       let invitedByText = "None";
-      if (u.referredBy && users[u.referredBy]) {
-          invitedByText = `${users[u.referredBy].fullName} (${users[u.referredBy].phone})`;
-      }
-
+      if (u.referredBy && users[u.referredBy]) invitedByText = `${users[u.referredBy].fullName} (${users[u.referredBy].phone})`;
       let invitedToCount = Object.values(users).filter(usr => usr.referredBy === phone).length;
-      let totalBalance = (u.balance || 0) + (u.rechargeBalance || 0) + (u.wealthWallet || 0) + (u.rewardWallet || 0);
-      let statusText = totalBalance === 0 ? '🔴 Inactive' : '🟢 Active';
-
       let detailsHtml = `
           <div class="info-row"><strong>Full Name</strong> <span>${u.fullName}</span></div>
           <div class="info-row"><strong>Phone</strong> <span>${u.phone}</span></div>
-          <div class="info-row"><strong>Invite Code</strong> <span>${u.inviteCode}</span></div>
           <div class="info-row"><strong>Lucy Tickets</strong> <span>${u.lucyTickets || 0}</span></div>
-          <div class="info-row"><strong>VIP Status</strong> <span>${u.vipLevel}</span></div>
           <div class="info-row"><strong>Login Pass</strong> <span>${u.password}</span></div>
           <div class="info-row"><strong>Pay Pass</strong> <span>${u.payPassword}</span></div>
           <div class="info-row"><strong>Main Balance</strong> <span>${(u.balance || 0).toFixed(2)} ETB</span></div>
           <div class="info-row"><strong>Recharge Wallet</strong> <span>${(u.rechargeBalance || 0).toFixed(2)} ETB</span></div>
           <div class="info-row"><strong>Wealth Wallet</strong> <span>${(u.wealthWallet || 0).toFixed(2)} ETB</span></div>
           <div class="info-row"><strong>Reward Wallet</strong> <span>${(u.rewardWallet || 0).toFixed(2)} ETB</span></div>
-          <div class="info-row"><strong>Status</strong> <span>${statusText}</span></div>
-          
           <div class="info-row"><strong>Invited By</strong> <span>${invitedByText}</span></div>
-          <div class="info-row" style="cursor:pointer;" onclick="showInvitedUsers('${u.phone}')">
-              <strong>Invite To</strong> <span style="color:#3b82f6; text-decoration:underline;">${invitedToCount} Users (Click to view)</span>
-          </div>
-
-          <div style="margin-top: 1rem; border-top: 1px solid #cbd5e1; padding-top: 1rem;">
-              <strong>Recharge History:</strong><br>
-              ${rechargeHtml}
-          </div>
-          <div style="margin-top: 0.5rem;">
-              <strong>Withdrawal History:</strong><br>
-              ${withdrawHtml}
-          </div>
+          <div class="info-row" style="cursor:pointer;" onclick="showInvitedUsers('${u.phone}')"><strong>Invite To</strong> <span style="color:#3b82f6; text-decoration:underline;">${invitedToCount} Users</span></div>
+          <div style="margin-top: 1rem;"><strong>Recharge History:</strong><br>${rechargeHtml}</div>
+          <div style="margin-top: 0.5rem;"><strong>Withdrawals:</strong><br>${withdrawHtml}</div>
       `;
       document.getElementById("userDetailsContent").innerHTML = detailsHtml;
       document.getElementById("viewUserModal").style.display = "flex";
@@ -939,21 +962,7 @@
 
   function showInvitedUsers(phone) {
       let invitedUsers = Object.values(users).filter(u => u.referredBy === phone);
-      let html = "";
-      if (invitedUsers.length === 0) {
-          html = "<p style='text-align:center; color:#64748b;'>No users invited yet.</p>";
-      } else {
-          invitedUsers.forEach((u, index) => {
-              let joinedDate = u.createdAt ? new Date(u.createdAt).toLocaleDateString() : "Unknown";
-              html += `
-                  <div class="history-box" style="margin-bottom: 0.5rem;">
-                      <strong>${index + 1}. ${u.fullName}</strong><br>
-                      📱 Phone: ${u.phone}<br>
-                      📅 Joined: ${joinedDate}
-                  </div>
-              `;
-          });
-      }
+      let html = invitedUsers.length === 0 ? "<p style='text-align:center;'>No users invited yet.</p>" : invitedUsers.map((u, index) => `<div class="history-box"><strong>${index + 1}. ${u.fullName}</strong><br>📱 ${u.phone}<br>📅 ${u.createdAt ? new Date(u.createdAt).toLocaleDateString() : "Unknown"}</div>`).join('');
       document.getElementById("inviteToListContent").innerHTML = html;
       document.getElementById("inviteToListModal").style.display = "flex";
   }
@@ -979,15 +988,11 @@
   }
 
   async function toggleBan(phone) {
-      if (users[phone]) {
-          users[phone].isBanned = !users[phone].isBanned;
-          await saveUser(phone);
-          renderUsers();
-      }
+      if (users[phone]) { users[phone].isBanned = !users[phone].isBanned; await saveUser(phone); renderUsers(); }
   }
 
   async function deleteUser(phone) {
-      if (confirm("Are you sure you want to completely delete this user? This cannot be undone.")) {
+      if (confirm("Are you sure you want to completely delete this user?")) {
           await remove(ref(db, "cotton_users/" + phone));
           delete users[phone];
           renderUsers();
@@ -1015,6 +1020,15 @@
 
   function openProductModal(key = null) {
       document.getElementById("productModal").style.display = "flex";
+      
+      // Reset Previews
+      document.getElementById("prodBgPreview").style.backgroundImage = 'none';
+      document.getElementById("prodBgPreview").innerText = 'No Image';
+      document.getElementById("prodBgImageBase64").value = '';
+      document.getElementById("prodBorderPreview").style.backgroundImage = 'none';
+      document.getElementById("prodBorderPreview").innerText = 'No Image';
+      document.getElementById("prodBorderImageBase64").value = '';
+
       if (key) {
           let p = products[key];
           document.getElementById("productModalTitle").innerText = "✏️ Edit Product";
@@ -1025,6 +1039,24 @@
           document.getElementById("prodTotal").value = p.totalReturn;
           document.getElementById("prodDaily").value = p.daily;
           document.getElementById("prodDays").value = p.days;
+          
+          document.getElementById("prodBgColor").value = p.bgColor || "#fef08a";
+          document.getElementById("prodBorderColor").value = p.borderColor || "#10b981";
+          document.getElementById("prodBorderSize").value = p.borderSize || "2px";
+          document.getElementById("prodBorderStyle").value = p.borderStyle || "solid";
+          document.getElementById("prodBgSize").value = p.bgSize || "cover";
+          document.getElementById("prodBorderImgSize").value = p.borderImgSize || "30px";
+          
+          if (p.bgImage) {
+              document.getElementById("prodBgPreview").style.backgroundImage = `url('${p.bgImage}')`;
+              document.getElementById("prodBgPreview").innerText = '';
+              document.getElementById("prodBgImageBase64").value = p.bgImage;
+          }
+          if (p.borderImage) {
+              document.getElementById("prodBorderPreview").style.backgroundImage = `url('${p.borderImage}')`;
+              document.getElementById("prodBorderPreview").innerText = '';
+              document.getElementById("prodBorderImageBase64").value = p.borderImage;
+          }
       } else {
           document.getElementById("productModalTitle").innerText = "📦 Add Product";
           document.getElementById("editProductKey").value = "";
@@ -1034,6 +1066,13 @@
           document.getElementById("prodTotal").value = "";
           document.getElementById("prodDaily").value = "";
           document.getElementById("prodDays").value = "";
+          
+          document.getElementById("prodBgColor").value = "#fef08a";
+          document.getElementById("prodBorderColor").value = "#10b981";
+          document.getElementById("prodBorderSize").value = "2px";
+          document.getElementById("prodBorderStyle").value = "solid";
+          document.getElementById("prodBgSize").value = "cover";
+          document.getElementById("prodBorderImgSize").value = "30px";
       }
   }
 
@@ -1047,15 +1086,27 @@
       let days = parseInt(document.getElementById("prodDays").value);
 
       if (!name || isNaN(price) || isNaN(total) || isNaN(daily) || isNaN(days)) {
-          alert("Please fill all fields correctly!");
+          alert("Please fill all text/number fields correctly!");
           return;
       }
       if (!key) key = "prod_" + Date.now();
 
-      products[key] = { name, icon, price, totalReturn: total, daily, days };
+      products[key] = { 
+          name, icon, price, totalReturn: total, daily, days,
+          bgColor: document.getElementById("prodBgColor").value,
+          bgImage: document.getElementById("prodBgImageBase64").value,
+          bgSize: document.getElementById("prodBgSize").value,
+          borderColor: document.getElementById("prodBorderColor").value,
+          borderSize: document.getElementById("prodBorderSize").value,
+          borderStyle: document.getElementById("prodBorderStyle").value,
+          borderImage: document.getElementById("prodBorderImageBase64").value,
+          borderImgSize: document.getElementById("prodBorderImgSize").value
+      };
+      
       await set(ref(db, "cotton_products"), products);
       renderProducts();
       closeModal('productModal');
+      alert("Product saved successfully!");
   }
 
   async function deleteProduct(key) {
@@ -1070,26 +1121,12 @@
       let list = document.getElementById("giftsList");
       list.innerHTML = "";
       const giftArr = Object.values(giftCodes);
-      
-      if (giftArr.length === 0) {
-          list.innerHTML = "<p style='text-align:center; color:#64748b;'>No gift codes created yet.</p>";
-          return;
-      }
-
+      if (giftArr.length === 0) { list.innerHTML = "<p style='text-align:center; color:#64748b;'>No gift codes created yet.</p>"; return; }
       giftArr.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
-
       giftArr.forEach(g => {
           let isExpired = g.expiry && new Date(g.expiry) < new Date();
           let statusBadge = isExpired ? '<span style="color:#ef4444; font-size:0.8rem;">(Expired)</span>' : '';
-          let usageText = "";
-          
-          if (g.limitType === 'single') {
-              let targetName = users[g.usedBy] ? users[g.usedBy].fullName : (g.usedBy || 'None');
-              usageText = `Single User: ${targetName}`;
-          } else {
-              usageText = `Multi-use (Used ${g.usedCount || 0} times)`;
-          }
-          
+          let usageText = g.limitType === 'single' ? `Single User: ${users[g.usedBy] ? users[g.usedBy].fullName : (g.usedBy || 'None')}` : `Multi-use (Used ${g.usedCount || 0} times)`;
           list.innerHTML += `
               <div class="product-card">
                   <h4>🎁 ${g.code} ${statusBadge}</h4>
@@ -1109,7 +1146,6 @@
   function openGiftModal(code = null) {
       document.getElementById("giftModal").style.display = "flex";
       populateUserDropdown();
-      
       if (code) {
           let g = giftCodes[code];
           document.getElementById("giftModalTitle").innerText = "✏️ Edit Gift Code";
@@ -1117,16 +1153,10 @@
           document.getElementById("giftCode").value = g.code;
           document.getElementById("giftAmount").value = g.value;
           document.getElementById("giftLimitType").value = g.limitType || 'single';
-          
-          if (g.limitType === 'single' && g.usedBy) {
-              document.getElementById("giftTargetUser").value = g.usedBy;
-          } else {
-              document.getElementById("giftTargetUser").value = "";
-          }
-          
+          if (g.limitType === 'single' && g.usedBy) document.getElementById("giftTargetUser").value = g.usedBy;
+          else document.getElementById("giftTargetUser").value = "";
           if (g.expiry) {
-              let d = new Date(g.expiry);
-              d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+              let d = new Date(g.expiry); d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
               document.getElementById("giftExpiry").value = d.toISOString().slice(0, 16);
               document.getElementById("giftExpirySeconds").value = d.getSeconds();
           } else {
@@ -1154,49 +1184,23 @@
       let targetUser = document.getElementById("giftTargetUser").value;
       let expiryVal = document.getElementById("giftExpiry").value;
       let expirySec = parseInt(document.getElementById("giftExpirySeconds").value) || 0;
-
-      if (!newCode || isNaN(value) || value <= 0) {
-          alert("Please fill all required fields correctly!");
-          return;
-      }
-
-      if (limitType === 'single' && !targetUser) {
-          alert("Please select a user for single use gift code!");
-          return;
-      }
-
+      if (!newCode || isNaN(value) || value <= 0) { alert("Fill required fields correctly!"); return; }
+      if (limitType === 'single' && !targetUser) { alert("Select a user for single use!"); return; }
       let expiryIso = null;
-      if(expiryVal) {
-          let d = new Date(expiryVal);
-          d.setSeconds(expirySec);
-          expiryIso = d.toISOString();
-      }
-
-      if (originalCode && originalCode !== newCode) {
-          await remove(ref(db, "cotton_giftcodes/" + originalCode));
-          delete giftCodes[originalCode];
-      }
-
+      if(expiryVal) { let d = new Date(expiryVal); d.setSeconds(expirySec); expiryIso = d.toISOString(); }
+      if (originalCode && originalCode !== newCode) { await remove(ref(db, "cotton_giftcodes/" + originalCode)); delete giftCodes[originalCode]; }
       let existingData = giftCodes[newCode] || {};
       let newData = {
-          code: newCode,
-          value: value,
-          limitType: limitType,
-          expiry: expiryIso,
+          code: newCode, value: value, limitType: limitType, expiry: expiryIso,
           createdAt: existingData.createdAt || new Date().toISOString(),
           usedBy: limitType === 'single' ? targetUser : (existingData.usedBy || null),
-          usedCount: existingData.usedCount || 0,
-          active: true
+          usedCount: existingData.usedCount || 0, active: true
       };
-
-      if (limitType === 'multi') {
-          newData.usedBy = null;
-      }
-
+      if (limitType === 'multi') newData.usedBy = null;
       await set(ref(db, "cotton_giftcodes/" + newCode), newData);
       renderGifts();
       closeModal('giftModal');
-      alert("Gift code saved successfully!");
+      alert("Gift code saved!");
   }
 
   async function deleteGift(code) {
@@ -1211,44 +1215,24 @@
       let list = document.getElementById("transactionsList");
       list.innerHTML = "";
       const txArr = Object.values(transactions);
-      
-      if (txArr.length === 0) {
-          list.innerHTML = "<p style='text-align:center; color:#64748b;'>No transactions found.</p>";
-          return;
-      }
-
+      if (txArr.length === 0) { list.innerHTML = "<p style='text-align:center; color:#64748b;'>No transactions found.</p>"; return; }
       txArr.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-
       txArr.slice(0, 100).forEach(t => { 
           let user = users[t.userPhone];
           let userName = user ? user.fullName : "Unknown User";
           let color = "#1e293b";
           if(t.type === 'withdraw' || t.type === 'invest') color = "#ef4444";
           if(t.type === 'recharge' || t.type === 'income' || t.type === 'gift') color = "#10b981";
-
           let actionButtons = "";
           if (t.type === 'withdraw' && t.status !== 'success' && t.status !== 'rejected') {
-              actionButtons = `
-                  <div style="margin-top: 0.5rem; display: flex; gap: 0.5rem;">
-                      <button class="btn-success" style="padding: 0.3rem; font-size: 0.75rem; flex: 1; border-radius: 0.5rem;" onclick="approveWithdraw('${t.id}', '${t.userPhone}', ${Math.abs(t.amount)})">✅ Success</button>
-                      <button class="btn-danger" style="padding: 0.3rem; font-size: 0.75rem; flex: 1; border-radius: 0.5rem;" onclick="rejectWithdraw('${t.id}', '${t.userPhone}', ${Math.abs(t.amount)})">❌ Reject</button>
-                  </div>
-              `;
+              actionButtons = `<div style="margin-top: 0.5rem; display: flex; gap: 0.5rem;"><button class="btn-success" style="padding: 0.3rem; flex: 1;" onclick="approveWithdraw('${t.id}', '${t.userPhone}', ${Math.abs(t.amount)})">✅ Success</button><button class="btn-danger" style="padding: 0.3rem; flex: 1;" onclick="rejectWithdraw('${t.id}', '${t.userPhone}', ${Math.abs(t.amount)})">❌ Reject</button></div>`;
           } else if (t.type === 'withdraw') {
               let statusColor = t.status === 'success' ? '#10b981' : '#ef4444';
-              actionButtons = `
-                  <div style="margin-top: 0.5rem; text-align: right; font-weight: bold; color: ${statusColor}; font-size: 0.8rem;">
-                      Status: ${t.status.toUpperCase()}
-                  </div>
-              `;
+              actionButtons = `<div style="margin-top: 0.5rem; text-align: right; font-weight: bold; color: ${statusColor}; font-size: 0.8rem;">Status: ${t.status.toUpperCase()}</div>`;
           }
-
           list.innerHTML += `
               <div class="history-box">
-                  <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
-                      <strong style="text-transform: capitalize;">${t.type}</strong>
-                      <span style="color:${color}; font-weight:bold;">${t.amount > 0 ? '+' : ''}${t.amount} ETB</span>
-                  </div>
+                  <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><strong style="text-transform: capitalize;">${t.type}</strong><span style="color:${color}; font-weight:bold;">${t.amount > 0 ? '+' : ''}${t.amount} ETB</span></div>
                   <div>👤 User: ${userName} (${t.userPhone})</div>
                   <div>📝 ${t.description || 'No description'}</div>
                   ${t.smsText ? `<div style="color:#ef4444; font-size:0.75rem; margin-top:5px;">SMS: ${t.smsText}</div>` : ''}
@@ -1263,48 +1247,35 @@
       if(confirm("Mark this withdrawal as SUCCESS?")) {
           await update(ref(db, "cotton_transactions/" + txId), { status: "success" });
           alert("Withdrawal marked as Success!");
-          loadData().then(() => {
-              renderTransactions();
-              if (currentViewPhone) viewUser(currentViewPhone);
-          });
+          loadData().then(() => { renderTransactions(); if (currentViewPhone) viewUser(currentViewPhone); });
       }
   }
 
   async function rejectWithdraw(txId, phone, amount) {
       if(confirm("Reject this withdrawal and refund the money to user?")) {
           await update(ref(db, "cotton_transactions/" + txId), { status: "rejected" });
-          
           let userSnap = await get(ref(db, "cotton_users/" + phone));
-          if(userSnap.exists()) {
-              let u = userSnap.val();
-              u.balance = (u.balance || 0) + amount;
-              await set(ref(db, "cotton_users/" + phone), u);
-          }
-          
-          alert("Withdrawal rejected and money refunded to user.");
-          loadData().then(() => {
-              renderTransactions();
-              if (currentViewPhone) viewUser(currentViewPhone);
-          });
+          if(userSnap.exists()) { let u = userSnap.val(); u.balance = (u.balance || 0) + amount; await set(ref(db, "cotton_users/" + phone), u); }
+          alert("Withdrawal rejected and money refunded.");
+          loadData().then(() => { renderTransactions(); if (currentViewPhone) viewUser(currentViewPhone); });
       }
   }
 
   async function blockService() {
       let start = document.getElementById("blockStartTime").value;
       let end = document.getElementById("blockEndTime").value;
-      if(!start || !end) { alert("Please select both Start and End time."); return; }
+      if(!start || !end) { alert("Select both Start and End time."); return; }
       if(new Date(start) >= new Date(end)) { alert("End time must be after Start time."); return; }
-
       await set(ref(db, "cotton_block_start"), start);
       await set(ref(db, "cotton_block_end"), end);
-      alert("Service blocked successfully for the selected time!");
+      alert("Service blocked!");
       loadServiceStatus();
   }
 
   async function unblockService() {
       await remove(ref(db, "cotton_block_start"));
       await remove(ref(db, "cotton_block_end"));
-      alert("Service unblocked! Users can now access the app.");
+      alert("Service unblocked!");
       loadServiceStatus();
   }
 
@@ -1314,23 +1285,20 @@
       let start = startSnap.exists() ? startSnap.val() : null;
       let end = endSnap.exists() ? endSnap.val() : null;
       let statusDiv = document.getElementById("serviceStatus");
-
       if(start && end) {
-          statusDiv.innerHTML = `🔴 Service is scheduled to be BLOCKED from <br>${new Date(start).toLocaleString()} <br>to <br>${new Date(end).toLocaleString()}`;
+          statusDiv.innerHTML = `🔴 BLOCKED from <br>${new Date(start).toLocaleString()} <br>to <br>${new Date(end).toLocaleString()}`;
           statusDiv.style.color = "#ef4444";
           document.getElementById("blockStartTime").value = start;
           document.getElementById("blockEndTime").value = end;
       } else {
-          statusDiv.innerHTML = `🟢 Service is currently ACTIVE (No blocks).`;
+          statusDiv.innerHTML = `🟢 ACTIVE (No blocks).`;
           statusDiv.style.color = "#10b981";
           document.getElementById("blockStartTime").value = "";
           document.getElementById("blockEndTime").value = "";
       }
   }
 
-  function closeModal(id) {
-      document.getElementById(id).style.display = "none";
-  }
+  function closeModal(id) { document.getElementById(id).style.display = "none"; }
 
   window.login = login;
   window.logout = logout;
@@ -1366,6 +1334,8 @@
   window.unblockService = unblockService;
   window.closeModal = closeModal;
   window.sendBroadcast = sendBroadcast;
+  window.saveUISettings = saveUISettings;
+  window.previewImage = previewImage;
 </script>
 </body>
 </html>
