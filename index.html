@@ -458,10 +458,11 @@
       await set(ref(db, "cotton_transactions/" + id), tx);
   }
 
-  // --- ✅ የተስተካከለው የማረጋገጫ ፈንክሽን (ወደ ሰርቨር የሚልክ) ---
+  // --- ✅ የተስተካከለው የማረጋገጫ ፈንክሽን (ወደ አዲሱ ሰርቨር የሚልክ) ---
   async function verifyPayment(provider, referenceNumber, receiverSuffix, extraData = {}) {
       try {
-          const response = await fetch("https://cotton-exporter-2026-production.up.railway.app/api/verify-payment", { 
+          // ✅ አዲሱ የ Railway አድራሻ እዚህ ጋር ተካቷል
+          const response = await fetch("https://cotton-exporter-2026-production-044f.up.railway.app/api/verify-payment", { 
               method: 'POST',
               headers: { 
                   "Content-Type": "application/json"
