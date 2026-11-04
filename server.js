@@ -9,8 +9,8 @@ app.use(express.json());
 
 // የእርስዎ የተመዘገቡ የባንክ አካውንቶች (ከ Verify.ET ዳሽቦርድዎ ጋር እንዲመሳሰሉ)
 const REGISTERED_ACCOUNTS = {
-    TELEBIRR_PHONE: "0947655291", // የቴሌብር ስልክ ቁጥርዎ
-    CBE_ACCOUNT_SUFFIX: "1000*********" // የንግድ ባንክ አካውንትዎ የመጨረሻ 8 አሃዝ
+    TELEBIRR_PHONE: "47655291", // የቴሌብር ስልክ ቁጥርዎ
+    CBE_ACCOUNT_SUFFIX: "87895848" // የንግድ ባንክ አካውንትዎ የመጨረሻ 8 አሃዝ
 };
 
 app.post('/api/verify-payment', async (req, res) => {
