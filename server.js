@@ -7,10 +7,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// የእርስዎ የተመዘገቡ የባንክ አካውንቶች (ከ Verify.ET ዳሽቦርድዎ ጋር እንዲመሳሰሉ)
+// የእርስዎ የተመዘገቡ የባንክ አካውንቶች
 const REGISTERED_ACCOUNTS = {
-    TELEBIRR_PHONE: "47655291", // የቴሌብር ስልክ ቁጥርዎ
-    CBE_ACCOUNT_SUFFIX: "87895848" // የንግድ ባንክ አካውንትዎ የመጨረሻ 8 አሃዝ
+    TELEBIRR_PHONE: "47655291",
+    CBE_ACCOUNT_SUFFIX: "87895848" 
 };
 
 app.post('/api/verify-payment', async (req, res) => {
@@ -21,6 +21,7 @@ app.post('/api/verify-payment', async (req, res) => {
     }
 
     let requestPayload = {};
+    let isCbeLink = reference.startsWith("https://mbreciept.cbe.com.et");
 
     if (provider === "telebirr") {
         requestPayload = {
@@ -31,9 +32,12 @@ app.post('/api/verify-payment', async (req, res) => {
     } else if (provider === "cbe") {
         requestPayload = {
             bank: "cbe",
-            reference: reference, 
-            accountSuffix: userAccount || REGISTERED_ACCOUNTS.CBE_ACCOUNT_SUFFIX 
+            reference: reference 
         };
+        // ✅ ማስተካከያ፡ ሊንክ ካልሆነ ብቻ ቅጥያ ይላካል
+        if (!isCbeLink && userAccount) {
+            requestPayload.accountSuffix = userAccount;
+        }
     } else {
         return res.status(400).json({ success: false, message: "የተደገፈ ባንክ አይደለም" });
     }
