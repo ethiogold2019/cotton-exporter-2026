@@ -85,4 +85,4 @@ app.post('/api/verify-payment', async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`ሰርቨር በፖርት ${PORT} ላይ እየሰራ ነው...`));
+app.listen(PORT, '0.0.0.0', () => console.log(`ሰርቨር በፖርት ${PORT} ላይ እየሰራ ነው...`));
