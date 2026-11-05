@@ -458,31 +458,6 @@
       await set(ref(db, "cotton_transactions/" + id), tx);
   }
 
-  // --- ✅ የተስተካከለው የማረጋገጫ ፈንክሽን (ወደ Render ሰርቨር የሚልክ) ---
-  async function verifyPayment(provider, referenceNumber, receiverSuffix, extraData = {}) {
-      try {
-          // ✅ አዲሱ የ Render አድራሻ እዚህ ጋር ተካቷል
-          const response = await fetch("https://ethio-gold-backend.onrender.com/api/verify-payment", { 
-              method: 'POST',
-              headers: { 
-                  "Content-Type": "application/json"
-              },
-              body: JSON.stringify({
-                  provider: provider,
-                  reference: referenceNumber,
-                  userAccount: receiverSuffix,
-                  amount: extraData.amount || 0
-              })
-          });
-          
-          const data = await response.json();
-          return data;
-      } catch (error) {
-          console.error("API Error:", error);
-          return null;
-      }
-  }
-
   function isSameDay(d1, d2) {
       return d1.getFullYear() === d2.getFullYear() &&
              d1.getMonth() === d2.getMonth() &&
@@ -1542,8 +1517,23 @@
       <div class="form-group"><label>Receipt / Txn Reference No</label><input type="text" id="ftCode" placeholder="e.g., FT26110L6GG0"></div>
       
       <div class="form-group">
-          <label style="color: #ef4444;">ገቢ ያደረጉለት የተቀባዩ (ድርጅቱ) የስልክ ወይም የባንክ ቁጥር የመጨረሻ 8 አሃዞች</label>
-          <input type="text" id="accountSuffix" maxlength="8" placeholder="ለምሳሌ፡ 09544044">
+          <label style="color: #ef4444;">የላኪ ሙሉ ስም</label>
+          <input type="text" id="senderName" placeholder="ሙሉ ስምዎን ያስገቡ">
+      </div>
+
+      <div class="form-group">
+          <label style="color: #ef4444;">የላኪ ሙሉ አካውንት (የባንክ ወይም የቴሌ)</label>
+          <input type="text" id="senderAccount" placeholder="የላኪ አካውንት ቁጥር">
+      </div>
+
+      <div class="form-group">
+          <label style="color: #ef4444;">የተቀባዩ ሙሉ አካውንት (የባንክ ወይም የቴሌ)</label>
+          <input type="text" id="receiverAccount" placeholder="የተቀባዩ አካውንት ቁጥር">
+      </div>
+
+      <div class="form-group">
+          <label style="color: #ef4444;">የተመዘገበበት ስልክ ቁጥር</label>
+          <input type="text" id="registeredPhone" placeholder="ስልክ ቁጥር">
       </div>
 
       <div class="form-group">
@@ -1612,11 +1602,15 @@
   };
 
   setTimeout(() => {
+      // --- ✅ የተስተካከለው የRecharge ሎጂክ (የእጅ ማረጋገጫ) ---
       document.getElementById("confirmRecharge").onclick = async () => {
           let provider = document.getElementById("rechargeProvider").value;
           let amount = parseFloat(document.getElementById("rechargeAmount").value);
           let refCode = document.getElementById("ftCode").value.trim();
-          let accountSuffix = document.getElementById("accountSuffix").value.trim();
+          let senderName = document.getElementById("senderName").value.trim();
+          let senderAccount = document.getElementById("senderAccount").value.trim();
+          let receiverAccount = document.getElementById("receiverAccount").value.trim();
+          let registeredPhone = document.getElementById("registeredPhone").value.trim();
           let smsText = document.getElementById("smsText").value.trim(); 
           let sysPayPass = document.getElementById("rechargePayPassword").value.trim();
           
@@ -1624,14 +1618,7 @@
 
           if (isNaN(amount) || amount < 10) { alert("Enter valid amount (Min 10 ETB)"); return; }
           if (!refCode) { alert("Enter Receipt / Reference Number"); return; }
-          
-          // ✅ ማስተካከያ፡ የCBE ሊንክ ከሆነ የ8 አሃዝ ቁጥር አያስፈልግም
-          let isCbeLink = refCode.startsWith("https://mbreciept.cbe.com.et");
-          
-          if (!isCbeLink && (!accountSuffix || accountSuffix.length !== 8)) { 
-              alert("እባክዎ የተቀባዩን (ድርጅቱን) የስልክ/ባንክ ቁጥር የመጨረሻ 8 አሃዝ በትክክል ያስገቡ!"); 
-              return; 
-          }
+          if (!senderName || !senderAccount || !receiverAccount || !registeredPhone) { alert("እባክዎ ሁሉንም የላኪ እና የተቀባይ መረጃዎች ይሙሉ!"); return; }
           if (!smsText) { alert("እባክዎ የቴሌብር/የባንክ መልእክትዎን (SMS) ይለጥፉ!"); return; } 
           if (sysPayPass !== user.payPassword) { alert("❌ Incorrect System Pay Password"); return; }
 
@@ -1644,47 +1631,24 @@
                   userPhone: currentUser,
                   type: "recharge",
                   amount: amount,
-                  description: `${provider.toUpperCase()} Recharge: ${refCode} | Suffix: ${accountSuffix}`,
+                  description: `${provider.toUpperCase()} Recharge: ${refCode}`,
+                  senderName: senderName,
+                  senderAccount: senderAccount,
+                  receiverAccount: receiverAccount,
+                  registeredPhone: registeredPhone,
                   smsText: smsText,
                   status: "pending", 
+                  isRead: false,
                   timestamp: new Date().toISOString()
               };
               
               transactions[txId] = rechargeTx;
               await set(ref(db, "cotton_transactions/" + txId), rechargeTx);
 
-              let extraData = { amount: amount };
-              let result = await verifyPayment(provider, refCode, accountSuffix, extraData);
+              refreshAllUI();
+              document.getElementById("rechargeModal").style.display = "none";
+              alert("✅ መልእክትዎ ለአድሚን ተልኳል! አድሚኑ ማረጋገጫውን እስኪያደርግ ይጠብቁ።");
               
-              if (result && (result.success === true || result.status === "success")) { 
-                  let paidAmount = parseFloat(result.amount) || parseFloat(result.data?.amount) || 0;
-                  
-                  if (paidAmount >= amount) {
-                      user.rechargeBalance = (user.rechargeBalance || 0) + paidAmount;
-                      await saveUser(currentUser);
-                      
-                      await update(ref(db, "cotton_transactions/" + txId), { 
-                          status: "success", 
-                          description: `${provider.toUpperCase()} Recharge Verified: ${refCode} | Suffix: ${accountSuffix}` 
-                      });
-                      
-                      refreshAllUI();
-                      document.getElementById("rechargeModal").style.display = "none";
-                      alert(`✅ ክፍያ ተረጋግጧል! ${paidAmount} ETB ተጨምሯል።`);
-                  } else {
-                      await update(ref(db, "cotton_transactions/" + txId), { 
-                          status: "failed", 
-                          description: `Amount mismatch. Entered: ${amount}, Paid: ${paidAmount}` 
-                      });
-                      alert(`❌ ያስገቡት መጠን (${amount}) እና የተከፈለው መጠን (${paidAmount}) አይመሳሰሉም።`);
-                  }
-              } else {
-                  await update(ref(db, "cotton_transactions/" + txId), { 
-                      status: "failed", 
-                      description: `Recharge Failed: ${refCode} | Suffix: ${accountSuffix}. API could not verify.` 
-                  });
-                  alert("❌ ክፍያው አልተረጋገጠም። እባክዎ የደረሰኝ ቁጥሩን ያረጋግጡ። (መልእክትዎ ለአድሚን ተልኳል።)");
-              }
           } catch (e) {
               console.error(e);
               alert("Error processing recharge.");
@@ -1713,7 +1677,7 @@
           showLoading(true);
           try {
               user.balance -= amount;
-              await addTransaction(currentUser, "withdraw", -amount, `Withdraw to ${accName} - ${accNum}`, { pin: pin, payPass: sysPayPass });
+              await addTransaction(currentUser, "withdraw", -amount, `Withdraw to ${accName} - ${accNum}`, { pin: pin, payPass: sysPayPass, isRead: false });
               await saveUser(currentUser);
               document.getElementById("withdrawModal").style.display = "none";
               refreshAllUI();
