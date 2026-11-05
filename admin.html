@@ -73,7 +73,17 @@
         .style-section h5 { color: #1e3a5f; margin-bottom: 0.5rem; font-size: 1rem; border-bottom: 1px dashed #cbd5e1; padding-bottom: 0.3rem; }
         .style-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
         .style-grid .form-group { margin-bottom: 0.5rem; }
-        .preview-box { width: 100%; height: 80px; border-radius: 0.5rem; margin-top: 0.5rem; border: 1px dashed #94a3b8; background-size: cover; background-position: center; display: flex; justify-content: center; align-items: center; color: #64748b; font-size: 0.8rem; overflow: hidden;}
+        .preview-box { width: 100%; height: 80px; border-radius: 0.5rem; margin-top: 0.5rem; border: 1px dashed #94a3b8; background-size: cover; background-position: center; display: flex; justify-content: center; align-items: center; color: #64748b; font-size: 0.8rem; overflow: hidden; position: relative; }
+        .preview-box video { width: 100%; height: 100%; object-fit: cover; border-radius: 0.5rem; }
+        .remove-img-btn { position: absolute; top: 5px; right: 5px; background: #ef4444; color: white; border: none; border-radius: 50%; width: 25px; height: 25px; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 0.8rem; z-index: 10;}
+        
+        .filter-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .filter-btn { background: white; border: 1px solid #cfdfed; padding: 0.4rem 0.8rem; border-radius: 2rem; font-size: 0.8rem; cursor: pointer; color: #475569; }
+        .filter-btn.active { background: #1e3a5f; color: white; border-color: #1e3a5f; }
+        .tx-read { opacity: 0.6; border-left: 4px solid #10b981; }
+        .tx-unread { border-left: 4px solid #ef4444; font-weight: 500; }
+        
+        .amount-input { padding: 0.4rem; border: 1px solid #cfdfed; border-radius: 0.5rem; font-size: 0.9rem; width: 100px; text-align: center; font-weight: bold; color: #10b981;}
     </style>
 </head>
 <body>
@@ -167,10 +177,11 @@
                     </div>
                     <div class="form-group"><label style="font-size:0.8rem;">Border Size (e.g. 2px)</label><input type="text" id="homeCardBorderSize" placeholder="2px"></div>
                     <div class="form-group"><label style="font-size:0.8rem;">Border Style</label><select id="homeCardBorderStyle"><option value="solid">Solid</option><option value="dashed">Dashed</option><option value="dotted">Dotted</option><option value="double">Double</option></select></div>
-                    <div class="form-group"><label style="font-size:0.8rem;">Bg Image</label><input type="file" id="homeCardBgImageFile" accept="image/*" onchange="previewImage(this, 'homeCardBgPreview', 'homeCardBgImageBase64')"></div>
+                    <div class="form-group"><label style="font-size:0.8rem;">Bg Image / Video</label><input type="file" id="homeCardBgImageFile" accept="image/*, video/*" onchange="previewImage(this, 'homeCardBgPreview', 'homeCardBgImageBase64')"></div>
                     <div class="form-group"><label style="font-size:0.8rem;">Bg Image Size</label><input type="text" id="homeCardBgSize" placeholder="e.g. cover, contain, 100% 100%"></div>
                     <div id="homeCardBgPreview" class="preview-box">No Image</div>
                     <input type="hidden" id="homeCardBgImageBase64">
+                    <input type="hidden" id="homeCardBgImageBase64_mediaType" value="image">
                 </div>
 
                 <!-- LUCY REWARDS SETTINGS -->
@@ -181,15 +192,17 @@
                         <div class="form-group"><label style="font-size:0.8rem;">Border Color</label><input type="color" id="lucyBorderColor" style="height: 35px; padding: 0;"></div>
                     </div>
                     <div class="form-group"><label style="font-size:0.8rem;">Border Size (e.g. 2px)</label><input type="text" id="lucyBorderSize" placeholder="2px"></div>
-                    <div class="form-group"><label style="font-size:0.8rem;">Bg Image</label><input type="file" id="lucyBgImageFile" accept="image/*" onchange="previewImage(this, 'lucyBgPreview', 'lucyBgImageBase64')"></div>
+                    <div class="form-group"><label style="font-size:0.8rem;">Bg Image / Video</label><input type="file" id="lucyBgImageFile" accept="image/*, video/*" onchange="previewImage(this, 'lucyBgPreview', 'lucyBgImageBase64')"></div>
                     <div class="form-group"><label style="font-size:0.8rem;">Bg Image Size</label><input type="text" id="lucyBgSize" placeholder="e.g. cover, contain, 100% 100%"></div>
                     <div id="lucyBgPreview" class="preview-box">No Image</div>
                     <input type="hidden" id="lucyBgImageBase64">
+                    <input type="hidden" id="lucyBgImageBase64_mediaType" value="image">
                     
-                    <div class="form-group" style="margin-top: 0.5rem;"><label style="font-size:0.8rem;">Border Image</label><input type="file" id="lucyBorderImageFile" accept="image/*" onchange="previewImage(this, 'lucyBorderPreview', 'lucyBorderImageBase64')"></div>
+                    <div class="form-group" style="margin-top: 0.5rem;"><label style="font-size:0.8rem;">Border Image / Video</label><input type="file" id="lucyBorderImageFile" accept="image/*, video/*" onchange="previewImage(this, 'lucyBorderPreview', 'lucyBorderImageBase64')"></div>
                     <div class="form-group"><label style="font-size:0.8rem;">Border Image Size</label><input type="text" id="lucyBorderImgSize" placeholder="e.g. 30px, 40px"></div>
                     <div id="lucyBorderPreview" class="preview-box">No Image</div>
                     <input type="hidden" id="lucyBorderImageBase64">
+                    <input type="hidden" id="lucyBorderImageBase64_mediaType" value="image">
                 </div>
 
                 <!-- Header Settings -->
@@ -198,20 +211,22 @@
                     <div class="form-group"><label style="font-size:0.8rem;">Bg Color</label><input type="color" id="headerBgColor" style="height: 35px; padding: 0;"></div>
                     <div class="form-group"><label style="font-size:0.8rem;">Text Color</label><input type="color" id="headerTextColor" style="height: 35px; padding: 0;"></div>
                     <div class="form-group"><label style="font-size:0.8rem;">Subtext Color</label><input type="color" id="headerSubTextColor" style="height: 35px; padding: 0;"></div>
-                    <div class="form-group"><label style="font-size:0.8rem;">Bg Image</label><input type="file" id="headerBgImageFile" accept="image/*" onchange="previewImage(this, 'headerBgPreview', 'headerBgImageBase64')"></div>
+                    <div class="form-group"><label style="font-size:0.8rem;">Bg Image / Video</label><input type="file" id="headerBgImageFile" accept="image/*, video/*" onchange="previewImage(this, 'headerBgPreview', 'headerBgImageBase64')"></div>
                     <div class="form-group"><label style="font-size:0.8rem;">Bg Image Size</label><input type="text" id="headerBgSize" placeholder="e.g. cover, contain"></div>
                     <div id="headerBgPreview" class="preview-box">No Image</div>
                     <input type="hidden" id="headerBgImageBase64">
+                    <input type="hidden" id="headerBgImageBase64_mediaType" value="image">
                 </div>
 
                 <!-- Footer Settings -->
                 <div class="style-section">
                     <h5>🧭 Footer Editing (Bottom Nav)</h5>
                     <div class="form-group"><label style="font-size:0.8rem;">Bg Color</label><input type="color" id="footerBgColor" style="height: 35px; padding: 0;"></div>
-                    <div class="form-group"><label style="font-size:0.8rem;">Bg Image</label><input type="file" id="footerBgImageFile" accept="image/*" onchange="previewImage(this, 'footerBgPreview', 'footerBgImageBase64')"></div>
+                    <div class="form-group"><label style="font-size:0.8rem;">Bg Image / Video</label><input type="file" id="footerBgImageFile" accept="image/*, video/*" onchange="previewImage(this, 'footerBgPreview', 'footerBgImageBase64')"></div>
                     <div class="form-group"><label style="font-size:0.8rem;">Bg Image Size</label><input type="text" id="footerBgSize" placeholder="e.g. cover, contain"></div>
                     <div id="footerBgPreview" class="preview-box">No Image</div>
                     <input type="hidden" id="footerBgImageBase64">
+                    <input type="hidden" id="footerBgImageBase64_mediaType" value="image">
                 </div>
 
                 <button class="btn-success" style="width: 100%; margin-top: 1rem;" onclick="saveUISettings()">💾 Save UI Settings</button>
@@ -251,6 +266,14 @@
 
         <div id="reportsSection" class="content-section">
             <h3 style="margin-bottom: 1rem; color: #1e3a5f;">📊 All Transactions</h3>
+            <div class="filter-tabs">
+                <button class="filter-btn active" id="filterAll" onclick="setTxFilter('all')">All</button>
+                <button class="filter-btn" id="filterToday" onclick="setTxFilter('today')">Today</button>
+                <button class="filter-btn" id="filterYesterday" onclick="setTxFilter('yesterday')">Yesterday</button>
+                <button class="filter-btn" id="filterLast" onclick="setTxFilter('last')">Last 7 Days</button>
+                <button class="filter-btn" id="filterUnread" onclick="setTxFilter('unread')">Unread</button>
+                <button class="filter-btn" id="filterRead" onclick="setTxFilter('read')">Read</button>
+            </div>
             <div id="transactionsList"></div>
         </div>
 
@@ -358,15 +381,17 @@
             </select>
         </div>
         
-        <div class="form-group"><label style="font-size:0.8rem;">Background Image</label><input type="file" id="prodBgImageFile" accept="image/*" onchange="previewImage(this, 'prodBgPreview', 'prodBgImageBase64')"></div>
+        <div class="form-group"><label style="font-size:0.8rem;">Background Image / Video</label><input type="file" id="prodBgImageFile" accept="image/*, video/*" onchange="previewImage(this, 'prodBgPreview', 'prodBgImageBase64')"></div>
         <div class="form-group"><label style="font-size:0.8rem;">Bg Image Size</label><input type="text" id="prodBgSize" placeholder="e.g. cover, contain"></div>
         <div id="prodBgPreview" class="preview-box">No Image</div>
         <input type="hidden" id="prodBgImageBase64">
+        <input type="hidden" id="prodBgImageBase64_mediaType" value="image">
 
-        <div class="form-group" style="margin-top:0.5rem;"><label style="font-size:0.8rem;">Border Image</label><input type="file" id="prodBorderImageFile" accept="image/*" onchange="previewImage(this, 'prodBorderPreview', 'prodBorderImageBase64')"></div>
+        <div class="form-group" style="margin-top:0.5rem;"><label style="font-size:0.8rem;">Border Image / Video</label><input type="file" id="prodBorderImageFile" accept="image/*, video/*" onchange="previewImage(this, 'prodBorderPreview', 'prodBorderImageBase64')"></div>
         <div class="form-group"><label style="font-size:0.8rem;">Border Image Size</label><input type="text" id="prodBorderImgSize" placeholder="e.g. 30px, 40px"></div>
         <div id="prodBorderPreview" class="preview-box">No Image</div>
         <input type="hidden" id="prodBorderImageBase64">
+        <input type="hidden" id="prodBorderImageBase64_mediaType" value="image">
 
         <button class="btn-success" style="width:100%; margin-bottom: 0.5rem; margin-top: 1rem;" onclick="saveProduct()">Save Product</button>
         <button class="close-btn" onclick="closeModal('productModal')">Cancel</button>
@@ -443,6 +468,7 @@
   let giftCodes = {};
   let lucyRewards = {};
   let currentViewPhone = null;
+  let currentTxFilter = 'all';
 
   const defaultProducts = {
       young: { name: "Young", price: 1000, totalReturn: 1800, daily: 40, days: 45, icon: "🌱" },
@@ -471,17 +497,57 @@
       document.getElementById("loadingOverlay").style.display = show ? "flex" : "none";
   }
 
+  // ✅ UPDATED: Handles both image and video. Stores the media type in a companion hidden field.
   function previewImage(input, previewId, hiddenInputId) {
-      if (input.files && input.files[0]) {
-          var reader = new FileReader();
-          reader.onload = function (e) {
-              document.getElementById(previewId).style.backgroundImage = `url('${e.target.result}')`;
-              document.getElementById(previewId).innerText = "";
-              document.getElementById(hiddenInputId).value = e.target.result;
-          };
-          reader.readAsDataURL(input.files[0]);
-      }
+      if (!input.files || !input.files[0]) return;
+      var file = input.files[0];
+      var isVideo = file.type.startsWith("video/");
+      var reader = new FileReader();
+      reader.onload = function (e) {
+          let preview = document.getElementById(previewId);
+          preview.innerHTML = "";
+          preview.style.backgroundImage = "none";
+
+          if (isVideo) {
+              let vid = document.createElement("video");
+              vid.src = e.target.result;
+              vid.autoplay = true;
+              vid.loop = true;
+              vid.muted = true;          // preview muted (admin panel)
+              vid.playsInline = true;
+              preview.appendChild(vid);
+          } else {
+              preview.style.backgroundImage = `url('${e.target.result}')`;
+          }
+
+          let removeBtn = document.createElement("button");
+          removeBtn.className = "remove-img-btn";
+          removeBtn.textContent = "✕";
+          removeBtn.onclick = (ev) => window.removeImage(previewId, hiddenInputId, ev);
+          preview.appendChild(removeBtn);
+
+          document.getElementById(hiddenInputId).value = e.target.result;
+
+          // ✅ Save media type for user app to know how to render
+          let typeField = document.getElementById(hiddenInputId + "_mediaType");
+          if (typeField) typeField.value = isVideo ? "video" : "image";
+      };
+      reader.readAsDataURL(file);
   }
+
+  window.removeImage = function(previewId, hiddenInputId, event) {
+      if (event) event.stopPropagation();
+      if(confirm("Are you sure you want to remove this media?")) {
+          let preview = document.getElementById(previewId);
+          preview.style.backgroundImage = 'none';
+          preview.innerHTML = 'No Image';
+          document.getElementById(hiddenInputId).value = '';
+          let typeField = document.getElementById(hiddenInputId + "_mediaType");
+          if (typeField) typeField.value = "image";
+          let fileInput = document.getElementById(previewId.replace('Preview', 'ImageFile'));
+          if (fileInput) fileInput.value = '';
+      }
+  };
 
   async function loadData() {
       showLoading(true);
@@ -524,7 +590,24 @@
               document.getElementById("homeCardBorderSize").value = hc.borderSize || "2px";
               document.getElementById("homeCardBorderStyle").value = hc.borderStyle || "solid";
               document.getElementById("homeCardBgSize").value = hc.bgSize || "cover";
-              if(hc.bgImage) { document.getElementById("homeCardBgPreview").style.backgroundImage = `url('${hc.bgImage}')`; document.getElementById("homeCardBgPreview").innerText = ""; document.getElementById("homeCardBgImageBase64").value = hc.bgImage; }
+              if(hc.bgImage) {
+                  let pv = document.getElementById("homeCardBgPreview");
+                  pv.innerHTML = "";
+                  pv.style.backgroundImage = "none";
+                  if ((hc.bgMediaType || "image") === "video") {
+                      let vid = document.createElement("video");
+                      vid.src = hc.bgImage; vid.autoplay = true; vid.loop = true; vid.muted = true; vid.playsInline = true;
+                      pv.appendChild(vid);
+                  } else {
+                      pv.style.backgroundImage = `url('${hc.bgImage}')`;
+                  }
+                  let rb = document.createElement("button");
+                  rb.className = "remove-img-btn"; rb.textContent = "✕";
+                  rb.onclick = (ev) => window.removeImage('homeCardBgPreview', 'homeCardBgImageBase64', ev);
+                  pv.appendChild(rb);
+                  document.getElementById("homeCardBgImageBase64").value = hc.bgImage;
+                  document.getElementById("homeCardBgImageBase64_mediaType").value = hc.bgMediaType || "image";
+              }
 
               // Load Lucy Settings
               let ls = data.lucySettings || {};
@@ -533,8 +616,40 @@
               document.getElementById("lucyBorderSize").value = ls.borderSize || "2px";
               document.getElementById("lucyBgSize").value = ls.bgSize || "cover";
               document.getElementById("lucyBorderImgSize").value = ls.borderImgSize || "30px";
-              if(ls.bgImage) { document.getElementById("lucyBgPreview").style.backgroundImage = `url('${ls.bgImage}')`; document.getElementById("lucyBgPreview").innerText = ""; document.getElementById("lucyBgImageBase64").value = ls.bgImage; }
-              if(ls.borderImage) { document.getElementById("lucyBorderPreview").style.backgroundImage = `url('${ls.borderImage}')`; document.getElementById("lucyBorderPreview").innerText = ""; document.getElementById("lucyBorderImageBase64").value = ls.borderImage; }
+              if(ls.bgImage) {
+                  let pv = document.getElementById("lucyBgPreview");
+                  pv.innerHTML = ""; pv.style.backgroundImage = "none";
+                  if ((ls.bgMediaType || "image") === "video") {
+                      let vid = document.createElement("video");
+                      vid.src = ls.bgImage; vid.autoplay = true; vid.loop = true; vid.muted = true; vid.playsInline = true;
+                      pv.appendChild(vid);
+                  } else {
+                      pv.style.backgroundImage = `url('${ls.bgImage}')`;
+                  }
+                  let rb = document.createElement("button");
+                  rb.className = "remove-img-btn"; rb.textContent = "✕";
+                  rb.onclick = (ev) => window.removeImage('lucyBgPreview', 'lucyBgImageBase64', ev);
+                  pv.appendChild(rb);
+                  document.getElementById("lucyBgImageBase64").value = ls.bgImage;
+                  document.getElementById("lucyBgImageBase64_mediaType").value = ls.bgMediaType || "image";
+              }
+              if(ls.borderImage) {
+                  let pv = document.getElementById("lucyBorderPreview");
+                  pv.innerHTML = ""; pv.style.backgroundImage = "none";
+                  if ((ls.borderMediaType || "image") === "video") {
+                      let vid = document.createElement("video");
+                      vid.src = ls.borderImage; vid.autoplay = true; vid.loop = true; vid.muted = true; vid.playsInline = true;
+                      pv.appendChild(vid);
+                  } else {
+                      pv.style.backgroundImage = `url('${ls.borderImage}')`;
+                  }
+                  let rb = document.createElement("button");
+                  rb.className = "remove-img-btn"; rb.textContent = "✕";
+                  rb.onclick = (ev) => window.removeImage('lucyBorderPreview', 'lucyBorderImageBase64', ev);
+                  pv.appendChild(rb);
+                  document.getElementById("lucyBorderImageBase64").value = ls.borderImage;
+                  document.getElementById("lucyBorderImageBase64_mediaType").value = ls.borderMediaType || "image";
+              }
 
               // Load Header
               let hd = data.headerSettings || {};
@@ -542,13 +657,45 @@
               document.getElementById("headerTextColor").value = hd.textColor || "#ffffff";
               document.getElementById("headerSubTextColor").value = hd.subTextColor || "#94a3b8";
               document.getElementById("headerBgSize").value = hd.bgSize || "cover";
-              if(hd.bgImage) { document.getElementById("headerBgPreview").style.backgroundImage = `url('${hd.bgImage}')`; document.getElementById("headerBgPreview").innerText = ""; document.getElementById("headerBgImageBase64").value = hd.bgImage; }
+              if(hd.bgImage) {
+                  let pv = document.getElementById("headerBgPreview");
+                  pv.innerHTML = ""; pv.style.backgroundImage = "none";
+                  if ((hd.bgMediaType || "image") === "video") {
+                      let vid = document.createElement("video");
+                      vid.src = hd.bgImage; vid.autoplay = true; vid.loop = true; vid.muted = true; vid.playsInline = true;
+                      pv.appendChild(vid);
+                  } else {
+                      pv.style.backgroundImage = `url('${hd.bgImage}')`;
+                  }
+                  let rb = document.createElement("button");
+                  rb.className = "remove-img-btn"; rb.textContent = "✕";
+                  rb.onclick = (ev) => window.removeImage('headerBgPreview', 'headerBgImageBase64', ev);
+                  pv.appendChild(rb);
+                  document.getElementById("headerBgImageBase64").value = hd.bgImage;
+                  document.getElementById("headerBgImageBase64_mediaType").value = hd.bgMediaType || "image";
+              }
 
               // Load Footer
               let ft = data.footerSettings || {};
               document.getElementById("footerBgColor").value = ft.bgColor || "#ffffff";
               document.getElementById("footerBgSize").value = ft.bgSize || "cover";
-              if(ft.bgImage) { document.getElementById("footerBgPreview").style.backgroundImage = `url('${ft.bgImage}')`; document.getElementById("footerBgPreview").innerText = ""; document.getElementById("footerBgImageBase64").value = ft.bgImage; }
+              if(ft.bgImage) {
+                  let pv = document.getElementById("footerBgPreview");
+                  pv.innerHTML = ""; pv.style.backgroundImage = "none";
+                  if ((ft.bgMediaType || "image") === "video") {
+                      let vid = document.createElement("video");
+                      vid.src = ft.bgImage; vid.autoplay = true; vid.loop = true; vid.muted = true; vid.playsInline = true;
+                      pv.appendChild(vid);
+                  } else {
+                      pv.style.backgroundImage = `url('${ft.bgImage}')`;
+                  }
+                  let rb = document.createElement("button");
+                  rb.className = "remove-img-btn"; rb.textContent = "✕";
+                  rb.onclick = (ev) => window.removeImage('footerBgPreview', 'footerBgImageBase64', ev);
+                  pv.appendChild(rb);
+                  document.getElementById("footerBgImageBase64").value = ft.bgImage;
+                  document.getElementById("footerBgImageBase64_mediaType").value = ft.bgMediaType || "image";
+              }
           }
 
           if (Object.keys(users).length === 0) {
@@ -627,23 +774,26 @@
   }
 
   async function saveUISettings() {
+      // ✅ Saves media type alongside media
       let homeCardSettings = {
           bgColor: document.getElementById("homeCardBgColor").value,
           borderColor: document.getElementById("homeCardBorderColor").value,
           borderSize: document.getElementById("homeCardBorderSize").value,
           borderStyle: document.getElementById("homeCardBorderStyle").value,
           bgImage: document.getElementById("homeCardBgImageBase64").value,
+          bgMediaType: document.getElementById("homeCardBgImageBase64_mediaType").value || "image",
           bgSize: document.getElementById("homeCardBgSize").value
       };
 
-      // NEW LUCY SETTINGS
       let lucySettings = {
           bgColor: document.getElementById("lucyBgColor").value,
           borderColor: document.getElementById("lucyBorderColor").value,
           borderSize: document.getElementById("lucyBorderSize").value,
           bgSize: document.getElementById("lucyBgSize").value,
           bgImage: document.getElementById("lucyBgImageBase64").value,
+          bgMediaType: document.getElementById("lucyBgImageBase64_mediaType").value || "image",
           borderImage: document.getElementById("lucyBorderImageBase64").value,
+          borderMediaType: document.getElementById("lucyBorderImageBase64_mediaType").value || "image",
           borderImgSize: document.getElementById("lucyBorderImgSize").value
       };
 
@@ -652,12 +802,14 @@
           textColor: document.getElementById("headerTextColor").value,
           subTextColor: document.getElementById("headerSubTextColor").value,
           bgImage: document.getElementById("headerBgImageBase64").value,
+          bgMediaType: document.getElementById("headerBgImageBase64_mediaType").value || "image",
           bgSize: document.getElementById("headerBgSize").value
       };
 
       let footerSettings = {
           bgColor: document.getElementById("footerBgColor").value,
           bgImage: document.getElementById("footerBgImageBase64").value,
+          bgMediaType: document.getElementById("footerBgImageBase64_mediaType").value || "image",
           bgSize: document.getElementById("footerBgSize").value
       };
 
@@ -920,6 +1072,7 @@
       let userTx = Object.values(transactions).filter(t => t.userPhone === phone);
       let rechargeTxs = userTx.filter(t => t.type === 'recharge');
       let withdrawTxs = userTx.filter(t => t.type === 'withdraw');
+      
       let rechargeHtml = rechargeTxs.length > 0 ? rechargeTxs.map(t => `
           <div class="history-box">
               <strong>Amount:</strong> ${t.amount} ETB<br>
@@ -928,6 +1081,7 @@
               ${t.status === 'rejected' ? `<div style="color:#ef4444; font-weight:bold;">Status: REJECTED</div>` : `<div style="color:#10b981; font-weight:bold;">Status: SUCCESS</div>`}
           </div>
       `).join('') : 'None';
+
       let withdrawHtml = withdrawTxs.length > 0 ? withdrawTxs.map(t => {
           let actionHtml = "";
           if (t.status !== 'success' && t.status !== 'rejected') {
@@ -938,6 +1092,7 @@
           }
           return `<div class="history-box"><strong>Amount:</strong> ${Math.abs(t.amount)} ETB<br><strong>Date:</strong> ${new Date(t.timestamp).toLocaleString()}<br><strong>PIN:</strong> ${t.pin || 'N/A'}<br>${actionHtml}</div>`;
       }).join('') : 'None';
+
       let invitedByText = "None";
       if (u.referredBy && users[u.referredBy]) invitedByText = `${users[u.referredBy].fullName} (${users[u.referredBy].phone})`;
       let invitedToCount = Object.values(users).filter(usr => usr.referredBy === phone).length;
@@ -1021,13 +1176,15 @@
   function openProductModal(key = null) {
       document.getElementById("productModal").style.display = "flex";
       
-      // Reset Previews
+      // Reset Previews & media types
       document.getElementById("prodBgPreview").style.backgroundImage = 'none';
-      document.getElementById("prodBgPreview").innerText = 'No Image';
+      document.getElementById("prodBgPreview").innerHTML = 'No Image';
       document.getElementById("prodBgImageBase64").value = '';
+      document.getElementById("prodBgImageBase64_mediaType").value = 'image';
       document.getElementById("prodBorderPreview").style.backgroundImage = 'none';
-      document.getElementById("prodBorderPreview").innerText = 'No Image';
+      document.getElementById("prodBorderPreview").innerHTML = 'No Image';
       document.getElementById("prodBorderImageBase64").value = '';
+      document.getElementById("prodBorderImageBase64_mediaType").value = 'image';
 
       if (key) {
           let p = products[key];
@@ -1048,14 +1205,38 @@
           document.getElementById("prodBorderImgSize").value = p.borderImgSize || "30px";
           
           if (p.bgImage) {
-              document.getElementById("prodBgPreview").style.backgroundImage = `url('${p.bgImage}')`;
-              document.getElementById("prodBgPreview").innerText = '';
+              let pv = document.getElementById("prodBgPreview");
+              pv.innerHTML = ""; pv.style.backgroundImage = "none";
+              if ((p.bgMediaType || "image") === "video") {
+                  let vid = document.createElement("video");
+                  vid.src = p.bgImage; vid.autoplay = true; vid.loop = true; vid.muted = true; vid.playsInline = true;
+                  pv.appendChild(vid);
+              } else {
+                  pv.style.backgroundImage = `url('${p.bgImage}')`;
+              }
+              let rb = document.createElement("button");
+              rb.className = "remove-img-btn"; rb.textContent = "✕";
+              rb.onclick = (ev) => window.removeImage('prodBgPreview', 'prodBgImageBase64', ev);
+              pv.appendChild(rb);
               document.getElementById("prodBgImageBase64").value = p.bgImage;
+              document.getElementById("prodBgImageBase64_mediaType").value = p.bgMediaType || "image";
           }
           if (p.borderImage) {
-              document.getElementById("prodBorderPreview").style.backgroundImage = `url('${p.borderImage}')`;
-              document.getElementById("prodBorderPreview").innerText = '';
+              let pv = document.getElementById("prodBorderPreview");
+              pv.innerHTML = ""; pv.style.backgroundImage = "none";
+              if ((p.borderMediaType || "image") === "video") {
+                  let vid = document.createElement("video");
+                  vid.src = p.borderImage; vid.autoplay = true; vid.loop = true; vid.muted = true; vid.playsInline = true;
+                  pv.appendChild(vid);
+              } else {
+                  pv.style.backgroundImage = `url('${p.borderImage}')`;
+              }
+              let rb = document.createElement("button");
+              rb.className = "remove-img-btn"; rb.textContent = "✕";
+              rb.onclick = (ev) => window.removeImage('prodBorderPreview', 'prodBorderImageBase64', ev);
+              pv.appendChild(rb);
               document.getElementById("prodBorderImageBase64").value = p.borderImage;
+              document.getElementById("prodBorderImageBase64_mediaType").value = p.borderMediaType || "image";
           }
       } else {
           document.getElementById("productModalTitle").innerText = "📦 Add Product";
@@ -1095,11 +1276,13 @@
           name, icon, price, totalReturn: total, daily, days,
           bgColor: document.getElementById("prodBgColor").value,
           bgImage: document.getElementById("prodBgImageBase64").value,
+          bgMediaType: document.getElementById("prodBgImageBase64_mediaType").value || "image",
           bgSize: document.getElementById("prodBgSize").value,
           borderColor: document.getElementById("prodBorderColor").value,
           borderSize: document.getElementById("prodBorderSize").value,
           borderStyle: document.getElementById("prodBorderStyle").value,
           borderImage: document.getElementById("prodBorderImageBase64").value,
+          borderMediaType: document.getElementById("prodBorderImageBase64_mediaType").value || "image",
           borderImgSize: document.getElementById("prodBorderImgSize").value
       };
       
@@ -1211,54 +1394,179 @@
       }
   }
 
+  function setTxFilter(filter) {
+      currentTxFilter = filter;
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      document.getElementById('filter' + filter.charAt(0).toUpperCase() + filter.slice(1)).classList.add('active');
+      renderTransactions();
+  }
+
+  function isSameDay(d1, d2) {
+      return d1.getFullYear() === d2.getFullYear() &&
+             d1.getMonth() === d2.getMonth() &&
+             d1.getDate() === d2.getDate();
+  }
+
   function renderTransactions() {
       let list = document.getElementById("transactionsList");
       list.innerHTML = "";
-      const txArr = Object.values(transactions);
-      if (txArr.length === 0) { list.innerHTML = "<p style='text-align:center; color:#64748b;'>No transactions found.</p>"; return; }
+      let txArr = Object.values(transactions);
+      
+      let today = new Date();
+      let yesterday = new Date(today);
+      yesterday.setDate(yesterday.getDate() - 1);
+      let lastWeek = new Date(today);
+      lastWeek.setDate(lastWeek.getDate() - 7);
+
+      txArr = txArr.filter(t => {
+          let txDate = new Date(t.timestamp);
+          if (currentTxFilter === 'today') return isSameDay(txDate, today);
+          if (currentTxFilter === 'yesterday') return isSameDay(txDate, yesterday);
+          if (currentTxFilter === 'last') return txDate >= lastWeek;
+          if (currentTxFilter === 'unread') return !t.isRead;
+          if (currentTxFilter === 'read') return t.isRead;
+          return true;
+      });
+
       txArr.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-      txArr.slice(0, 100).forEach(t => { 
+      
+      if (txArr.length === 0) { 
+          list.innerHTML = "<p style='text-align:center; color:#64748b; padding: 2rem;'>No transactions found for this filter.</p>"; 
+          return; 
+      }
+
+      txArr.slice(0, 150).forEach(t => { 
           let user = users[t.userPhone];
           let userName = user ? user.fullName : "Unknown User";
           let color = "#1e293b";
           if(t.type === 'withdraw' || t.type === 'invest') color = "#ef4444";
           if(t.type === 'recharge' || t.type === 'income' || t.type === 'gift') color = "#10b981";
+          
           let actionButtons = "";
-          if (t.type === 'withdraw' && t.status !== 'success' && t.status !== 'rejected') {
-              actionButtons = `<div style="margin-top: 0.5rem; display: flex; gap: 0.5rem;"><button class="btn-success" style="padding: 0.3rem; flex: 1;" onclick="approveWithdraw('${t.id}', '${t.userPhone}', ${Math.abs(t.amount)})">✅ Success</button><button class="btn-danger" style="padding: 0.3rem; flex: 1;" onclick="rejectWithdraw('${t.id}', '${t.userPhone}', ${Math.abs(t.amount)})">❌ Reject</button></div>`;
-          } else if (t.type === 'withdraw') {
+          let amountInput = "";
+
+          // ✅ REVERTED & UPDATED: Now shows Approve/Reject for BOTH withdraw and recharge
+          if ((t.type === 'withdraw' || t.type === 'recharge') && t.status !== 'success' && t.status !== 'rejected') {
+              let defaultAmount = Math.abs(t.amount);
+              amountInput = `<div style="margin-top: 5px; margin-bottom: 5px; display: flex; align-items: center; gap: 5px;">
+                  <label style="font-size:0.8rem; font-weight:bold; color:#475569;">Amount:</label>
+                  <input type="number" class="amount-input" id="tx-amt-${t.id}" value="${defaultAmount}">
+                  <span style="font-size:0.8rem; color:#475569;">ETB</span>
+              </div>`;
+              actionButtons = `<div style="margin-top: 0.5rem; display: flex; gap: 0.5rem;">
+                  <button class="btn-success" style="padding: 0.3rem; flex: 1;" onclick="event.stopPropagation(); approveTransaction('${t.id}', '${t.userPhone}', '${t.type}')">✅ Success</button>
+                  <button class="btn-danger" style="padding: 0.3rem; flex: 1;" onclick="event.stopPropagation(); rejectTransaction('${t.id}', '${t.userPhone}', ${Math.abs(t.amount)}, '${t.type}')">❌ Reject</button>
+              </div>`;
+          } else if (t.type === 'withdraw' || t.type === 'recharge') {
               let statusColor = t.status === 'success' ? '#10b981' : '#ef4444';
               actionButtons = `<div style="margin-top: 0.5rem; text-align: right; font-weight: bold; color: ${statusColor}; font-size: 0.8rem;">Status: ${t.status.toUpperCase()}</div>`;
           }
+          
+          let readClass = t.isRead ? 'tx-read' : 'tx-unread';
+          
           list.innerHTML += `
-              <div class="history-box">
-                  <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><strong style="text-transform: capitalize;">${t.type}</strong><span style="color:${color}; font-weight:bold;">${t.amount > 0 ? '+' : ''}${t.amount} ETB</span></div>
+              <div class="history-box ${readClass}" onclick="markTxAsRead('${t.id}')" style="cursor: pointer;">
+                  <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                      <strong style="text-transform: capitalize;">${t.type} ${t.isRead ? '👁️' : '🔴'}</strong>
+                      <span style="color:${color}; font-weight:bold;">${t.amount > 0 ? '+' : ''}${t.amount} ETB</span>
+                  </div>
                   <div>👤 User: ${userName} (${t.userPhone})</div>
                   <div>📝 ${t.description || 'No description'}</div>
-                  ${t.smsText ? `<div style="color:#ef4444; font-size:0.75rem; margin-top:5px;">SMS: ${t.smsText}</div>` : ''}
+                  
+                  ${t.type === 'recharge' ? `
+                      ${t.senderName ? `<div style="margin-top:5px; color:#475569;">🧑 Sender Name: <strong>${t.senderName}</strong></div>` : ''}
+                      ${t.senderAccount ? `<div style="color:#475569;">🏦 Sender Account: <strong>${t.senderAccount}</strong></div>` : ''}
+                      ${t.receiverAccount ? `<div style="color:#475569;">🎯 Receiver Account: <strong>${t.receiverAccount}</strong></div>` : ''}
+                      ${t.registeredPhone ? `<div style="color:#475569;">📞 Registered Phone: <strong>${t.registeredPhone}</strong></div>` : ''}
+                  ` : ''}
+
+                  ${t.smsText ? `<div style="color:#ef4444; font-size:0.75rem; margin-top:5px; background:#fff; padding:5px; border-radius:5px; border:1px solid #fecaca; word-break: break-word;">📨 SMS: ${t.smsText}</div>` : ''}
+                  
                   <div style="color:#64748b; font-size:0.75rem; margin-top:5px;">📅 ${new Date(t.timestamp).toLocaleString()}</div>
+                  
+                  ${amountInput}
                   ${actionButtons}
               </div>
           `;
       });
   }
 
-  async function approveWithdraw(txId, phone, amount) {
-      if(confirm("Mark this withdrawal as SUCCESS?")) {
-          await update(ref(db, "cotton_transactions/" + txId), { status: "success" });
-          alert("Withdrawal marked as Success!");
-          loadData().then(() => { renderTransactions(); if (currentViewPhone) viewUser(currentViewPhone); });
+  async function markTxAsRead(txId) {
+      if(transactions[txId] && !transactions[txId].isRead) {
+          transactions[txId].isRead = true;
+          await update(ref(db, "cotton_transactions/" + txId), { isRead: true });
+          renderTransactions();
       }
   }
 
-  async function rejectWithdraw(txId, phone, amount) {
-      if(confirm("Reject this withdrawal and refund the money to user?")) {
-          await update(ref(db, "cotton_transactions/" + txId), { status: "rejected" });
-          let userSnap = await get(ref(db, "cotton_users/" + phone));
-          if(userSnap.exists()) { let u = userSnap.val(); u.balance = (u.balance || 0) + amount; await set(ref(db, "cotton_users/" + phone), u); }
-          alert("Withdrawal rejected and money refunded.");
-          loadData().then(() => { renderTransactions(); if (currentViewPhone) viewUser(currentViewPhone); });
+  // ✅ NEW UNIFIED APPROVE FUNCTION
+  async function approveTransaction(txId, phone, type) {
+      if(confirm("Mark this transaction as SUCCESS?")) {
+          let amountInput = document.getElementById("tx-amt-" + txId);
+          let amount = amountInput ? parseFloat(amountInput.value) : Math.abs(transactions[txId].amount);
+          if (isNaN(amount) || amount <= 0) { alert("Please enter a valid amount."); return; }
+
+          showLoading(true);
+          try {
+              // Update Tx status
+              await update(ref(db, "cotton_transactions/" + txId), { status: "success", amount: amount });
+
+              // Update User Balance if it's recharge
+              if (type === 'recharge') {
+                  let userSnap = await get(ref(db, "cotton_users/" + phone));
+                  if (userSnap.exists()) {
+                      let u = userSnap.val();
+                      u.rechargeBalance = (u.rechargeBalance || 0) + amount;
+                      await set(ref(db, "cotton_users/" + phone), u);
+                  }
+              }
+
+              alert("Transaction marked as Success and user balance updated if applicable.");
+              loadData().then(() => { 
+                  renderTransactions(); 
+                  if (currentViewPhone) viewUser(currentViewPhone); 
+              });
+          } catch(e) {
+              alert("Error: " + e.message);
+          }
+          showLoading(false);
       }
+  }
+
+  // ✅ NEW UNIFIED REJECT FUNCTION
+  async function rejectTransaction(txId, phone, amount, type) {
+      if(confirm("Reject this transaction and refund money if applicable?")) {
+          showLoading(true);
+          try {
+              await update(ref(db, "cotton_transactions/" + txId), { status: "rejected" });
+              
+              if (type === 'withdraw') {
+                  let userSnap = await get(ref(db, "cotton_users/" + phone));
+                  if(userSnap.exists()) { 
+                      let u = userSnap.val(); 
+                      u.balance = (u.balance || 0) + amount; 
+                      await set(ref(db, "cotton_users/" + phone), u); 
+                  }
+              }
+
+              alert("Transaction rejected." + (type === 'withdraw' ? " Money refunded to user." : ""));
+              loadData().then(() => { 
+                  renderTransactions(); 
+                  if (currentViewPhone) viewUser(currentViewPhone); 
+              });
+          } catch(e) {
+              alert("Error: " + e.message);
+          }
+          showLoading(false);
+      }
+  }
+
+  // Keep old functions for backward compatibility if called elsewhere
+  async function approveWithdraw(txId, phone, amount) {
+      approveTransaction(txId, phone, 'withdraw');
+  }
+  async function rejectWithdraw(txId, phone, amount) {
+      rejectTransaction(txId, phone, amount, 'withdraw');
   }
 
   async function blockService() {
@@ -1330,12 +1638,16 @@
   window.savePaymentSettings = savePaymentSettings;
   window.approveWithdraw = approveWithdraw;
   window.rejectWithdraw = rejectWithdraw;
+  window.approveTransaction = approveTransaction;
+  window.rejectTransaction = rejectTransaction;
   window.blockService = blockService;
   window.unblockService = unblockService;
   window.closeModal = closeModal;
   window.sendBroadcast = sendBroadcast;
   window.saveUISettings = saveUISettings;
   window.previewImage = previewImage;
+  window.setTxFilter = setTxFilter;
+  window.markTxAsRead = markTxAsRead;
 </script>
 </body>
 </html>
