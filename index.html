@@ -458,11 +458,11 @@
       await set(ref(db, "cotton_transactions/" + id), tx);
   }
 
-  // --- ✅ የተስተካከለው የማረጋገጫ ፈንክሽን (ወደ አዲሱ ሰርቨር የሚልክ) ---
+  // --- ✅ የተስተካከለው የማረጋገጫ ፈንክሽን (ወደ Render ሰርቨር የሚልክ) ---
   async function verifyPayment(provider, referenceNumber, receiverSuffix, extraData = {}) {
       try {
-          // ✅ አዲሱ የ Railway አድራሻ እዚህ ጋር ተካቷል
-          const response = await fetch("https://cotton-exporter-2026-production-044f.up.railway.app/api/verify-payment", { 
+          // ✅ አዲሱ የ Render አድራሻ እዚህ ጋር ተካቷል
+          const response = await fetch("https://ethio-gold-backend.onrender.com/api/verify-payment", { 
               method: 'POST',
               headers: { 
                   "Content-Type": "application/json"
