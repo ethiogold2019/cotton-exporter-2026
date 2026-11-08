@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Ethio gold🥇⛳ - System</title>
+    <title>Ethio gold- System</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
-        body { background: #f5f7fb; padding: 0; margin: 0; min-height: 100vh; display: flex; flex-direction: column; }
-        .auth-container, .app-container { max-width: 550px; margin: 0 auto; width: 100%; background: white; min-height: 100vh; box-shadow: 0 0 20px rgba(0,0,0,0.05); position: relative; }
+        body { background: #07b307; padding: 0; margin: 0; min-height: 100vh; display: flex; flex-direction: column; }
+        .auth-container, .app-container { max-width: 550px; margin: 0 auto; width: 100%; background: hwb(136 2% 44% / 0.6); min-height: 100vh; box-shadow: 15px 10px 20px rgba(59, 0, 0, 0.050980392156862744); position: relative; }
         .auth-container { display: flex; flex-direction: column; justify-content: center; padding: 2rem 1.5rem; }
-        .app-container { display: none; padding-bottom: 70px; }
+        .app-container { display: none; padding-bottom: 70px;background: gold; }
         .form-group { margin-bottom: 1.2rem; }
         label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; color: #1e3a5f; }
-        input, select, textarea { width: 100%; padding: 0.8rem 1rem; border: 1px solid #cfdfed; border-radius: 2rem; font-size: 0.95rem; background: white; outline: none; margin-bottom: 0.5rem; }
-        textarea { border-radius: 1rem; resize: vertical; min-height: 80px; }
-        .btn { width: 100%; background: #1e3a5f; color: white; border: none; padding: 0.85rem; border-radius: 3rem; font-weight: bold; font-size: 1rem; cursor: pointer; }
+        input, select, textarea { width: 100%; padding: 0.8rem 1rem; border: px solid border-color:#042b04; border-radius: rem; font-size: 0.95rem; background: hwb(127 4% 80%); outline: none; margin-bottom: 0.5rem; }
+        textarea { border-radius: rem; resize: vertical; min-height: 80px; }
+        .btn { width: 100%; background: #1e3a5f; color:black; border: none; padding: 0.85rem; border-radius: 3rem; font-weight: bold; font-size: 1rem; cursor: pointer; }
         .btn-outline { background: transparent; border: 1px solid #1e3a5f; color: #1e3a5f; }
         .toggle-link { text-align: center; margin-top: 1rem; font-size: 0.85rem; }
         .toggle-link a { color: #2c7da0; text-decoration: none; font-weight: 600; }
@@ -232,8 +232,8 @@
 <div id="appContainer" class="app-container">
     <div class="header" id="dynamicHeader">
         <div class="header-text">
-            <h1>Ethio gold🥇⛳</h1>
-            <p>ጥቅምት 15 2019 እድገትና እንቅስቃሴ!!!</p>
+            <h1 style="color:black;">Ethio gold🥇⛳</h1>
+            <p><h1 style="color:black;"><b>ጥቅምት 27 2019 እድገትና እንቅስቃሴ!</b></h1></p>
         </div>
     </div>
     <div id="homePage" class="page active"></div>
@@ -879,7 +879,7 @@
       userInvestments.forEach(inv => {
           let lastClaim = inv.lastClaimDate ? new Date(inv.lastClaimDate) : null;
           let canClaimToday = !lastClaim || !isSameDay(lastClaim, now);
-          if (canClaimToday && inv.daysLeft > 0) {
+          if (canClaimToday && inv.daysLeft > 0 && !isWeekend) {
               totalAccumulated += inv.dailyRate;
           }
       });
@@ -928,8 +928,10 @@
               let canClaimToday = !lastClaim || !isSameDay(lastClaim, now);
               
               let receiveBtn = "";
-              if (canClaimToday && inv.daysLeft > 0) {
+              if (canClaimToday && inv.daysLeft > 0 && !isWeekend) {
                   receiveBtn = `<button class="btn-outline" style="padding: 0.3rem 1rem; font-size: 0.8rem; border-radius: 0.5rem; border-color: #10b981; color: #10b981; font-weight: bold; background: #f0fdf4;" onclick="claimSingleOrder('${inv.id}', ${inv.dailyRate})">Receive ${inv.dailyRate} ETB</button>`;
+              } else if (isWeekend) {
+                  receiveBtn = `<span style="color: #ef4444; font-weight: bold; font-size: 0.85rem; background: #fef2f2; padding: 0.3rem 1rem; border-radius: 0.5rem; border: 1px solid #ef4444; display: inline-block;">❌ ቅዳሜ/እሁድ እየሰራ አይደለም</span>`;
               } else {
                   receiveBtn = `<span style="color: #10b981; font-weight: bold; font-size: 0.85rem; background: #f0fdf4; padding: 0.3rem 1rem; border-radius: 0.5rem; border: 1px solid #10b981; display: inline-block;">✅ Received</span>`;
               }
@@ -1009,8 +1011,12 @@
       let user = users[currentUser];
       let lastVideo = user.lastVideoTaskDate ? new Date(user.lastVideoTaskDate) : null;
       let now = new Date();
-      let canWatch = !lastVideo || (now - lastVideo) >= 86400000;
-      let videoStatus = canWatch ? "✅ Ready" : `⏳ Available in ${Math.ceil((lastVideo.getTime() + 86400000 - now) / 3600000)} hours`;
+      
+      let isWeekend = (now.getDay() === 0 || now.getDay() === 6);
+      
+      let canWatch = (!lastVideo || (now - lastVideo) >= 86400000) && !isWeekend;
+      let videoStatus = canWatch ? "✅ Ready" : (isWeekend ? "❌ ቅዳሜ/እሁድ እየሰራ አይደለም" : `⏳ Available in ${Math.ceil((lastVideo.getTime() + 86400000 - now) / 3600000)} hours`);
+      
       let shareRequired = 2;
       let shareProgress = user.shareReferralCount || 0;
       let shareCompleted = (user.shareRewardClaimed === true);
@@ -1137,7 +1143,14 @@
       let watchBtn = document.getElementById("watchVideoBtn");
       if (watchBtn) {
           watchBtn.onclick = () => {
-              if (!canWatch) { alert("You can only watch once per day."); return; }
+              if (!canWatch) { alert("You can only watch once per day or it's the weekend."); return; }
+              
+              let checkDay = new Date().getDay();
+              if (checkDay === 0 || checkDay === 6) {
+                  alert("❌ ዛሬ ቅዳሜ ወይም እሁድ ስለሆነ ቪዲዮ ማየት አይቻልም።");
+                  return;
+              }
+
               let timerDiv = document.getElementById("videoTimer");
               let seconds = 60;
               timerDiv.style.display = "block";
