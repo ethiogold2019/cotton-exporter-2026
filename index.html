@@ -1278,11 +1278,44 @@
           
           await set(ref(db, "cotton_investments/" + invId), newInv);
           await addTransaction(currentUser, "invest", -prod.price, `Purchased ${prod.name}`);
+
+          // ✅ አዲሱ የኮሚሽን ሎጂክ (Commission Logic) እዚህ ጋር ተጨምሯል
+          if (user.referredBy && users[user.referredBy]) {
+              let inviterUser = users[user.referredBy];
+              
+              // የጋባዡ የተጠቀመበትን ፕሮዳክት መፈለግ
+              let inviterInvestments = Object.values(investments).filter(i => i.userPhone === inviterUser.phone);
+              
+              // የጋባዡ የገዛው ፕሮዳክት ከአዲሱ ተጠቃሚ ፕሮዳክት ጋር ተመሳሳይ መሆኑን ማረጋገጥ
+              let hasSameProduct = inviterInvestments.some(inv => inv.productKey === productKey);
+              
+              if (hasSameProduct) {
+                  let commissionRate = 0;
+                  if (inviterUser.vipLevel === 3) commissionRate = 0.12;
+                  else if (inviterUser.vipLevel === 2) commissionRate = 0.09;
+                  else if (inviterUser.vipLevel >= 1) commissionRate = 0.05;
+                  
+                  if (commissionRate > 0) {
+                      let commissionAmount = prod.price * commissionRate;
+                      
+                      inviterUser.wealthWallet = (inviterUser.wealthWallet || 0) + commissionAmount;
+                      await saveUser(inviterUser.phone);
+                      
+                      await addTransaction(inviterUser.phone, "commission", commissionAmount, `Commission from ${user.fullName} for matching product: ${prod.name}`);
+                      
+                      // ለተጠቃሚው ማሳወቂያ
+                      alert(`✅ ተግባሩ ተሳክቷል! (የእርስዎ ጋባዥ ${commissionAmount.toFixed(2)} ETB ኮሚሽን አግኝቷል)`);
+                  }
+              }
+          }
+
           await saveUser(currentUser);
           
           modal.style.display = "none";
           refreshAllUI();
-          alert(`Successfully invested in ${prod.name}!`);
+          if(!user.referredBy || !Object.values(investments).some(i => i.userPhone === user.referredBy && i.productKey === productKey)) {
+             alert(`Successfully invested in ${prod.name}!`);
+          }
       };
       document.getElementById("closeInvestModal").onclick = () => modal.style.display = "none";
   }
