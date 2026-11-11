@@ -117,9 +117,9 @@
             position: relative;
             padding: 1.5rem 1.2rem;
             margin: 1.5rem 0;
-            border-radius: 1rem;
+           /* border-radius: 1.5rem;*/
             z-index: 1;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+           /* box-shadow: 0 4px 15px rgba(09,20,10,07.05);*/
             background-size: cover;
             background-position: center;
         }
@@ -144,8 +144,8 @@
             flex-direction: column; 
             padding: 1rem; 
             background: transparent;
-            border-radius: 1rem; 
-            border: 2px dashed #10b981; 
+            /*border-radius: 1rem; 
+            border: 2px dashed #10b981; */
             margin-bottom: 1rem; 
             position: relative; 
         }
@@ -163,7 +163,7 @@
             font-size: 1.8rem; 
             font-weight: bold; 
             color: #ffffff; 
-            text-shadow: 2px 2px 5px rgba(0,0,0,0.9);
+            text-shadow: 2px 2px 5px rgba(10,20,10,10.9);
             padding: 5px; 
             text-align: center; 
         }
@@ -323,7 +323,7 @@
 <div id="lucyResultModal" class="modal">
     <div class="modal-content" style="text-align: center;">
         <div id="lucyResultIcon" style="font-size: 4rem; margin-bottom: 0.5rem;">🎉</div>
-        <h3 id="lucyResultTitle" style="color: #10b981; border: none; font-size: 1.5rem; margin-bottom: 0.5rem;">Congratulations!</h3>
+        <h3 id="lucyResultTitle" style="color: #10b981; border: none; font-size: 2rem; margin-bottom: 0.5rem;">Congratulations!</h3>
         <p id="lucyResultMessage" style="margin-bottom: 1.5rem; font-size: 1.2rem; font-weight: bold; color: #1e3a5f;"></p>
         <button class="btn" id="closeLucyResultBtn">OK</button>
     </div>
@@ -626,11 +626,31 @@
       const bcSnap = await get(ref(db, "cotton_broadcasts"));
       if (bcSnap.exists()) {
           let broadcasts = Object.values(bcSnap.val());
-          let latest = broadcasts.sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp))[0];
-          let lastSeen = localStorage.getItem('last_broadcast_' + currentUser) || 0;
-          if (latest && new Date(latest.timestamp).getTime() > lastSeen) {
-              alert(`📢 ከአስተዳዳሪ የተላከ መልእክት:\n\n${latest.message}`);
-              localStorage.setItem('last_broadcast_' + currentUser, new Date(latest.timestamp).getTime());
+          let latestBroadcast = null;
+          
+          // ✅ Unicast & Multicast Logic (ብዙ እና አንድ ሰው መልእክት መቀበል)
+          for (let bc of broadcasts) {
+              if (bc.type === 'unicast') {
+                  // Unicast: ተጠቃሚው በተመረጠው ዝርዝር ውስጥ ካለ
+                  if (Array.isArray(bc.targetUsers) && bc.targetUsers.includes(currentUser)) {
+                      if (!latestBroadcast || new Date(bc.timestamp) > new Date(latestBroadcast.timestamp)) {
+                          latestBroadcast = bc;
+                      }
+                  }
+              } else {
+                  // Multicast: ለሁሉም የተላከ (ወይም አሮጌው ያለ targetUsers)
+                  if (!latestBroadcast || new Date(bc.timestamp) > new Date(latestBroadcast.timestamp)) {
+                      latestBroadcast = bc;
+                  }
+              }
+          }
+
+          if (latestBroadcast) {
+              let lastSeen = localStorage.getItem('last_broadcast_' + currentUser) || 0;
+              if (new Date(latestBroadcast.timestamp).getTime() > lastSeen) {
+                  alert(`📢 ከአስተዳዳሪ የተላከ መልእክት:\n\n${latestBroadcast.message}`);
+                  localStorage.setItem('last_broadcast_' + currentUser, new Date(latestBroadcast.timestamp).getTime());
+              }
           }
       }
 
@@ -683,24 +703,24 @@
               <div class="dynamic-card-box" style="${lStyle} margin-top: 1rem;">
                   <div style="position: relative; text-align: center;">
                       <span class="ticket-badge" id="lucyTicketCount">${user.lucyTickets || 0}</span>
-                      <h3 style="color: #065f46; margin-bottom: 0.5rem;">🍀 Lucy Rewards</h3>
+                      <h1 style="color: #050404; margin-bottom: 1rem;font-size:2rem;">🍀 Lucy Rewards</h1>
                   </div>
-                  <div style="text-align: center; font-size: 0.85rem; color: #047857; margin-bottom: 1rem;" class="lucy-flex-wrap">
-                      <span class="lucy-circle-text">Spin</span> the wheel to <span class="lucy-circle-text-oval">win amazing</span> prizes!
+                  <div style="text-align: center; font-size: 0.85rem; color: #f1f74e; margin-bottom: 1rem;" class="">
+                      <span class=""></span> <span class=""> </span>
                   </div>
                   
                   <div class="lucy-spinner-container">
                       <div class="lucy-window" id="lucyWindow" style="flex-direction: column; gap: 5px;">
-                          <span style="font-size: 1.2rem;">🎁</span>
+                          <span style="font-size: 1.2rem;"></span>
                           <div class="lucy-flex-wrap" style="font-size: 1rem;">
-                              <span class="lucy-circle-text">Tap</span> <span class="lucy-circle-text-oval">GO to</span> Spin!
+                              <span class=""></span> <span class=""></span>
                           </div>
                       </div>
-                      <button class="lucy-go-btn" id="lucyGoBtn">GO</button>
+                      <button class="lucy-go-btn" id="lucyGoBtn"style="color:red;font-size:3rem;border:5px;solid;yellow;">GO</button>
                   </div>
                   
-                  <div style="font-size: 0.75rem; color: #64748b; text-align: center;" class="lucy-flex-wrap">
-                      <span class="lucy-circle-text">Available</span> rewards: ${lucySettings.items ? lucySettings.items.map(i => i.label).join(", ") : "None"}
+                  <div style="font-size:0; color: #f3d913; text-align: center;" class="lucy-flex-wrap">
+                      <span class=""></span> rewards: ${lucySettings.items ? lucySettings.items.map(i => i.label).join(", ") : "None"}
                   </div>
               </div>
           `;
@@ -801,6 +821,7 @@
           document.getElementById("withdrawModal").style.display = "flex";
       };
 
+      // ✅ የሉሲ ስፒን ሎጂክ (ሙሉ በሙሉ ተስተካክሏል)
       if (lucySettings.enabled) {
           document.getElementById("lucyGoBtn").onclick = async () => {
               if (isSpinning) return;
@@ -813,43 +834,44 @@
 
               user.lucyTickets = tickets - 1;
               
-              let assignedRewards = Array.isArray(user.assignedRewards) ? user.assignedRewards : [];
               let forcedRewards = Array.isArray(user.forcedRewards) ? user.forcedRewards : [];
+              let rejectAmounts = Array.isArray(user.rejectAmounts) ? user.rejectAmounts : [];
+              let rejectReasons = Array.isArray(user.rejectReasons) ? user.rejectReasons : [];
               
               let selectedReward = null;
               let isReject = false;
+              let rejectAmount = 0;
+              let rejectReason = "";
 
-              if (assignedRewards.length > 0) {
-                  selectedReward = assignedRewards.shift();
-                  user.assignedRewards = assignedRewards;
-              } else if (forcedRewards.length > 0) {
+              // ✅ አድሚኑ የፈቀደውን ሪዋርድ ብቻ መጠቀም
+              if (forcedRewards.length > 0) {
                   let nextReward = forcedRewards.shift();
                   user.forcedRewards = forcedRewards;
 
-                  if (nextReward === "REJECT") {
+                  if (nextReward === "REJECT" || nextReward === "NONE" || !nextReward) {
                       isReject = true;
+                      rejectAmount = rejectAmounts.shift() || 0;
+                      rejectReason = rejectReasons.shift() || "ውድ ደንበኛችን እንቅስቃሴዎ ለዚህ ሽልማት ብቁ አላደረገውም።";
+                      user.rejectAmounts = rejectAmounts;
+                      user.rejectReasons = rejectReasons;
                   } else {
                       selectedReward = nextReward;
                   }
+              } else {
+                  // አድሚኑ ምንም ካልፈቀደ (ወይም ከተጠቀመ) ሪዋርድ አይሰጥም
+                  isReject = true;
+                  rejectReason = "ውድ ደንበኛችን እንቅስቃሴዎ ለዚህ ሽልማት ብቁ አላደረገውም።";
               }
 
               await saveUser(currentUser);
 
-              if (!selectedReward && !isReject) {
-                  if (!lucySettings.items || lucySettings.items.length === 0) {
-                      alert("No rewards available at the moment.");
-                      return;
-                  }
-                  let randItem = lucySettings.items[Math.floor(Math.random() * lucySettings.items.length)];
-                  selectedReward = randItem.label;
-              }
-
-              startSpin(selectedReward, isReject);
+              startSpin(selectedReward, isReject, rejectAmount, rejectReason);
           };
       }
   }
 
-  async function startSpin(selectedReward, isReject) {
+  // ✅ የስፒን ሎጂክ (REJECT መረጃዎችን የሚያሳይ)
+  async function startSpin(selectedReward, isReject, rejectAmount, rejectReason) {
       isSpinning = true;
       let btn = document.getElementById("lucyGoBtn");
       let windowDiv = document.getElementById("lucyWindow");
@@ -879,7 +901,13 @@
               isSpinning = false;
 
               if (isReject) {
-                  showLucyResult("❌", "Oops!", "ውድቅ ተደርጓል! ሰዓት ስላለፈበት እባክዎ በድጋሚ ይሞክሩ።", "#ef4444");
+                  // ✅ አድሚኑ የጻፈውን የውድቅ ምክንያት ማሳየት
+                  let rejectMessage = rejectReason;
+                  if (rejectAmount > 0) {
+                      rejectMessage = `ውድ ደንበኛችን የድረስዎ ሽልማት         (${rejectAmount} ETB)  ነበር ግን:-  ${rejectReason}`;
+                  }
+                  
+                  showLucyResult("❌", "ውድቅ ተደርጓል!", rejectMessage, "#ef4444");
                   windowDiv.innerHTML = "🎁 Tap GO to Spin!";
               } else {
                   let displayLabel = String(selectedReward);
