@@ -84,6 +84,12 @@
         .tx-unread { border-left: 4px solid #ef4444; font-weight: 500; }
         
         .amount-input { padding: 0.4rem; border: 1px solid #cfdfed; border-radius: 0.5rem; font-size: 0.9rem; width: 100px; text-align: center; font-weight: bold; color: #10b981;}
+
+        /* ✅ አዲስ የተጨመረ፡ ለREJECT ማስገቢያ ሳጥኖች ስታይል */
+        .reject-input-group { display: flex; gap: 10px; margin-top: 8px; margin-bottom: 8px; }
+        .reject-input-group input { margin-bottom: 0; padding: 0.4rem; border-radius: 0.5rem; border: 1px solid #cfdfed; }
+        .reject-input-group input[type="number"] { width: 90px; text-align: center; font-weight: bold; color: #10b981; }
+        .reject-input-group input[type="text"] { flex: 1; font-size: 0.85rem; }
     </style>
 </head>
 <body>
@@ -119,6 +125,7 @@
             <div class="tab" id="tabProducts" onclick="switchTab('products')">📦 Products</div>
             <div class="tab" id="tabGifts" onclick="switchTab('gifts')">🎁 Gift Codes</div>
             <div class="tab" id="tabLucy" onclick="switchTab('lucy')">🍀 Lucy Rewards</div>
+            <div class="tab" id="tabBroadcasts" onclick="switchTab('broadcasts')">📢 Broadcasts</div>
             <div class="tab" id="tabUISettings" onclick="switchTab('uiSettings')">🎨 UI Settings</div>
             <div class="tab" id="tabSettings" onclick="switchTab('settings')">⚙️ Settings</div>
             <div class="tab" id="tabReports" onclick="switchTab('reports')">📊 Reports</div>
@@ -159,6 +166,31 @@
             <h4 style="margin-bottom: 1rem; color: #1e3a5f;">🏆 Available Rewards List</h4>
             <div id="lucyRewardsList" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
                 <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <!-- 📢 NEW BROADCASTS SECTION -->
+        <div id="broadcastsSection" class="content-section">
+            <div class="product-card">
+                <h4>📢 Broadcast Messages</h4>
+                <p style="margin-bottom: 1rem;">ለሁሉም (Multicast) ወይም ለተመረጡ ተጠቃሚዎች ብቻ (Unicast) መልእክት ይላኩ።</p>
+                
+                <label style="font-weight: bold; color: #475569;">Message Type</label>
+                <select id="broadcastType" onchange="toggleBroadcastTarget()" style="margin-bottom: 0.5rem;">
+                    <option value="multicast">📢 Multicast (All Users)</option>
+                    <option value="unicast">👤 Unicast (Specific Users)</option>
+                </select>
+
+                <div id="broadcastTargetDiv" style="display: none; margin-bottom: 1rem;">
+                    <label style="font-weight: bold; color: #475569;">Select Users</label>
+                    <div id="broadcastUserList" style="max-height: 150px; overflow-y: auto; border: 1px solid #cbd5e1; border-radius: 0.5rem; padding: 0.5rem; background: white;">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <label style="font-weight: bold; color: #475569;">Message</label>
+                <textarea id="broadcastMessage" placeholder="መልእክትዎን እዚህ ይጻፉ..." style="margin-bottom: 1rem;"></textarea>
+                <button class="btn-success" style="width: 100%;" onclick="sendBroadcast()">🚀 Send Message</button>
             </div>
         </div>
 
@@ -254,13 +286,6 @@
                 <label style="font-weight: bold; color: #475569;">Account Number</label>
                 <input type="text" id="settingAccountNumber" placeholder="e.g. 1000123456789" style="margin-bottom: 1rem; width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 0.5rem;">
                 <button class="btn-success" style="width: 100%;" onclick="savePaymentSettings()">💾 Save Payment Settings</button>
-            </div>
-
-            <div class="product-card" style="margin-top: 1.5rem;">
-                <h4>📢 Broadcast Message to Users</h4>
-                <p style="margin-bottom: 1rem;">ለሁሉም ተጠቃሚዎች በአንድ ጊዜ የሚደርስ መልእክት (Notification) ይላኩ።</p>
-                <textarea id="broadcastMessage" placeholder="መልእክትዎን እዚህ ይጻፉ..." style="margin-bottom: 1rem;"></textarea>
-                <button class="btn-success" style="width: 100%;" onclick="sendBroadcast()">🚀 Send Broadcast</button>
             </div>
         </div>
 
@@ -497,7 +522,6 @@
       document.getElementById("loadingOverlay").style.display = show ? "flex" : "none";
   }
 
-  // ✅ UPDATED: Handles both image and video. Stores the media type in a companion hidden field.
   function previewImage(input, previewId, hiddenInputId) {
       if (!input.files || !input.files[0]) return;
       var file = input.files[0];
@@ -513,7 +537,7 @@
               vid.src = e.target.result;
               vid.autoplay = true;
               vid.loop = true;
-              vid.muted = true;          // preview muted (admin panel)
+              vid.muted = true;
               vid.playsInline = true;
               preview.appendChild(vid);
           } else {
@@ -528,7 +552,6 @@
 
           document.getElementById(hiddenInputId).value = e.target.result;
 
-          // ✅ Save media type for user app to know how to render
           let typeField = document.getElementById(hiddenInputId + "_mediaType");
           if (typeField) typeField.value = isVideo ? "video" : "image";
       };
@@ -733,6 +756,7 @@
               renderLucySettings();
               populateUserDropdown();
               loadServiceStatus();
+              populateBroadcastUsers();
           });
       } else {
           document.getElementById("loginError").innerText = "Incorrect Password!";
@@ -760,6 +784,10 @@
           document.getElementById('tabLucy').classList.add('active');
           document.getElementById('lucySection').classList.add('active');
           renderLucySettings();
+      } else if (tab === 'broadcasts') {
+          document.getElementById('tabBroadcasts').classList.add('active');
+          document.getElementById('broadcastsSection').classList.add('active');
+          populateBroadcastUsers();
       } else if (tab === 'uiSettings') {
           document.getElementById('tabUISettings').classList.add('active');
           document.getElementById('uiSettingsSection').classList.add('active');
@@ -773,8 +801,66 @@
       }
   }
 
+  // 📢 Broadcast Functions
+  function toggleBroadcastTarget() {
+      let type = document.getElementById("broadcastType").value;
+      let targetDiv = document.getElementById("broadcastTargetDiv");
+      if (type === "unicast") {
+          targetDiv.style.display = "block";
+          populateBroadcastUsers();
+      } else {
+          targetDiv.style.display = "none";
+      }
+  }
+
+  function populateBroadcastUsers() {
+      let listDiv = document.getElementById("broadcastUserList");
+      if (!listDiv) return;
+      listDiv.innerHTML = "";
+      Object.values(users).forEach(u => {
+          listDiv.innerHTML += `
+              <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px; font-weight: normal; cursor: pointer;">
+                  <input type="checkbox" class="broadcast-user-checkbox" value="${u.phone}" style="width: auto; margin: 0;">
+                  <span>${u.fullName} (${u.phone})</span>
+              </label>
+          `;
+      });
+  }
+
+  async function sendBroadcast() {
+      let msg = document.getElementById("broadcastMessage").value.trim();
+      let type = document.getElementById("broadcastType").value;
+      
+      if (!msg) { alert("Please enter a message to broadcast."); return; }
+      
+      let selectedUsers = [];
+      if (type === "unicast") {
+          document.querySelectorAll(".broadcast-user-checkbox:checked").forEach(cb => {
+              selectedUsers.push(cb.value);
+          });
+          if (selectedUsers.length === 0) {
+              alert("Please select at least one user for Unicast.");
+              return;
+          }
+      }
+
+      let id = Date.now();
+      let broadcastData = {
+          message: msg,
+          type: type,
+          targetUsers: type === "unicast" ? selectedUsers : "all",
+          timestamp: new Date().toISOString()
+      };
+
+      await set(ref(db, "cotton_broadcasts/" + id), broadcastData);
+      
+      document.getElementById("broadcastMessage").value = "";
+      document.querySelectorAll(".broadcast-user-checkbox:checked").forEach(cb => cb.checked = false);
+      
+      alert("✅ Message sent successfully!");
+  }
+
   async function saveUISettings() {
-      // ✅ Saves media type alongside media
       let homeCardSettings = {
           bgColor: document.getElementById("homeCardBgColor").value,
           borderColor: document.getElementById("homeCardBorderColor").value,
@@ -822,15 +908,6 @@
       let num = document.getElementById("settingAccountNumber").value.trim();
       await set(ref(db, "cotton_payment_settings"), { accountName: name, accountNumber: num });
       alert("Payment settings saved successfully!");
-  }
-
-  async function sendBroadcast() {
-      let msg = document.getElementById("broadcastMessage").value.trim();
-      if (!msg) { alert("Please enter a message to broadcast."); return; }
-      let id = Date.now();
-      await set(ref(db, "cotton_broadcasts/" + id), { message: msg, timestamp: new Date().toISOString() });
-      document.getElementById("broadcastMessage").value = "";
-      alert("✅ Message broadcasted to all users successfully!");
   }
 
   function renderLucySettings() {
@@ -927,6 +1004,7 @@
       document.getElementById("assignTicketModal").setAttribute("data-phone", phone);
   }
 
+  // ✅ የተሻሻለው የቲኬት ሪዋርድ መምረጫ (REJECT ሲመረጥ ተጨማሪ ሳጥኖች ይመጣሉ)
   function generateTicketRewardSelects(savedForcedRewards = []) {
       let count = parseInt(document.getElementById("assignTicketCount").value) || 0;
       let container = document.getElementById("ticketRewardContainer");
@@ -940,29 +1018,78 @@
               let label = document.createElement("label");
               label.innerText = `Ticket #${i + 1} Reward:`;
               label.style.fontSize = "0.85rem"; label.style.color = "#475569";
+              
               let select = document.createElement("select");
-              select.className = "ticket-reward-select"; select.style.marginTop = "0.2rem";
+              select.className = "ticket-reward-select"; 
+              select.style.marginTop = "0.2rem";
+              select.setAttribute("data-index", i);
               select.innerHTML = `<option value="NONE">-- Random --</option><option value="REJECT">❌ REJECT</option>`;
               if (lucyRewards.items) {
                   lucyRewards.items.forEach(item => { select.innerHTML += `<option value="${item.label}">${item.icon} ${item.label}</option>`; });
               }
               if (existingValues[i] !== undefined) select.value = existingValues[i];
               else if (savedForcedRewards[i] !== undefined) select.value = savedForcedRewards[i];
-              div.appendChild(label); div.appendChild(select); container.appendChild(div);
+              
+              // ✅ REJECT ሲመረጥ የሚታዩ ሳጥኖች
+              let rejectInputs = document.createElement("div");
+              rejectInputs.className = "reject-input-group";
+              rejectInputs.id = `reject-inputs-${i}`;
+              rejectInputs.style.display = select.value === "REJECT" ? "flex" : "none";
+              rejectInputs.innerHTML = `
+                  <input type="number" id="reject-amount-${i}" placeholder="Amount" title="የደረሰበት መጠን">
+                  <input type="text" id="reject-reason-${i}" placeholder="የውድቅ ምክንያት (ለምሳሌ፡ እንቅስቃሴው ደካማ ነው)" title="የውድቅ ምክንያት">
+              `;
+              
+              select.onchange = function() {
+                  rejectInputs.style.display = this.value === "REJECT" ? "flex" : "none";
+              };
+
+              div.appendChild(label); 
+              div.appendChild(select); 
+              div.appendChild(rejectInputs);
+              container.appendChild(div);
           }
       }
   }
 
+  // ✅ REJECT መረጃዎችን (Amount & Reason) አንድ ላይ ማስቀመጥ
   async function saveAssignedTickets() {
       let phone = document.getElementById("assignTicketModal").getAttribute("data-phone");
       let ticketCount = parseInt(document.getElementById("assignTicketCount").value);
       if (!users[phone] || isNaN(ticketCount) || ticketCount < 0) { alert("Invalid count."); return; }
+      
       let selectedRewards = [];
-      document.querySelectorAll(".ticket-reward-select").forEach(sel => { selectedRewards.push(sel.value); });
+      let rejectAmounts = [];
+      let rejectReasons = [];
+
+      document.querySelectorAll(".ticket-reward-select").forEach((sel, i) => { 
+          selectedRewards.push(sel.value); 
+          if (sel.value === "REJECT") {
+              let amountVal = parseFloat(document.getElementById(`reject-amount-${i}`).value) || 0;
+              let reasonVal = document.getElementById(`reject-reason-${i}`).value.trim() || "ውድ ደንበኛችን እንቅስቃሴዎ ለዚህ ሽልማት ብቁ አላደረገውም።";
+              rejectAmounts.push(amountVal);
+              rejectReasons.push(reasonVal);
+          } else {
+              rejectAmounts.push(0);
+              rejectReasons.push("");
+          }
+      });
+
       users[phone].lucyTickets = ticketCount;
       users[phone].forcedRewards = selectedRewards;
-      if (selectedRewards.length > 0) await set(ref(db, "cotton_users/" + phone + "/forcedRewards"), selectedRewards);
-      else await remove(ref(db, "cotton_users/" + phone + "/forcedRewards"));
+      users[phone].rejectAmounts = rejectAmounts;
+      users[phone].rejectReasons = rejectReasons;
+
+      if (selectedRewards.length > 0) {
+          await set(ref(db, "cotton_users/" + phone + "/forcedRewards"), selectedRewards);
+          await set(ref(db, "cotton_users/" + phone + "/rejectAmounts"), rejectAmounts);
+          await set(ref(db, "cotton_users/" + phone + "/rejectReasons"), rejectReasons);
+      } else {
+          await remove(ref(db, "cotton_users/" + phone + "/forcedRewards"));
+          await remove(ref(db, "cotton_users/" + phone + "/rejectAmounts"));
+          await remove(ref(db, "cotton_users/" + phone + "/rejectReasons"));
+      }
+      
       await saveUser(phone);
       renderUsers();
       closeModal('assignTicketModal');
@@ -1176,7 +1303,6 @@
   function openProductModal(key = null) {
       document.getElementById("productModal").style.display = "flex";
       
-      // Reset Previews & media types
       document.getElementById("prodBgPreview").style.backgroundImage = 'none';
       document.getElementById("prodBgPreview").innerHTML = 'No Image';
       document.getElementById("prodBgImageBase64").value = '';
@@ -1445,7 +1571,6 @@
           let actionButtons = "";
           let amountInput = "";
 
-          // ✅ REVERTED & UPDATED: Now shows Approve/Reject for BOTH withdraw and recharge
           if ((t.type === 'withdraw' || t.type === 'recharge') && t.status !== 'success' && t.status !== 'rejected') {
               let defaultAmount = Math.abs(t.amount);
               amountInput = `<div style="margin-top: 5px; margin-bottom: 5px; display: flex; align-items: center; gap: 5px;">
@@ -1499,7 +1624,6 @@
       }
   }
 
-  // ✅ NEW UNIFIED APPROVE FUNCTION
   async function approveTransaction(txId, phone, type) {
       if(confirm("Mark this transaction as SUCCESS?")) {
           let amountInput = document.getElementById("tx-amt-" + txId);
@@ -1508,10 +1632,8 @@
 
           showLoading(true);
           try {
-              // Update Tx status
               await update(ref(db, "cotton_transactions/" + txId), { status: "success", amount: amount });
 
-              // Update User Balance if it's recharge
               if (type === 'recharge') {
                   let userSnap = await get(ref(db, "cotton_users/" + phone));
                   if (userSnap.exists()) {
@@ -1533,7 +1655,6 @@
       }
   }
 
-  // ✅ NEW UNIFIED REJECT FUNCTION
   async function rejectTransaction(txId, phone, amount, type) {
       if(confirm("Reject this transaction and refund money if applicable?")) {
           showLoading(true);
@@ -1561,7 +1682,6 @@
       }
   }
 
-  // Keep old functions for backward compatibility if called elsewhere
   async function approveWithdraw(txId, phone, amount) {
       approveTransaction(txId, phone, 'withdraw');
   }
@@ -1644,6 +1764,7 @@
   window.unblockService = unblockService;
   window.closeModal = closeModal;
   window.sendBroadcast = sendBroadcast;
+  window.toggleBroadcastTarget = toggleBroadcastTarget; // New
   window.saveUISettings = saveUISettings;
   window.previewImage = previewImage;
   window.setTxFilter = setTxFilter;
