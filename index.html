@@ -12,8 +12,8 @@
         .app-container { display: none; padding-bottom: 70px;background: gold; }
         .form-group { margin-bottom: 1.2rem; }
         label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; color: #1e3a5f; }
-        input, select, textarea { width: 100%; padding: 0.8rem 1rem; border: px solid border-color:#042b04; border-radius: rem; font-size: 0.95rem; background: hwb(127 4% 80%); outline: none; margin-bottom: 0.5rem; }
-        textarea { border-radius: rem; resize: vertical; min-height: 80px; }
+        input, select, textarea { width: 100%; padding: 0.8rem 1rem; border: 1px solid #042b04; border-radius: 0.5rem; font-size: 0.95rem; background: hwb(127 4% 80%); outline: none; margin-bottom: 0.5rem; }
+        textarea { border-radius: 0.5rem; resize: vertical; min-height: 80px; }
         .btn { width: 100%; background: #1e3a5f; color:black; border: none; padding: 0.85rem; border-radius: 3rem; font-weight: bold; font-size: 1rem; cursor: pointer; }
         .btn-outline { background: transparent; border: 1px solid #1e3a5f; color: #1e3a5f; }
         .toggle-link { text-align: center; margin-top: 1rem; font-size: 0.85rem; }
@@ -143,7 +143,7 @@
             align-items: center; 
             flex-direction: column; 
             padding: 1rem; 
-            background: transparent; /* ነጩ ቀለም ተወግዷል */
+            background: transparent;
             border-radius: 1rem; 
             border: 2px dashed #10b981; 
             margin-bottom: 1rem; 
@@ -154,21 +154,21 @@
             height: 90px; 
             overflow: hidden; 
             position: relative; 
-            background: transparent; /* ነጩ ቀለም ተወግዷል */
+            background: transparent; 
             border-radius: 0.5rem; 
-            border: none; /* ድንበሩ ተወግዷል */
+            border: none; 
             display: flex; 
             justify-content: center; 
             align-items: center; 
             font-size: 1.8rem; 
             font-weight: bold; 
-            color: #ffffff; /* ጽሑፉ ነጭ ሆኗል */
-            text-shadow: 2px 2px 5px rgba(0,0,0,0.9); /* ጽሑፉ ላይ ጥላ */
+            color: #ffffff; 
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.9);
             padding: 5px; 
             text-align: center; 
         }
         .lucy-go-btn { 
-            background: #10b981; /* አረንጓዴ ቀለም */
+            background: #10b981; 
             color: white; 
             border: none; 
             border-radius: 2rem; 
@@ -187,6 +187,62 @@
         .expandable-menu { background: white; border-radius: 1rem; padding: 1rem; margin-top: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #eef2f6; text-align: center; display: none; }
         .expandable-menu.active { display: block; }
         .expand-btn { background: #e2e8f0; border: none; border-radius: 50%; width: 30px; height: 30px; display: inline-flex; justify-content: center; align-items: center; cursor: pointer; margin-top: 0.5rem; font-size: 1.2rem; }
+
+        /* Custom Result Modal Styling (Image 3 & 4) */
+        .custom-result-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAAyAGQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD3+iiigD//2Q=='); /* Placeholder for gold background */
+            background-size: cover;
+            background-position: center;
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        .custom-result-content {
+            background: white;
+            width: 80%;
+            max-width: 320px;
+            border-radius: 2rem;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .custom-result-content h2 {
+            color: #333;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        .custom-result-amount {
+            color: #e11d48; /* Red color */
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+        }
+        .custom-result-btn {
+            background: #047857; /* Dark Green */
+            color: white;
+            border: none;
+            border-radius: 2rem;
+            padding: 0.8rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(4, 120, 87, 0.3);
+            transition: transform 0.2s;
+        }
+        .custom-result-btn:active {
+            transform: scale(0.95);
+        }
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
     </style>
 </head>
 <body>
@@ -198,6 +254,15 @@
     <h2 style="color: #ef4444; margin-bottom: 1rem;">Under Maintenance</h2>
     <p style="color: #475569; margin-bottom: 1.5rem;">አገልግሎቱ ለጊዜው ተቋርጧል። እባክዎ በኋላ ይሞክሩ።</p>
     <p id="maintenanceTime" style="font-size: 0.9rem; color: #94a3b8; font-weight: bold;"></p>
+</div>
+
+<!-- Custom Notification Modal -->
+<div id="customNotifyModal" class="custom-result-modal">
+    <div class="custom-result-content">
+        <h2 id="customNotifyTitle">Congratulations</h2>
+        <div id="customNotifyAmount" class="custom-result-amount">ETB 0.00</div>
+        <button class="custom-result-btn" id="customNotifyBtn">Okay</button>
+    </div>
 </div>
 
 <div id="authContainer" class="auth-container">
@@ -304,6 +369,23 @@
   function showLoading(show) {
       document.getElementById("loadingOverlay").style.display = show ? "flex" : "none";
   }
+
+  // ✅ አዲስ የማሳወቂያ ስርዓት (Custom Notification)
+  function showCustomNotification(title, amountText, isAmount = true) {
+      document.getElementById("customNotifyTitle").innerText = title;
+      if (isAmount) {
+          document.getElementById("customNotifyAmount").innerText = `ETB ${amountText}`;
+      } else {
+          document.getElementById("customNotifyAmount").innerText = amountText;
+          document.getElementById("customNotifyAmount").style.fontSize = "1.2rem";
+      }
+      document.getElementById("customNotifyModal").style.display = "flex";
+  }
+
+  document.getElementById("customNotifyBtn").onclick = () => {
+      document.getElementById("customNotifyModal").style.display = "none";
+      document.getElementById("customNotifyAmount").style.fontSize = "2.2rem"; // Reset size
+  };
 
   function generateInviteCode() { return Math.random().toString(36).substring(2, 8).toUpperCase(); }
 
@@ -851,7 +933,8 @@
 
           await saveUser(currentUser);
           refreshAllUI();
-          alert(`✅ ${amount.toFixed(2)} ETB ከ ${inv.productName} ተቀብለዋል!`);
+          // ✅ አዲሱን የማሳወቂያ ስርዓት ተጠቅመናል
+          showCustomNotification("Congratulations", amount.toFixed(2));
       } catch(e) { alert("Error: " + e.message); }
       showLoading(false);
   };
@@ -982,7 +1065,8 @@
 
                   await saveUser(currentUser);
                   refreshAllUI();
-                  alert(`✅ በተሳካ ሁኔታ ${totalAccumulated.toFixed(2)} ETB ተቀብለዋል!`);
+                  // ✅ አዲሱን የማሳወቂያ ስርዓት ተጠቅመናል
+                  showCustomNotification("Congratulations", totalAccumulated.toFixed(2));
               } catch(e) {
                   alert("Error: " + e.message);
               }
@@ -1002,7 +1086,8 @@
               await addTransaction(currentUser, "daily_bonus", bonus, `Daily receive bonus: ${bonus} ETB (Added to Reward Wallet)`);
               await saveUser(currentUser);
               refreshAllUI();
-              alert(`You received ${bonus} ETB bonus! Added to Reward Wallet.`);
+              // ✅ አዲሱን የማሳወቂያ ስርዓት ተጠቅመናል
+              showCustomNotification("Congratulations", bonus.toFixed(2));
           };
       }
   }
@@ -1179,7 +1264,8 @@
                       await addTransaction(currentUser, "video_task", reward, `Video task reward: ${reward} ETB (Added to Reward Wallet)`);
                       await saveUser(currentUser);
                       refreshAllUI();
-                      alert(`You earned ${reward} ETB! Added to Reward Wallet.`);
+                      // ✅ አዲሱን የማሳወቂያ ስርዓት ተጠቅመናል
+                      showCustomNotification("Congratulations", reward.toFixed(2));
                   }
               }, 1000);
           };
@@ -1304,7 +1390,7 @@
                       await addTransaction(inviterUser.phone, "commission", commissionAmount, `Commission from ${user.fullName} for matching product: ${prod.name}`);
                       
                       // ለተጠቃሚው ማሳወቂያ
-                      alert(`✅ ተግባሩ ተሳክቷል! (የእርስዎ ጋባዥ ${commissionAmount.toFixed(2)} ETB ኮሚሽን አግኝቷል)`);
+                      showCustomNotification("Commission Alert", `Your invitee ${user.fullName} earned you ${commissionAmount.toFixed(2)} ETB!`, false);
                   }
               }
           }
@@ -1314,7 +1400,7 @@
           modal.style.display = "none";
           refreshAllUI();
           if(!user.referredBy || !Object.values(investments).some(i => i.userPhone === user.referredBy && i.productKey === productKey)) {
-             alert(`Successfully invested in ${prod.name}!`);
+             showCustomNotification("Success", `Successfully invested in ${prod.name}!`, false);
           }
       };
       document.getElementById("closeInvestModal").onclick = () => modal.style.display = "none";
@@ -1800,7 +1886,8 @@
               
               document.getElementById("cashGiftModal").style.display = "none";
               refreshAllUI();
-              alert(`You received ${gift.value} ETB!`);
+              // ✅ አዲሱን የማሳወቂያ ስርዓት ተጠቅመናል
+              showCustomNotification("Congratulations", gift.value.toFixed(2));
           } catch(e) {
               alert("Error: " + e.message);
           }
